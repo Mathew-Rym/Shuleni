@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
@@ -12,13 +13,20 @@ jwt = JWTManager()
 def create_app():
     load_dotenv()
     app = Flask(__name__)
+
+     
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 
+   
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
+     
     from app.routes.auth_routes import auth_bp
     from app.routes.school_routes import school_bp
     from app.routes.attendance_routes import attendance_bp
