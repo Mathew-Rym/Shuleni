@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: shuleni-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn run:app"
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: FLASK_ENV
+        value: production
