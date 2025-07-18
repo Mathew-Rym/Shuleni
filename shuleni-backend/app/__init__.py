@@ -7,4 +7,5 @@ def create_app():
     @app.route('/')
     def index():
         return {"message": "Shuleni deployment"}
+        
     return app
