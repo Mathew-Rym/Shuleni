@@ -34,4 +34,5 @@ jobs:
        flake8 . --exclude=venv,.venv
     - name: Test with pytest
       run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/shuleni-backend
         pytest
