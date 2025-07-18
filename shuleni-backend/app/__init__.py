@@ -1,5 +1,6 @@
 from flask import Flask
 
+
 def create_app():
     app = Flask(__name__)
 
@@ -8,4 +9,3 @@ def create_app():
         return {"message": "Shuleni deployment"}
 
     return app
-    
