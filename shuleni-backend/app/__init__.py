@@ -4,5 +4,5 @@ def create_app():
     app = Flask(__name__)
     @app.route('/')
     def index():
-        return {"message": "CI/CD Deployment successful"}
+        return {"message": "Shuleni deployment"}
     return app
