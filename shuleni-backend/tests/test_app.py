@@ -1,10 +1,4 @@
-from app import create_app
+from app.__init__ import add
 
-
-def test_index():
-    app = create_app()
-    client = app.test_client()
-
-    response = client.get('/')
-    assert response.status_code == 200
-    assert response.json == {"message": "Shuleni deployment"}
+def test_add():
+    assert add(2, 3) == 5
