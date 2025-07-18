@@ -4,15 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+flask = "*"
 flask-migrate = "*"
 flask-jwt-extended = "*"
 flask-cors = "*"
 python-dotenv = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
-pytest = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.12"
