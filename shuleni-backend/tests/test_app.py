@@ -1,4 +1,4 @@
-from app import add
+from app.utils import add
 
 def test_add():
     assert add(2, 3) == 5
