@@ -21,6 +21,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+            path: shuleni-frontend/node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('shuleni-frontend/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-node-
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
