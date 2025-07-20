@@ -6,12 +6,8 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
-    paths:
-     - 'shuleni-frontend/**' 
   pull_request:
     branches: [ "main" ]
-    paths:
-      - 'shuleni-frontend/**'
 
 
 jobs:
