@@ -17,30 +17,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-            path: shuleni-frontend/node_modules
-            key: ${{ runner.os }}-node-${{ hashFiles('shuleni-frontend/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.os }}-node-
-
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20' # Specify the Node.js version you want to use
-          cache: 'npm' 
-          cache-dependency-path: shuleni-frontend/package-lock.json
 
-      - name: Install Dependencies
-        working-directory: ./shuleni-frontend
-        run: npm install  
-        
-
-      - name: Build Project
-        working-directory: ./shuleni-frontend
-        run: npm run build
-      
+      - name: Install and Build
+        run: |
+          cd shuleni-frontend
+          npm install
+          npm run build
 
       - name : Skip Tests
         run: echo "Skipping tests for frontend CI"
