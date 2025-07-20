@@ -17,7 +17,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
@@ -31,6 +30,7 @@ jobs:
         with:
           node-version: '20' # Specify the Node.js version you want to use
           cache: 'npm' 
+          cache-dependency-path: shuleni-frontend/package-lock.json
 
       - name: Install Dependencies
         working-directory: ./shuleni-frontend
