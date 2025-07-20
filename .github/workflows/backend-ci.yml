@@ -6,8 +6,12 @@ name: Python Flask Tests
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'shuleni-backend/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'shuleni-backend/**'
 
 permissions:
   contents: read
