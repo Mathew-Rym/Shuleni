@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone   
 
 class School(db.Model):
     __tablename__ = 'schools'
@@ -7,7 +7,7 @@ class School(db.Model):
     name = db.Column(db.String(255), nullable=False)
     owner_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
 
     users = db.relationship(
         'User', back_populates='school',

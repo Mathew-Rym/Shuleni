@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone   
 
 class Resource(db.Model):
     __tablename__ = 'resources'
@@ -9,7 +9,7 @@ class Resource(db.Model):
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     file_url = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  
 
     class_ = db.relationship('Class', back_populates='resources')
     uploader = db.relationship('User', back_populates='uploaded_resources')

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.models.school import School
 from app.models.user import User
 from app.models.class_ import Class
@@ -48,12 +48,12 @@ def test_resource_attendance_exam_submission(session):
     session.add(res); session.commit()
     assert res in clazz.resources and res.uploader == user
 
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     att = Attendance(class_id=clazz.id, student_id=user.id, educator_id=user.id, date=today, status="present")
     session.add(att); session.commit()
     assert att in clazz.attendance_records
 
-    start = datetime.utcnow()
+    start = datetime.now(timezone.utc)
     exam = Exam(class_id=clazz.id, title="Test", start_time=start, end_time=start+timedelta(hours=1), duration_minutes=60, created_by=user.id)
     session.add(exam); session.commit()
     assert exam in clazz.exams
@@ -74,7 +74,8 @@ def test_chat_video_club_membership(session):
     session.add(chat); session.commit()
     assert chat in clazz.chats and chat.sender == user
 
-    vs = VideoSession(class_id=clazz.id, hosted_by=user.id, title="Zoom", link="http://", start_time=datetime.utcnow(), end_time=datetime.utcnow())
+    now = datetime.now(timezone.utc)
+    vs = VideoSession(class_id=clazz.id, hosted_by=user.id, title="Zoom", link="http://", start_time=now, end_time=now)
     session.add(vs); session.commit()
     assert vs in clazz.video_sessions and vs.host == user
 

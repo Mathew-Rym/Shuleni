@@ -1,13 +1,13 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone 
 
 class Class(db.Model):
     __tablename__ = 'classes'
     id = db.Column(db.Integer, primary_key=True)
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id', ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    grade_level = db.Column(db.String(50))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    year_level = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc)) 
 
     school = db.relationship('School', back_populates='classes')
     enrollments = db.relationship('Enrollment', back_populates='class_',

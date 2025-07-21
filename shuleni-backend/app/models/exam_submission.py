@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone   
 from sqlalchemy.schema import UniqueConstraint
 
 class ExamSubmission(db.Model):
@@ -9,7 +9,7 @@ class ExamSubmission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exam_id = db.Column(db.Integer, db.ForeignKey('exams.id', ondelete='CASCADE'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    submitted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
     score = db.Column(db.Numeric(5, 2))
     plagiarism_flag = db.Column(db.Boolean, default=False)
 

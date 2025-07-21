@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone  
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     role = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
 
     school = db.relationship('School', back_populates='users')
     enrollments = db.relationship('Enrollment', back_populates='user',
