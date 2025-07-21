@@ -13,3 +13,6 @@ class ClubMember(db.Model):
 
     club = db.relationship('Club', back_populates='members')
     user = db.relationship('User', back_populates='club_memberships')
+
+
+    

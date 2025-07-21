@@ -13,3 +13,4 @@ class VideoSession(db.Model):
 
     class_ = db.relationship('Class', back_populates='video_sessions')
     host = db.relationship('User', back_populates='hosted_sessions')
+
