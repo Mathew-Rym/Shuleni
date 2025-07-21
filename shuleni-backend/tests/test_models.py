@@ -8,7 +8,7 @@ from app.models.attendance import Attendance
 from app.models.exam import Exam
 from app.models.exam_submission import ExamSubmission
 from app.models.chat import ChatMessage
-from app.models.videoSession import VideoSession
+from app.models.videosession import VideoSession
 from app.models.club import Club
 from app.models.clubmember import ClubMember
 
