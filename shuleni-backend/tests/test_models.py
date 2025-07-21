@@ -25,7 +25,7 @@ def test_class_enrollment(session):
     school = School(name="S2", owner_name="Admin2", email="s2@school.com")
     session.add(school); session.commit()
 
-    clazz = Class(school_id=school.id, name="Math", grade_level="10")
+    clazz = Class(school_id=school.id, name="Devops", year_level="1")
     session.add(clazz); session.commit()
     assert clazz.school == school
 
@@ -41,7 +41,7 @@ def test_resource_attendance_exam_submission(session):
     session.add(school); session.commit()
     user = User(school_id=school.id, name="Eve", email="eve@school.com", role="educator", password_hash="pw")
     session.add(user); session.commit()
-    clazz = Class(school_id=school.id, name="Sci", grade_level="9")
+    clazz = Class(school_id=school.id, name="S.analysis", year_level="2")
     session.add(clazz); session.commit()
 
     res = Resource(class_id=clazz.id, uploaded_by=user.id, title="Notes", description="desc", file_url="file.pdf")
@@ -67,7 +67,7 @@ def test_chat_video_club_membership(session):
     session.add(school); session.commit()
     user = User(school_id=school.id, name="Carl", email="carl@school.com", role="student", password_hash="pw")
     session.add(user); session.commit()
-    clazz = Class(school_id=school.id, name="Hist", grade_level="11")
+    clazz = Class(school_id=school.id, name="Comp Sci", year_level="3")
     session.add(clazz); session.commit()
 
     chat = ChatMessage(class_id=clazz.id, sender_id=user.id, message="Hello")
