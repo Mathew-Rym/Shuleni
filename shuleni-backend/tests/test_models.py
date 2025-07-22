@@ -8,9 +8,9 @@ from app.models.attendance import Attendance
 from app.models.exam import Exam
 from app.models.exam_submission import ExamSubmission
 from app.models.chat import ChatMessage
-from app.models.videosession import VideoSession
-from app.models.club import Club
-from app.models.clubmember import ClubMember
+from app.models.VideoSession import VideoSession
+from app.models.Club import Club
+from app.models.ClubMember import ClubMember
 
 def test_school_user_relationship(session):
     school = School(name="TestSchool", owner_name="Admin", email="test@school.com")
