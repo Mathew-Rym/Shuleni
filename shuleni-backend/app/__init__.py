@@ -21,7 +21,7 @@ def create_app():
 
     from app import models
 
-    # Uncomment the following when the respective routes are ready
+    # Uncomment the following when the respective routes are ready then add those which haven't included 
     # from app.routes.auth_routes import auth_bp
     # from app.routes.school_routes import school_bp
     # from app.routes.attendance_routes import attendance_bp
