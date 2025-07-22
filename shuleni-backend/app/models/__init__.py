@@ -1,4 +1,3 @@
-
 from .school import School
 from .user import User
 from .class_ import Class
