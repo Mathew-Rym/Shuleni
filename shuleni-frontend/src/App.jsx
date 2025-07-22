@@ -7,10 +7,13 @@ import './App.css'
 
 function App() {
   return (
-    <Router>
+   <Router>
+    <Header />
+    <main>
       <Routes>
         <Route path="/class/:classId" element={<ClassPage />} />
       </Routes>
+    </main>
     </Router>
   )
 }
