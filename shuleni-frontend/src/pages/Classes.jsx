@@ -118,12 +118,12 @@ const Class= () => {
     setChatMessages([...chatMessages, newMessage]);
   }; 
 
-   const handleTakeExam = (examId) => {
-    navigate(`/exam/${examId}`);
+  const handleTakeExam = (examId) => {
+    navigate(`/exam-taking`);
   };
 
   const handleViewPerformance = () => {
-    navigate('/exam-performance');
+    navigate('/exam-overview');
   };
 
   if (isLoading) {
@@ -198,7 +198,6 @@ const Class= () => {
           </Card>
         )}
 
-        {/* Examinations Tab */}
         {activeTab === 'examinations' && (
           <Row>
             <Col lg={8}>
@@ -269,15 +268,6 @@ const Class= () => {
                   <p className="text-muted mb-4">
                     Quick tests on your own results. Download detailed reports for comprehensive analysis.
                   </p>
-                  
-                  <div className="d-flex justify-content-between mb-4">
-                    <Button variant="outline-primary" size="sm">
-                      Download January Report
-                    </Button>
-                    <Button variant="outline-success" size="sm">
-                      Win-critical Report
-                    </Button>
-                  </div>
                   
                   <Table borderless className="mb-4">
                     <thead>
