@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Badge, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const Header = () => {
     const [showSidebar, setShowSidebar] = useState(false);

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, ListGroup, Form, Button, Badge } from 'react-bootstrap';
 
 const Chat= ({ messages, onSendMessage, currentUser }) => {
+  const [newMessage, setNewMessage] = useState('');
 
   const handleSend = (e) => {
     e.preventDefault();
