@@ -39,4 +39,39 @@
 
 .read-the-docs {
   color: #888;
+}  
+
+
+.class-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container-fluid {
+  flex: 1;
+}
+
+.list-group-horizontal .list-group-item {
+  border-right: 1px solid rgba(0,0,0,.125);
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .list-group-horizontal {
+    flex-direction: column;
+  }
+  
+  .list-group-horizontal .list-group-item {
+    border-right: none;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+  }
+  
+  .d-flex.border-bottom {
+    flex-wrap: wrap;
+  }
+  
+  .d-flex.border-bottom .btn {
+    margin-bottom: 5px;
+  }
 }
