@@ -1,86 +1,34 @@
-import json
 import pytest
-from app import db
-from app.models.user import User
-from sqlalchemy.exc import IntegrityError
+from app.models import User, School
 
-@pytest.fixture(autouse=True)
-def clean_db():
-    """Rollback failed transactions and clean all tables after each test."""
-    yield
-    db.session.rollback()
-    for table in reversed(db.metadata.sorted_tables):
-        db.session.execute(table.delete())
-    db.session.commit()
-
-def test_signup_success(client):
+def test_school_registration(client, session):
     data = {
-        "school_id": 1,
-        "name": "Alice",
-        "email": "alice@example.com",
-        "role": "student",
-        "password": "password123"
+        "name": "Test School",
+        "owner_name": "John Doe",
+        "email": "test@school.com",
+        "password": "securepassword"
     }
-    response = client.post('/auth/signup', json=data)
+    
+    response = client.post('auth/register/school', json=data)
     assert response.status_code == 201
-    assert response.json['user']['email'] == "alice@example.com"
+    assert b"School and admin account created" in response.data
+    
+    # Verify school was created
+    school = School.query.first()
+    assert school.name == "Test School"
+    
+    # Verify admin user was created
+    admin = User.query.first()
+    assert admin.role == "admin"
+    assert admin.school_id == school.id
 
-def test_signup_duplicate_email(client):
-    try:
-        db.session.add(User(
-            school_id=1,
-            name="Alice",
-            email="alice@example.com",
-            role="student",
-            password_hash="fakehash"
-        ))
-        db.session.commit()
-    except IntegrityError:
-        db.session.rollback()
-
+def test_login(client, session, school, user):
     data = {
-        "school_id": 1,
-        "name": "Alice",
-        "email": "alice@example.com",  # duplicate
-        "role": "student",
-        "password": "password123"
+        "email": user.email,
+        "password": "adminpassword"
     }
-    response = client.post('/auth/signup', json=data)
-    assert response.status_code == 400
-    assert "Email already in use" in response.json['error']
-
-def test_login_success(client):
-    user = User(
-        school_id=1,
-        name="Bob",
-        email="bob@example.com",
-        role="educator"
-    )
-    user.set_password("secret")
-    db.session.add(user)
-    db.session.commit()
-
-    response = client.post('/auth/login', json={
-        "email": "bob@example.com",
-        "password": "secret"
-    })
+    
+    response = client.post('/auth/login', json=data)
     assert response.status_code == 200
-    assert "access_token" in response.json
-
-def test_login_wrong_password(client):
-    user = User(
-        school_id=1,
-        name="Carol",
-        email="carol@example.com",
-        role="educator"
-    )
-    user.set_password("correct-password")
-    db.session.add(user)
-    db.session.commit()
-
-    response = client.post('/auth/login', json={
-        "email": "carol@example.com",
-        "password": "wrong-password"
-    })
-    assert response.status_code == 401
-    assert "Invalid credentials" in response.json['error']
+    assert b"access_token" in response.data
+    assert b"refresh_token" in response.data

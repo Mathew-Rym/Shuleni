@@ -1,31 +1,16 @@
-from flask import Blueprint, request
-from app.controllers.auth_controller import signup_user, login_user
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models.user import User
+from flask import Blueprint
+from app.controllers.auth import (
+    register_school,
+    login,
+    refresh_token
+)
+from flask_jwt_extended import jwt_required
 
-auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@auth_bp.route('/signup', methods=['POST'])
-def signup():
-    data = request.get_json()
-    return signup_user(data)
+# Public routes
+auth_bp.route('/register/school', methods=['POST'])(register_school)
+auth_bp.route('/login', methods=['POST'])(login)
 
-@auth_bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    return login_user(data)
-
-@auth_bp.route('/me', methods=['GET'])
-@jwt_required()
-def me():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-    if not user:
-        return {"error": "User not found"}, 404
-
-    return {
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        "role": user.role
-    }, 200
+# Protected routes
+auth_bp.route('/refresh', methods=['POST'])(jwt_required(refresh=True)(refresh_token))
