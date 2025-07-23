@@ -1,8 +1,8 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Class from './pages/Classes.jsx'
-import { useState } from 'react'
+import ExamTaking from './pages/ExamTaking.jsx'
 import './App.css'
 
 function App() {
@@ -11,7 +11,8 @@ function App() {
     <Header />
     <main>
       <Routes>
-        <Route path="/class/:classId" element={<Class />} />
+        <Route path="/classes" element={<Class />} />
+        <Route path="/exam/" element={<ExamTaking />} />
       </Routes>
     </main>
     </Router>
