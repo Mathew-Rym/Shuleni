@@ -21,11 +21,13 @@ def create_app(config_class='app.config.Config'):
     from app.routes.class_routes import class_bp
     from app.routes.resource_routes import resource_bp
     from app.routes.attendance_routes import attendance_bp
+    from app.routes.exam_routes import exam_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(school_bp)
     app.register_blueprint(class_bp)
     app.register_blueprint(resource_bp)
     app.register_blueprint(attendance_bp)
+    app.register_blueprint(exam_bp)
 
     return app
