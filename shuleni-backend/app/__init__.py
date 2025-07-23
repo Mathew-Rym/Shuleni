@@ -2,12 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
 db = SQLAlchemy()
-migrate = Migrate()
 jwt = JWTManager()
+migrate = Migrate()
 
 def create_app():
     load_dotenv()
@@ -18,12 +19,12 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    CORS(app)
 
     from app import models
 
-    # Uncomment the following when the respective routes are ready then add those which haven't included 
-    # from app.routes.auth_routes import auth_bp
-    # from app.routes.school_routes import school_bp
+    from app.routes.auth_routes import auth_bp
+    from app.routes.school_routes import school_bp
     # from app.routes.attendance_routes import attendance_bp
     # from app.routes.resource_routes import resource_bp
     # from app.routes.exam_routes import exam_bp
@@ -32,8 +33,8 @@ def create_app():
     # from app.routes.enrollment_routes import enrollment_bp
     # from app.routes.exam_submission_routes import submission_bp
 
-    # app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    # app.register_blueprint(school_bp, url_prefix='/api/schools')
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(school_bp, url_prefix='/schools')
     # app.register_blueprint(attendance_bp, url_prefix='/api/attendance')
     # app.register_blueprint(resource_bp, url_prefix='/api/resources')
     # app.register_blueprint(exam_bp, url_prefix='/api/exams')
