@@ -25,6 +25,7 @@ def create_app(config_class='app.config.Config'):
     from app.routes.chat_routes import chat_bp
     from app.routes.club_routes import club_bp
     from app.routes.video_routes import video_bp
+    from app.routes.exam_submission_routes import submission_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(school_bp)
@@ -35,5 +36,6 @@ def create_app(config_class='app.config.Config'):
     app.register_blueprint(chat_bp)
     app.register_blueprint(club_bp)
     app.register_blueprint(video_bp)
+    app.register_blueprint(submission_bp)
 
     return app
