@@ -22,6 +22,7 @@ def create_app(config_class='app.config.Config'):
     from app.routes.resource_routes import resource_bp
     from app.routes.attendance_routes import attendance_bp
     from app.routes.exam_routes import exam_bp
+    from app.routes.chat_routes import chat_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(school_bp)
@@ -29,5 +30,6 @@ def create_app(config_class='app.config.Config'):
     app.register_blueprint(resource_bp)
     app.register_blueprint(attendance_bp)
     app.register_blueprint(exam_bp)
+    app.register_blueprint(chat_bp)
 
     return app
