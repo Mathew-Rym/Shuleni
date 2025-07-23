@@ -17,7 +17,9 @@ def create_app(config_class='app.config.Config'):
     jwt.init_app(app)
 
     from app.routes.auth_routes import auth_bp
+    from app.routes.school_routes import school_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(school_bp)
     
     return app
