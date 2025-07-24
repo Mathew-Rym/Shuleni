@@ -11,7 +11,7 @@ from flask_jwt_extended import jwt_required
 
 resource_bp = Blueprint('resources', __name__)
 
-resource_bp.route('', methods=['POST'])(
+resource_bp.route('/', methods=['POST'])(
     jwt_required()(roles_required('admin', 'educator')(school_required(upload_resource)))
 )
 resource_bp.route('/<int:class_id>', methods=['GET'])(

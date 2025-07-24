@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required
 
 attendance_bp = Blueprint('attendance', __name__)
 
-attendance_bp.route('', methods=['POST'])(
+attendance_bp.route('/', methods=['POST'])(
     jwt_required()(roles_required('educator')(school_required(take_attendance)))
 )
 attendance_bp.route('/<int:class_id>', methods=['GET'])(

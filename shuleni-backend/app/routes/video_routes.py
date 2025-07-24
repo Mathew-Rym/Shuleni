@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required
 
 video_bp = Blueprint('video', __name__)
 
-video_bp.route('', methods=['POST'])(
+video_bp.route('/', methods=['POST'])(
     jwt_required()(roles_required('educator')(school_required(create_session)))
 )
 video_bp.route('/class/<int:class_id>', methods=['GET'])(

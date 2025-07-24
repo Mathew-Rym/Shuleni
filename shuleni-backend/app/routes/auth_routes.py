@@ -6,7 +6,7 @@ from app.controllers.auth import (
 )
 from flask_jwt_extended import jwt_required
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__)
 
 # Public routes
 auth_bp.route('/register/school', methods=['POST'])(register_school)

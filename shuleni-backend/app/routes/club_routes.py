@@ -12,10 +12,10 @@ from flask_jwt_extended import jwt_required
 
 club_bp = Blueprint('clubs', __name__)
 
-club_bp.route('', methods=['POST'])(
+club_bp.route('/', methods=['POST'])(
     jwt_required()(roles_required('admin', 'educator')(school_required(create_club)))
 )
-club_bp.route('', methods=['GET'])(
+club_bp.route('/', methods=['GET'])(
     jwt_required()(school_required(list_clubs))
 )
 club_bp.route('/<int:club_id>', methods=['GET'])(
