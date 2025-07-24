@@ -12,6 +12,22 @@ const ExamTaking = () => {
   const [submitError, setSubmitError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+ 
+  const currentUser = { role: "student" }; 
+
+  if (currentUser.role !== "student") {
+    return (
+      <Container className="d-flex justify-content-center align-items-center vh-100">
+        <Card className="p-4">
+          <Card.Body className="text-center">
+            <h4 className="mb-3 text-danger">Access Denied</h4>
+            <p>You must be a student to take this exam.</p>
+          </Card.Body>
+        </Card>
+      </Container>
+    );
+  }
+
   // Mock exam data
   const mockExam = {
     id: examId,
