@@ -15,4 +15,3 @@ class ClubMember(db.Model):
     user = db.relationship('User', back_populates='club_memberships')
 
 
-    
