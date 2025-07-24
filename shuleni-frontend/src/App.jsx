@@ -5,12 +5,12 @@ import Header from './components/Header.jsx';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import Class from './pages/Classes.jsx';
-import ExamTaking from './pages/ExamTaking.jsx';
-import ExamOverview from './pages/ExamOverview.jsx';
+import ExamTaking from './pages/Student/ExamTaking.jsx';
+import ExamOverview from './pages/Student/ExamOverview.jsx';
 import Resources from './pages/Resources.jsx';
-import ResourceDetail from './pages/ResourceDetail.jsx';
+import ResourceDetail from './pages/Student/ResourceDetail.jsx';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 
 export default function App() {
