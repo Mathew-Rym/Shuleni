@@ -12,7 +12,7 @@ const Header = () => {
     const handleShowSidebar = () => setShowSidebar(true);
   return (
     <>
-      <Navbar bg="light" expand="lg" className="border-bottom">
+      <Navbar bg="blue" expand="lg" className="border-bottom">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             <h3 className="mb-0">Shuleni</h3>
@@ -26,7 +26,7 @@ const Header = () => {
           
           <div className="d-flex align-items-center">
             {isAdmin && (
-              <Button variant="outline-primary"  size="sm" className="me-2"
+              <Button variant="outline-primary" bg ="light" size="sm" className="me-2"
                 onClick={handleShowSidebar}
               >  Open Sidebar</Button>
             )}

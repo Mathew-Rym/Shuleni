@@ -332,10 +332,12 @@ const Class= () => {
         )}
 
         <Row>
-          <Col md={6} className="mb-4">
+          <Col xs={12} className="mb-4">
             <ClassMembers members={classData.members} />
           </Col>
-          <Col md={6} className="mb-4">
+        </Row>
+        <Row>
+          <Col xs={12} className="mb-4">
             <Chat
               messages={chatMessages}
               onSendMessage={handleSendMessage}

@@ -1,8 +1,82 @@
+.chat-bubble {
+  background: var(--white);
+  border: 2px solid var(--primary-blue);
+  border-radius: 1.5em;
+  padding: 0.65em 1.1em;
+  margin-bottom: 0.7em;
+  color: var(--primary-blue);
+  font-size: 1em;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+.chat-bubble.alt {
+  border-color: #115293;
+  color: #115293;
+}
+.navbar .btn-outline-primary {
+  background: var(--white) !important;
+  color: var(--primary-blue) !important;
+  border-color: var(--white) !important;
+}
+.card-header,
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-white) !important;
+}
+
+.navbar .card-header,
+.sidebar .card-header {
+  color: var(--white) !important;
+}
+:root {
+  --primary-blue: #1976d2;
+  --white: #ffffff;
+}
+
+body {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+.card {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+.class-page {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+
+.navbar, .sidebar {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+
+.navbar a, .sidebar a {
+  color: var(--white);
+}
+
+.navbar a:hover, .sidebar a:hover {
+  color: var(--white);
+}
+
+.btn-primary {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: #115293;
+  border-color: #115293;
+}
 #root {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  width: 100%;
+  width: 100%; 
 }
 
 .logo {
@@ -18,20 +92,6 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
   padding: 2em;
@@ -58,20 +118,40 @@
 }
 
 @media (max-width: 768px) {
+  .container-fluid, #root {
+    padding: 0.5rem !important;
+    max-width: 100vw !important;
+    box-sizing: border-box;
+  }
+  .card {
+    padding: 0.75em !important;
+  }
+  .chat-bubble {
+    font-size: 0.95em !important;
+    padding: 0.45em 0.7em !important;
+    margin-bottom: 0.55em !important;
+  }
+  .chat-bubble.alt {
+    border-color: #115293 !important;
+    color: #115293 !important;
+  }
   .list-group-horizontal {
-    flex-direction: column;
+    flex-direction: column !important;
   }
-  
   .list-group-horizontal .list-group-item {
-    border-right: none;
-    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0,0,0,.125) !important;
+    font-size: 0.95em !important;
   }
-  
   .d-flex.border-bottom {
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
   }
-  
   .d-flex.border-bottom .btn {
-    margin-bottom: 5px;
+    margin-bottom: 5px !important;
+    width: 100% !important;
+  }
+  .btn-primary, .btn-outline-primary {
+    font-size: 0.95em !important;
+    padding: 0.5em 0.75em !important;
   }
 }
