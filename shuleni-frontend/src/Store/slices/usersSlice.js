@@ -1,3 +1,4 @@
+// Users management slice for students and teachers
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -7,6 +8,7 @@ const initialState = {
   error: null,
 };
 
+// Mock data for development
 const mockStudents = [
   {
     id: 1,
@@ -23,14 +25,6 @@ const mockStudents = [
     enrollmentDate: '2024-01-15',
     status: 'active',
     classes: ['Math', 'Science', 'History'],
-    // Additional fields for student information
-    admissionNo: 'STU-2025-001',
-    idNumber: '12345678',
-    gender: 'Male',
-    county: 'Nairobi',
-    country: 'KENYAN',
-    postalAddress: '123 Main St, Nairobi',
-    canGraduate: true,
   },
   {
     id: 2,
@@ -47,14 +41,6 @@ const mockStudents = [
     enrollmentDate: '2024-01-20',
     status: 'active',
     classes: ['Science', 'Math', 'English'],
-    // Additional fields for student information
-    admissionNo: 'STU-2025-002',
-    idNumber: '87654321',
-    gender: 'Female',
-    county: 'Mombasa',
-    country: 'KENYAN',
-    postalAddress: '456 Oak Ave, Mombasa',
-    canGraduate: false,
   },
   {
     id: 3,
@@ -68,17 +54,9 @@ const mockStudents = [
     parentName: 'Sarah Johnson',
     phone: '+1234567892',
     address: '789 Pine St',
-    enrollmentDate: '2024-02-01',
+    enrollmentDate: '2024-01-10',
     status: 'active',
-    classes: ['History', 'English', 'Math'],
-    // Additional fields for student information
-    admissionNo: 'STU-2025-003',
-    idNumber: '11223344',
-    gender: 'Male',
-    county: 'Kisumu',
-    country: 'KENYAN',
-    postalAddress: '789 Pine St, Kisumu',
-    canGraduate: true,
+    classes: ['History', 'English', 'Geography'],
   },
 ];
 
@@ -128,29 +106,19 @@ const usersSlice = createSlice({
       state.error = null;
     },
     
+    // Students actions
     setStudents: (state, action) => {
       state.students = action.payload;
       state.loading = false;
     },
     addStudent: (state, action) => {
-      const newStudent = {
+      state.students.push({
         ...action.payload,
-        id: Date.now(),
+        id: Date.now(), // Mock ID generation
         status: 'active',
         enrollmentDate: new Date().toISOString().split('T')[0],
         avatar: `https://via.placeholder.com/150/4A90E2/FFFFFF?text=${action.payload.name.split(' ').map(n => n[0]).join('')}`,
-        credentials: {
-          email: action.payload.email,
-          password: `student${Date.now()}`,
-          role: 'student',
-          dashboardAccess: true,
-          createdAt: new Date().toISOString()
-        },
-        classes: [action.payload.class],
-        attendance: 100,
-        grade: 'Pending'
-      };
-      state.students.push(newStudent);
+      });
     },
     updateStudent: (state, action) => {
       const index = state.students.findIndex(s => s.id === action.payload.id);
@@ -162,27 +130,19 @@ const usersSlice = createSlice({
       state.students = state.students.filter(s => s.id !== action.payload);
     },
     
+    // Teachers actions
     setTeachers: (state, action) => {
       state.teachers = action.payload;
       state.loading = false;
     },
     addTeacher: (state, action) => {
-      const newTeacher = {
+      state.teachers.push({
         ...action.payload,
-        id: Date.now(),
+        id: Date.now(), // Mock ID generation
         status: 'active',
         hireDate: new Date().toISOString().split('T')[0],
         avatar: `https://via.placeholder.com/150/9B59B6/FFFFFF?text=${action.payload.name.split(' ').map(n => n[0]).join('')}`,
-        classes: action.payload.assignedClasses || [],
-        credentials: {
-          email: action.payload.email,
-          password: `temp${Date.now()}`,
-          role: 'teacher',
-          dashboardAccess: true,
-          createdAt: new Date().toISOString()
-        }
-      };
-      state.teachers.push(newTeacher);
+      });
     },
     updateTeacher: (state, action) => {
       const index = state.teachers.findIndex(t => t.id === action.payload.id);
@@ -193,45 +153,18 @@ const usersSlice = createSlice({
     deleteTeacher: (state, action) => {
       state.teachers = state.teachers.filter(t => t.id !== action.payload);
     },
-    
-    assignClassesToTeacher: (state, action) => {
-      const { teacherId, classIds } = action.payload;
-      const teacher = state.teachers.find(t => t.id === teacherId);
-      if (teacher) {
-        teacher.classes = classIds;
-        teacher.lastUpdated = new Date().toISOString();
-      }
-    },
-    
-    removeClassFromTeacher: (state, action) => {
-      const { teacherId, classId } = action.payload;
-      const teacher = state.teachers.find(t => t.id === teacherId);
-      if (teacher) {
-        teacher.classes = teacher.classes.filter(id => id !== classId);
-        teacher.lastUpdated = new Date().toISOString();
-      }
-    },
-    
-    assignTeacherToMultipleClasses: (state, action) => {
-      const { teacherId, classData } = action.payload;
-      const teacher = state.teachers.find(t => t.id === teacherId);
-      if (teacher) {
-        teacher.classes = [...(teacher.classes || []), ...classData.map(c => c.id)];
-        teacher.assignedClassDetails = classData;
-        teacher.lastUpdated = new Date().toISOString();
-      }
-    },
   },
 });
 
-// BACKEND TODO: Implement GET /api/students endpoint
+// Async actions
 export const fetchStudents = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    // BACKEND INTEGRATION: Replace with actual API call
+    // TODO: Replace with actual API call
     // const response = await fetch('/api/students');
     // const students = await response.json();
     
+    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
     dispatch(setStudents(mockStudents));
   } catch (error) {
@@ -239,14 +172,14 @@ export const fetchStudents = () => async (dispatch) => {
   }
 };
 
-// BACKEND TODO: Implement GET /api/teachers endpoint
 export const fetchTeachers = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    // BACKEND INTEGRATION: Replace with actual API call
+    // TODO: Replace with actual API call
     // const response = await fetch('/api/teachers');
     // const teachers = await response.json();
     
+    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
     dispatch(setTeachers(mockTeachers));
   } catch (error) {
@@ -254,11 +187,10 @@ export const fetchTeachers = () => async (dispatch) => {
   }
 };
 
-// BACKEND TODO: Implement POST /api/students endpoint
 export const createStudent = (studentData) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    // BACKEND INTEGRATION: Replace with actual API call
+    // TODO: Replace with actual API call
     // const response = await fetch('/api/students', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
@@ -266,6 +198,7 @@ export const createStudent = (studentData) => async (dispatch) => {
     // });
     // const student = await response.json();
     
+    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
     dispatch(addStudent(studentData));
     dispatch(setLoading(false));
@@ -274,11 +207,10 @@ export const createStudent = (studentData) => async (dispatch) => {
   }
 };
 
-// BACKEND TODO: Implement POST /api/teachers endpoint
 export const createTeacher = (teacherData) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    // BACKEND INTEGRATION: Replace with actual API call
+    // TODO: Replace with actual API call
     // const response = await fetch('/api/teachers', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
@@ -286,6 +218,7 @@ export const createTeacher = (teacherData) => async (dispatch) => {
     // });
     // const teacher = await response.json();
     
+    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
     dispatch(addTeacher(teacherData));
     dispatch(setLoading(false));
@@ -306,9 +239,6 @@ export const {
   addTeacher,
   updateTeacher,
   deleteTeacher,
-  assignClassesToTeacher,
-  removeClassFromTeacher,
-  assignTeacherToMultipleClasses,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

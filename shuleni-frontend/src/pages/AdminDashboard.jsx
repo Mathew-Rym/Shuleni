@@ -72,12 +72,7 @@ const AdminDashboard = () => {
     dispatch(fetchTeachers());
     dispatch(fetchClasses());
     dispatch(fetchEvents());
-    
-    // Initialize admin photo from user avatar
-    if (user?.avatar) {
-      setAdminPhoto(user.avatar);
-    }
-  }, [dispatch, user?.avatar]);
+  }, [dispatch]);
 
   const handleAdminPhotoUpdate = (newPhotoUrl) => {
     setAdminPhoto(newPhotoUrl);
@@ -417,7 +412,7 @@ const AdminDashboard = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
                   <PhotoUpload
-                    currentPhoto={adminPhoto || user?.avatar}
+                    currentPhoto={adminPhoto}
                     onPhotoUpdate={handleAdminPhotoUpdate}
                     userRole="admin"
                     size={80}

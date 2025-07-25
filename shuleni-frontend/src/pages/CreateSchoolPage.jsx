@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSchool, faArrowLeft, faCheckCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { createSchool } from '../Store/slices/schoolsSlice';
 import { loginUser } from '../Store/slices/authSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -17,7 +15,6 @@ const CreateSchoolPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    schoolType: '',
     address: '',
     phone: '',
     email: '',
@@ -84,7 +81,7 @@ const CreateSchoolPage = () => {
             <Card className="shadow-lg border-0">
               <Card.Header className="card-header-custom text-center py-4">
                 <h2 className="mb-0">
-                  <FontAwesomeIcon icon={faSchool} className="me-2" />
+                  <i className="fas fa-school me-2"></i>
                   Create Your School
                 </h2>
                 <p className="mb-0 mt-2 opacity-75">
@@ -95,14 +92,14 @@ const CreateSchoolPage = () => {
               <Card.Body className="p-4">
                 {showSuccess && (
                   <Alert variant="success" className="mb-4">
-                    <FontAwesomeIcon icon={faCheckCircle} className="me-2" />
+                    <i className="fas fa-check-circle me-2"></i>
                     School created successfully! Redirecting to admin dashboard...
                   </Alert>
                 )}
 
                 {error && (
                   <Alert variant="danger" className="mb-4">
-                    <FontAwesomeIcon icon={faExclamationTriangle} className="me-2" />
+                    <i className="fas fa-exclamation-circle me-2"></i>
                     {error}
                   </Alert>
                 )}
@@ -149,33 +146,6 @@ const CreateSchoolPage = () => {
                     <Row>
                       <Col md={6}>
                         <Form.Group className="mb-3">
-                          <Form.Label>School Type *</Form.Label>
-                          <Form.Select
-                            name="schoolType"
-                            value={formData.schoolType}
-                            onChange={handleChange}
-                            required
-                          >
-                            <option value="">Select school type</option>
-                            <option value="primary">Primary School</option>
-                            <option value="secondary">Secondary School</option>
-                            <option value="high-school">High School</option>
-                            <option value="college">College</option>
-                            <option value="university">University</option>
-                            <option value="technical">Technical Institute</option>
-                            <option value="vocational">Vocational Training</option>
-                            <option value="international">International School</option>
-                            <option value="private">Private School</option>
-                            <option value="public">Public School</option>
-                            <option value="montessori">Montessori School</option>
-                            <option value="special-needs">Special Needs School</option>
-                            <option value="boarding">Boarding School</option>
-                            <option value="online">Online School</option>
-                          </Form.Select>
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
                           <Form.Label>Established Year</Form.Label>
                           <Form.Control
                             type="number"
@@ -188,9 +158,6 @@ const CreateSchoolPage = () => {
                           />
                         </Form.Group>
                       </Col>
-                    </Row>
-
-                    <Row>
                       <Col md={6}>
                         <Form.Group className="mb-3">
                           <Form.Label>School Email</Form.Label>
@@ -290,7 +257,7 @@ const CreateSchoolPage = () => {
                       onClick={handleGoBack}
                       disabled={loading}
                     >
-                      <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
+                      <i className="fas fa-arrow-left me-2"></i>
                       Back to Home
                     </Button>
                     <Button 
@@ -305,7 +272,7 @@ const CreateSchoolPage = () => {
                         </>
                       ) : (
                         <>
-                          <FontAwesomeIcon icon={faSchool} className="me-2" />
+                          <i className="fas fa-plus me-2"></i>
                           Create School
                         </>
                       )}

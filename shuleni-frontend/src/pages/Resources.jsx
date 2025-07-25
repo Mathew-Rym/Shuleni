@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Card, ListGroup, Form, Modal } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const Resources = () => {
-  const navigate = useNavigate();
   const [selectedClass, setSelectedClass] = useState('math');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [newFile, setNewFile] = useState(null);
@@ -74,15 +71,6 @@ const Resources = () => {
   return (
     <div className="resources-page bg-light min-vh-100">
       <Container className="py-4">
-        {/* Back Button */}
-        <Button 
-          variant="link" 
-          onClick={() => navigate(-1)}
-          className="d-flex align-items-center text-decoration-none p-0 mb-3"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
-        </Button>
-        
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0">Class Resources</h1>
           <Button variant="primary" onClick={() => setShowUploadModal(true)}>

@@ -191,30 +191,10 @@ const LoginPage = () => {
           <Row>
             <Col className="text-center">
               <div className="d-flex justify-content-center align-items-center flex-wrap gap-4">
-                <button 
-                  className="btn btn-link text-muted text-decoration-none p-0"
-                  onClick={() => navigate('/privacy')}
-                >
-                  Privacy Policy
-                </button>
-                <button 
-                  className="btn btn-link text-muted text-decoration-none p-0"
-                  onClick={() => navigate('/terms')}
-                >
-                  Terms of Service
-                </button>
-                <button 
-                  className="btn btn-link text-muted text-decoration-none p-0"
-                  onClick={() => navigate('/contact')}
-                >
-                  Contact Us
-                </button>
-                <button 
-                  className="btn btn-link text-muted text-decoration-none p-0"
-                  onClick={() => navigate('/about')}
-                >
-                  FAQ
-                </button>
+                <a href="#" className="text-muted text-decoration-none">Privacy Policy</a>
+                <a href="#" className="text-muted text-decoration-none">Terms of Service</a>
+                <a href="#" className="text-muted text-decoration-none">Contact Us</a>
+                <a href="#" className="text-muted text-decoration-none">FAQ</a>
               </div>
               <p className="text-muted mt-2 mb-0 small">
                 © 2025 Shuleni School Management Platform

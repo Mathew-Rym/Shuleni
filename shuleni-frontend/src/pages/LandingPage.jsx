@@ -1,45 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import DemoVideoModal from '../components/DemoVideoModal';
-import { useLanguage } from '../contexts/LanguageContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faToolbox, faHeadset, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [showDemoModal, setShowDemoModal] = useState(false);
-  const { t } = useLanguage();
-
-  // Debug element to check if page is rendering
-  console.log('LandingPage is rendering');
-
-  const handleWatchDemo = () => {
-    setShowDemoModal(true);
-  };
-
-  const handleCloseDemoModal = () => {
-    setShowDemoModal(false);
-  };
 
   const features = [
     {
-      icon: faUsers,
-      title: t('userFriendly'),
-      description: t('userFriendlyDesc'),
+      icon: '👥',
+      title: 'User-Friendly',
+      description: 'Our interface is simple and intuitive for all users.',
       color: '#FF6B6B'
     },
     {
-      icon: faToolbox,
-      title: t('comprehensiveTools'),
-      description: t('comprehensiveToolsDesc'),
+      icon: '⚛️',
+      title: 'Comprehensive Tools',
+      description: 'All necessary tools for managing schools in one place.',
       color: '#4ECDC4'
     },
     {
-      icon: faHeadset,
-      title: t('support247'),
-      description: t('support247Desc'),
+      icon: '',
+      title: '24/7 Support',
+      description: 'We provide around-the-clock support to ensure your success.',
       color: '#45B7D1'
     }
   ];
@@ -54,41 +37,25 @@ const LandingPage = () => {
         <Container>
           <Row className="justify-content-center text-center">
             <Col lg={8}>
-              <h1 className="display-4 fw-bold mb-4">{t('landingHeroTitle')}</h1>
+              <h1 className="display-4 fw-bold mb-4">Welcome to Shuleni</h1>
               <p className="lead mb-4">
-                {t('landingHeroSubtitle')}
+                Create, manage and grow your school community easily with our platform.
               </p>
               <div className="d-flex justify-content-center gap-3 flex-wrap">
                 <Button 
                   variant="outline-light"
                   size="lg"
                   onClick={() => navigate('/about')}
-                  className="fw-bold px-4 py-3 border-2"
-                  style={{ boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}
                 >
-                  {t('learnMore')}
+                  Learn More
                 </Button>
                 <Button 
                   variant="light"
                   size="lg"
-                  onClick={handleWatchDemo}
-                  className="fw-bold px-4 py-3"
-                  style={{ 
-                    boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)',
-                    background: 'linear-gradient(to right, #ffffff, #f0f0f0)'
-                  }}
+                  onClick={() => navigate('/login')}
+                  className="fw-bold"
                 >
-                  <FontAwesomeIcon icon={faPlay} className="me-2" />
-                  {t('watchDemo')}
-                </Button>
-                <Button 
-                  variant="outline-light"
-                  size="lg"
-                  onClick={() => navigate('/create-school')}
-                  className="fw-bold px-4 py-3 border-2"
-                  style={{ boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}
-                >
-                  {t('createYourSchool')}
+                  Create Your School
                 </Button>
               </div>
             </Col>
@@ -100,12 +67,12 @@ const LandingPage = () => {
       <Container className="py-5">
         <Row className="text-center mb-5">
           <Col>
-            <h2 className="display-5 fw-bold">{t('whyChooseUs')}</h2>
+            <h2 className="display-5 fw-bold">Why Choose Us?</h2>
             <p className="lead text-muted">
-              {t('whyChooseUsSubtitle')}
+              Learn about the key features that make our platform stand out.
             </p>
             <Button variant="primary" className="shuleni-btn-primary">
-              {t('getStarted')}
+              Get Started
             </Button>
           </Col>
         </Row>
@@ -122,11 +89,10 @@ const LandingPage = () => {
                       width: '80px',
                       height: '80px',
                       backgroundColor: feature.color,
-                      fontSize: '2rem',
-                      color: 'white'
+                      fontSize: '2rem'
                     }}
                   >
-                    <FontAwesomeIcon icon={feature.icon} />
+                    {feature.icon}
                   </div>
                   <Card.Title className="h4 fw-bold">{feature.title}</Card.Title>
                   <Card.Text className="text-muted">
@@ -144,9 +110,9 @@ const LandingPage = () => {
         <Container>
           <Row className="text-center">
             <Col lg={8} className="mx-auto">
-              <h3 className="display-6 fw-bold mb-3">{t('readyToStart')}</h3>
+              <h3 className="display-6 fw-bold mb-3">Ready to Get Started?</h3>
               <p className="lead text-muted mb-4">
-                {t('readyToStartDesc')}
+                Join thousands of schools already using Shuleni to manage their educational communities.
               </p>
               <div className="d-flex justify-content-center gap-3 flex-wrap">
                 <Button 
@@ -155,16 +121,14 @@ const LandingPage = () => {
                   className="shuleni-btn-primary"
                   onClick={() => navigate('/login')}
                 >
-                  {t('startSchoolToday')}
+                  Start Your School Today
                 </Button>
                 <Button 
                   variant="outline-primary"
                   size="lg"
-                  onClick={handleWatchDemo}
-                  className="d-flex align-items-center"
+                  onClick={() => navigate('/demo')}
                 >
-                  <FontAwesomeIcon icon={faPlay} className="me-2" />
-                  {t('watchDemo')}
+                  Watch Demo
                 </Button>
               </div>
             </Col>
@@ -188,49 +152,19 @@ const LandingPage = () => {
             <Col md={6}>
               <Row>
                 <Col sm={6}>
-                  <h6 className="fw-bold mb-3">{t('quickLinks')}</h6>
+                  <h6 className="fw-bold mb-3">Quick Links</h6>
                   <div className="d-flex flex-column">
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/privacy')}
-                    >
-                      {t('privacyPolicy')}
-                    </button>
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/terms')}
-                    >
-                      {t('termsOfUse')}
-                    </button>
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/contact')}
-                    >
-                      {t('contactSupport')}
-                    </button>
+                    <a href="#" className="text-muted text-decoration-none mb-2">Privacy Policy</a>
+                    <a href="#" className="text-muted text-decoration-none mb-2">Terms of Use</a>
+                    <a href="#" className="text-muted text-decoration-none mb-2">Contact Support</a>
                   </div>
                 </Col>
                 <Col sm={6}>
-                  <h6 className="fw-bold mb-3">{t('support')}</h6>
+                  <h6 className="fw-bold mb-3">Support</h6>
                   <div className="d-flex flex-column">
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/about')}
-                    >
-                      {t('helpCenter')}
-                    </button>
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/about')}
-                    >
-                      {t('faq')}
-                    </button>
-                    <button 
-                      className="btn btn-link text-muted text-decoration-none mb-2 p-0 text-start"
-                      onClick={() => navigate('/contact')}
-                    >
-                      {t('contactUs')}
-                    </button>
+                    <a href="#" className="text-muted text-decoration-none mb-2">Help Center</a>
+                    <a href="#" className="text-muted text-decoration-none mb-2">FAQ</a>
+                    <a href="#" className="text-muted text-decoration-none mb-2">Contact Us</a>
                   </div>
                 </Col>
               </Row>
@@ -246,12 +180,6 @@ const LandingPage = () => {
           </Row>
         </Container>
       </footer>
-
-      {/* Demo Video Modal */}
-      <DemoVideoModal 
-        show={showDemoModal} 
-        onHide={handleCloseDemoModal} 
-      />
     </div>
   );
 };

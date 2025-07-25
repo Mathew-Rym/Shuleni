@@ -12,51 +12,27 @@ const Header = () => {
     const handleShowSidebar = () => setShowSidebar(true);
   return (
     <>
-      <Navbar bg="light" expand="lg" className="border-bottom navbar-custom" fixed="top">
-        <Container fluid className="px-3 px-lg-4">
-          <Navbar.Brand as={Link} to="/" className="fw-bold">
-            <span className="d-none d-sm-inline">Shuleni</span>
-            <span className="d-inline d-sm-none">S</span>
+      <Navbar bg="light" expand="lg" className="border-bottom">
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/">
+            <h3 className="mb-0">Shuleni</h3>
           </Navbar.Brand>
           
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Nav.Link as={Link} to="/resources">Resources</Nav.Link>
+            <Nav.Link as={Link} to="/classes">Classes</Nav.Link>
+          </Nav>
           
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/" className="px-2 px-lg-3">
-                <i className="fas fa-home me-1 d-lg-none"></i>
-                <span>Home</span>
-              </Nav.Link>
-              <Nav.Link as={Link} to="/resources" className="px-2 px-lg-3">
-                <i className="fas fa-book me-1 d-lg-none"></i>
-                <span>Resources</span>
-              </Nav.Link>
-              <Nav.Link as={Link} to="/classes" className="px-2 px-lg-3">
-                <i className="fas fa-chalkboard me-1 d-lg-none"></i>
-                <span>Classes</span>
-              </Nav.Link>
-            </Nav>
-            
-            <div className="d-flex align-items-center flex-column flex-lg-row gap-2">
-              {isAdmin && (
-                <Button 
-                  variant="outline-primary" 
-                  size="sm" 
-                  className="w-100 w-lg-auto"
-                  onClick={handleShowSidebar}
-                >
-                  <i className="fas fa-bars me-2"></i>
-                  <span className="d-none d-sm-inline">Open Sidebar</span>
-                  <span className="d-inline d-sm-none">Menu</span>
-                </Button>
-              )}
-            </div>
-          </Navbar.Collapse>
+          <div className="d-flex align-items-center">
+            {isAdmin && (
+              <Button variant="outline-primary"  size="sm" className="me-2"
+                onClick={handleShowSidebar}
+              >  Open Sidebar</Button>
+            )}
+          </div>
         </Container>
       </Navbar>
-      
-      {/* Add spacing for fixed navbar */}
-      <div style={{ paddingTop: '76px' }}></div>
     </>
   );
 };

@@ -1,10 +1,11 @@
+// Authentication slice for managing user login/logout state
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  role: null,
+  role: null, // 'admin', 'teacher', 'student'
   loading: false,
   error: null,
 };
@@ -42,20 +43,15 @@ const authSlice = createSlice({
     updateProfile: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
-    updateUserAvatar: (state, action) => {
-      if (state.user) {
-        state.user.avatar = action.payload;
-      }
-    },
   },
 });
 
-// BACKEND TODO: Replace with actual API endpoint POST /api/auth/login
+// Mock login function - Replace with actual API call
 export const loginUser = (credentials) => async (dispatch) => {
   dispatch(loginStart());
   
   try {
-    // BACKEND INTEGRATION: Replace mock with actual API call
+    // TODO: Replace with actual API endpoint
     // const response = await fetch('/api/auth/login', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
@@ -63,6 +59,7 @@ export const loginUser = (credentials) => async (dispatch) => {
     // });
     // const data = await response.json();
     
+    // Mock authentication - Remove when backend is ready
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const mockUser = {
@@ -73,23 +70,13 @@ export const loginUser = (credentials) => async (dispatch) => {
             credentials.email.includes('teacher') ? 'teacher' : 'student',
       avatar: 'https://via.placeholder.com/150',
       school_id: 1,
-      // Additional student fields (will be available when role is 'student')
-      admissionNo: 'STU-2025-001',
-      idNumber: '12345678',
-      gender: 'Male',
-      dateOfBirth: '1/15/2005',
-      county: 'Nairobi',
-      country: 'KENYAN',
-      phone: '+254712345678',
-      parentName: 'Jane Doe',
-      postalAddress: 'P.O. Box 123, Nairobi',
-      canGraduate: false
     };
     
     const mockToken = 'mock-jwt-token-' + Date.now();
     
     dispatch(loginSuccess({ user: mockUser, token: mockToken }));
     
+    // Store in localStorage for persistence
     localStorage.setItem('shuleni_token', mockToken);
     localStorage.setItem('shuleni_user', JSON.stringify(mockUser));
     
@@ -98,9 +85,9 @@ export const loginUser = (credentials) => async (dispatch) => {
   }
 };
 
-// BACKEND TODO: Implement POST /api/auth/logout endpoint
+// Logout function
 export const logoutUser = () => (dispatch) => {
-  // BACKEND INTEGRATION: Call logout API endpoint
+  // TODO: Call logout API endpoint if needed
   // await fetch('/api/auth/logout', { method: 'POST' });
   
   localStorage.removeItem('shuleni_token');
@@ -108,6 +95,7 @@ export const logoutUser = () => (dispatch) => {
   dispatch(logout());
 };
 
+// Check authentication on app load
 export const checkAuth = () => (dispatch) => {
   const token = localStorage.getItem('shuleni_token');
   const user = localStorage.getItem('shuleni_user');
@@ -122,5 +110,5 @@ export const checkAuth = () => (dispatch) => {
   }
 };
 
-export const { loginStart, loginSuccess, loginFailure, logout, clearError, updateProfile, updateUserAvatar } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, clearError, updateProfile } = authSlice.actions;
 export default authSlice.reducer;
