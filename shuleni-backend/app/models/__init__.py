@@ -7,6 +7,6 @@ from .attendance import Attendance
 from .exam import Exam
 from .exam_submission import ExamSubmission
 from .chat import ChatMessage
-from .videosession import VideoSession
-from .club import Club
-from .clubmember import ClubMember
+#from .videosession import VideoSession
+#from .club import Club
+#from .clubmember import ClubMember

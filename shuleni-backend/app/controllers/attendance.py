@@ -36,7 +36,7 @@ def take_attendance(school_id):
         
         if not attendance:
             attendance = Attendance(
-                class_id=data['class_id'],
+                class_id=data.get['class_id'],
                 student_id=record['student_id'],
                 educator_id=get_jwt_identity(),
                 date=date,

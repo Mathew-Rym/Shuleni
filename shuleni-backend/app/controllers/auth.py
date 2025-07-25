@@ -14,7 +14,7 @@ def register_school():
     if errors:
         return {"errors": errors}, 400
         
-    if School.query.filter_by(email=data['email']).first():
+    if School.query.filter_by(email=data('email')).first():
         return {"msg": "Email already registered"}, 400
         
     school = School(
@@ -28,9 +28,10 @@ def register_school():
         school_id=school.id,
         name=data['owner_name'],
         email=data['email'],
-        role='admin',
-        password_hash=generate_password_hash(data['password'])
+        role='admin'
     )
+    admin.set_password(data['password'])
+
     save_to_db(admin)
     
     access_token = create_access_token(identity=admin.id)
@@ -53,7 +54,10 @@ def login():
         return {"msg": "Email and password required"}, 400
 
     user = User.query.filter_by(email=email).first()
-    if not user or not user.check_password(password):
+    if User.query.filter_by(email=data['email']).first():
+        return {"msg": "User email already in use"}, 400
+
+    if not user or not user.password_hash or not user.check_password(password):
         return {"msg": "Invalid credentials"}, 401
 
     access_token = create_access_token(identity=user.id)

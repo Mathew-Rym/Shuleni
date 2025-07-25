@@ -31,10 +31,10 @@ class User(db.Model):
                                        cascade='all, delete-orphan', passive_deletes=True)
     sent_messages = db.relationship('ChatMessage', back_populates='sender',
                                     cascade='all, delete-orphan', passive_deletes=True)
-    hosted_sessions = db.relationship('VideoSession', back_populates='host',
-                                      cascade='all, delete-orphan', passive_deletes=True)
-    club_memberships = db.relationship('ClubMember', back_populates='user',
-                                       cascade='all, delete-orphan', passive_deletes=True)
+    #hosted_sessions = db.relationship('VideoSession', back_populates='host',
+    #                                  cascade='all, delete-orphan', passive_deletes=True)
+    #club_memberships = db.relationship('ClubMember', back_populates='user',
+    #                                   cascade='all, delete-orphan', passive_deletes=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

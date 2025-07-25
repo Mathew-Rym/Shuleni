@@ -4,7 +4,8 @@ from app.controllers.resources import (
     get_class_resources,
     get_resource,
     update_resource,
-    delete_resource
+    delete_resource,
+    download_resource
 )
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
@@ -25,4 +26,7 @@ resource_bp.route('/<int:resource_id>', methods=['PUT'])(
 )
 resource_bp.route('/<int:resource_id>', methods=['DELETE'])(
     jwt_required()(roles_required('admin', 'educator')(school_required(delete_resource)))
+)
+resource_bp.route('/<int:resource_id>/download', methods=['GET'])(
+    jwt_required()(roles_required('admin', 'educator', 'student')(school_required(download_resource)))
 )

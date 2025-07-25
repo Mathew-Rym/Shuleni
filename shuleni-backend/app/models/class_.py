@@ -20,5 +20,5 @@ class Class(db.Model):
                             cascade='all, delete-orphan', passive_deletes=True)
     chats = db.relationship('ChatMessage', back_populates='class_',
                             cascade='all, delete-orphan', passive_deletes=True)
-    video_sessions = db.relationship('VideoSession', back_populates='class_',
-                                     cascade='all, delete-orphan', passive_deletes=True)
+    #video_sessions = db.relationship('VideoSession', back_populates='class_',
+    #                                 cascade='all, delete-orphan', passive_deletes=True)

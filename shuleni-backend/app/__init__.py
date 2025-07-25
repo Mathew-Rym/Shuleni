@@ -23,21 +23,21 @@ def create_app(config_class='app.config.Config'):
     from app.routes.attendance_routes import attendance_bp
     from app.routes.exam_routes import exam_bp
     from app.routes.chat_routes import chat_bp
-    from app.routes.club_routes import club_bp
-    from app.routes.video_routes import video_bp
+    #from app.routes.club_routes import club_bp
+    #from app.routes.video_routes import video_bp
     from app.routes.exam_submission_routes import submission_bp
     from app.routes.enrollment_routes import enrollment_bp
 
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(school_bp)
-    app.register_blueprint(class_bp)
-    app.register_blueprint(resource_bp)
-    app.register_blueprint(attendance_bp)
-    app.register_blueprint(exam_bp)
-    app.register_blueprint(chat_bp)
-    app.register_blueprint(club_bp)
-    app.register_blueprint(video_bp)
-    app.register_blueprint(submission_bp)
-    app.register_blueprint(enrollment_bp)
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(school_bp, url_prefix="/api/schools")
+    app.register_blueprint(class_bp, url_prefix="/api/classes")
+    app.register_blueprint(resource_bp, url_prefix="/api/resources")
+    app.register_blueprint(attendance_bp, url_prefix="/api/attendance")
+    app.register_blueprint(exam_bp, url_prefix="/api/exams")
+    app.register_blueprint(chat_bp, url_prefix="/api/chats")
+    #app.register_blueprint(club_bp, url_prefix="/api/clubs")
+    #app.register_blueprint(video_bp, url_prefix="/api/video")
+    app.register_blueprint(submission_bp, url_prefix="/api/exam_submissions")
+    app.register_blueprint(enrollment_bp, url_prefix="/api/enrollments")
 
     return app

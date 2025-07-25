@@ -11,6 +11,7 @@ class ExamSubmission(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     submitted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
     score = db.Column(db.Numeric(5, 2))
+    graded_at = db.Column(db.DateTime)
     plagiarism_flag = db.Column(db.Boolean, default=False)
 
     exam = db.relationship('Exam', back_populates='submissions')

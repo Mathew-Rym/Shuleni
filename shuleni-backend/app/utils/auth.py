@@ -23,11 +23,10 @@ def school_required(fn):
         verify_jwt_in_request()
         current_user_id = get_jwt_identity()
         user = User.query.get(current_user_id)
-        
+
         if not user or not user.school_id:
             return jsonify({"msg": "School context required"}), 403
-            
-        # Add school_id to kwargs for route functions
-        kwargs['school_id'] = user.school_id
-        return fn(*args, **kwargs)
+
+        return fn(school_id=user.school_id, *args, **kwargs)
+
     return decorator

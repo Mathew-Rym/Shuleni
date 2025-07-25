@@ -11,14 +11,9 @@ flask-cors = "*"
 python-dotenv = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
-<<<<<<< HEAD
-=======
 pytest = "*"
-flask = "*"
->>>>>>> ff7ddca (Changes to the dependencies)
 
 [dev-packages]
-pytest = "*"
 
 [requires]
 python_version = "3.12"
