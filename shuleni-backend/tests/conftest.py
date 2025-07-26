@@ -2,6 +2,7 @@ import pytest
 from app import create_app, db
 from app.models.user import User
 from app.models.school import School
+from app.config import TestingConfig
 from flask_jwt_extended import create_access_token
 
 @pytest.fixture(scope="session")
@@ -26,7 +27,6 @@ def session(app):
 
 @pytest.fixture()
 def client(app):
-    """Create a test client."""
     return app.test_client()
 
 @pytest.fixture()

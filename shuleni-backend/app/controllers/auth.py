@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import get_jwt_identity, create_access_token, create_refresh_token
 from app import db
 from app.models import User, School
 from app.utils.helpers import save_to_db
@@ -13,8 +13,9 @@ def register_school():
     errors = validate_school_creation(data)
     if errors:
         return {"errors": errors}, 400
-        
-    if School.query.filter_by(email=data('email')).first():
+
+    email = data.get('email')
+    if School.query.filter_by(email=email).first():
         return {"msg": "Email already registered"}, 400
         
     school = School(
@@ -54,8 +55,6 @@ def login():
         return {"msg": "Email and password required"}, 400
 
     user = User.query.filter_by(email=email).first()
-    if User.query.filter_by(email=data['email']).first():
-        return {"msg": "User email already in use"}, 400
 
     if not user or not user.password_hash or not user.check_password(password):
         return {"msg": "Invalid credentials"}, 401
@@ -71,8 +70,6 @@ def login():
     }, 200
 
 def refresh_token():
-    """Handle token refresh"""
-    from flask_jwt_extended import get_jwt_identity
-    current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user)
-    return {"access_token": new_token}
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
+    return jsonify(access_token=access_token), 200
