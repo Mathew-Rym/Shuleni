@@ -1,12 +1,14 @@
 // Classes management slice
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk,  } from '@reduxjs/toolkit';
 
+
+// Correct `initialState` initialization at the top of the file
 const initialState = {
-  classes: [],
-  resources: [],
+  classes: [], // Initialize classes as an empty array
+  resources: [], // Initialize resources as an empty array
   loading: false,
   error: null,
-};
+}; 
 
 // Mock classes data
 const mockClasses = [
@@ -214,7 +216,36 @@ export const createClass = (classData) => async (dispatch) => {
   } catch (error) {
     dispatch(setError(error.message));
   }
-};
+}; 
+
+export const assignTeacherToClass = createAsyncThunk(
+  'classes/assignTeacherToClass',
+  async ({ classId, teacherId, teacherName }, { dispatch, getState }) => {
+    dispatch(setLoading(true));
+    try {
+      // TODO: Replace with actual API call
+      // const response = await fetch(`/api/classes/${classId}/assign-teacher`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ teacherId }),
+      // });
+      // const updatedClass = await response.json();
+
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const state = getState();
+      const classToUpdate = state.classes.classes.find(c => c.id === classId);
+      if (classToUpdate) {
+        const updatedClass = { ...classToUpdate, teacherId, teacher: teacherName };
+        dispatch(updateClass(updatedClass));
+      }
+      
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setError(error.message));
+    }
+  }
+);
 
 export const {
   setLoading,

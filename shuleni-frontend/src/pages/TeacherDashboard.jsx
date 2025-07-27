@@ -28,7 +28,7 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     dispatch(fetchStudents());
-    dispatch(fetchClasses());
+    dispatch(fetchClasses() );
   }, [dispatch]);
 
   // Student management functions

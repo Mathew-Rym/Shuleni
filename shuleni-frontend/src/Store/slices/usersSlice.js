@@ -187,6 +187,37 @@ export const fetchTeachers = () => async (dispatch) => {
   }
 };
 
+export const assignClassesToTeacher = (teacherId, classIds) => async (dispatch, getState) => {
+  dispatch(setLoading(true));
+  try {
+    // TODO: Replace with actual API call
+    // const response = await fetch(`/api/teachers/${teacherId}/assign-classes`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ classIds }),
+    // });
+    // const updatedTeacher = await response.json();
+    
+    // Mock API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Update the teacher's classes in the store
+    const { teachers } = getState().users;
+    const index = teachers.findIndex((teacher) => teacher.id === teacherId);
+    if (index !== -1) {
+      const updatedTeachers = [...teachers];
+      updatedTeachers[index] = { 
+        ...teachers[index], 
+        classes: classIds 
+      };
+      dispatch(setTeachers(updatedTeachers)); // Re-use the setTeachers action to update the store
+    }
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
+};
+
 export const createStudent = (studentData) => async (dispatch) => {
   dispatch(setLoading(true));
   try {

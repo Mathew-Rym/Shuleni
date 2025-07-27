@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Form, Table, Badge, Alert, Tabs, Tab } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, Provider} from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -11,10 +12,14 @@ import ClassManagement from '../components/ClassManagement';
 import SubjectManagement from '../components/SubjectManagement';
 import StudentSearch from '../components/StudentSearch';
 import { fetchDashboardData } from '../Store/slices/dashboardSlice';
-import { fetchStudents, fetchTeachers, createStudent, createTeacher, updateStudent, updateTeacher, deleteStudent, deleteTeacher, assignClassesToTeacher, assignTeacherToMultipleClasses } from '../Store/slices/usersSlice';
+import { fetchStudents, fetchTeachers, createStudent, createTeacher, updateStudent, updateTeacher, deleteStudent, deleteTeacher, assignClassesToTeacher } from '../Store/slices/usersSlice';
 import { fetchClasses, createClass, assignTeacherToClass } from '../Store/slices/classesSlice';
 import { fetchEvents, createEvent, updateEventData, deleteEventData } from '../Store/slices/calendarSlice';
-import { updateUserAvatar } from '../Store/slices/authSlice';
+
+const selectEvents = createSelector(
+  (state) => state.calendar || {}, // Handle undefined state.calendar
+  (calendar) => calendar.events || [] // Provide default if events is undefined
+); 
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -22,8 +27,8 @@ const AdminDashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const { metrics, attendanceData, loading } = useSelector((state) => state.dashboard);
   const { students, teachers } = useSelector((state) => state.users);
-  const { classes } = useSelector((state) => state.classes);
-  const { events } = useSelector((state) => state.calendar);
+  const classes = useSelector((state) => state.classes?.classes || []);
+  const events = useSelector(selectEvents);
 
   
   const [showStudentModal, setShowStudentModal] = useState(false);
@@ -224,7 +229,7 @@ const AdminDashboard = () => {
           }));
         });
       }
-    }
+    }  
     
     setShowTeacherModal(false);
     setEditingTeacher(null);
@@ -243,6 +248,24 @@ const AdminDashboard = () => {
       }, 500);
     }
   };
+
+  const handleAddNewTeacher = () => {
+        setEditingTeacher(null);
+        setTeacherForm({
+          name: '',
+          email: '',
+          subject: '',
+          phone: '',
+          address: '',
+          qualifications: '',
+          experience: '',
+          photo: '',
+          assignedClasses: []
+        });
+        setSelectedClasses([]);
+        setShowTeacherModal(true);
+      };
+    
 
   const handleEventSubmit = (e) => {
     e.preventDefault();
@@ -667,37 +690,6 @@ const AdminDashboard = () => {
             <Col lg={6}>
               <Card className="shuleni-card h-100">
                 <Card.Body>
-                  <h5 className="fw-bold mb-3">School Performance Metrics</h5>
-                  <p className="text-muted">Key metrics to monitor your school's performance.</p>
-                  <Button variant="primary">View Detailed Report</Button>
-                  
-                  <Row className="mt-4">
-                    <Col sm={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold">{metrics.examsCompleted}</h4>
-                        <small className="text-muted">Exams Conducted</small>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold">{metrics.resourcesUploaded}</h4>
-                        <small className="text-muted">Resources Uploaded</small>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold">{metrics.activeClasses}</h4>
-                        <small className="text-muted">Active Classes</small>
-                      </div>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col lg={6}>
-              <Card className="shuleni-card h-100">
-                <Card.Body>
                   <h5 className="fw-bold mb-3">Monthly Attendance</h5>
                   <p className="text-muted">Attendance (%)</p>
                   
@@ -807,7 +799,7 @@ const AdminDashboard = () => {
                     <div className="d-flex gap-2">
                       <Button 
                         className="shuleni-btn-primary"
-                        onClick={handleCreateTeacherAndDashboard}
+                        onClick={handleAddNewTeacher}
                       >
                         <i className="fas fa-plus me-2"></i>
                         Add Teacher

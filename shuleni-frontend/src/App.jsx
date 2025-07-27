@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { store } from './Store/store.js';
 import { checkAuth } from './Store/slices/authSlice.js';
+import './App.css';
+import Navbar from './components/Navbar';
 
 
 import LandingPage from './pages/LandingPage';
@@ -37,11 +39,11 @@ function App() {
             } />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-school" element={<CreateSchoolPage />} />
-            
-            {/* Protected Routes */}
+          
+           {/* Protected Routes */}
             <Route path="/admin" element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
+                  <AdminDashboard />
               </ProtectedRoute>
             } />
             <Route path="/teacher" element={
