@@ -22,12 +22,12 @@ from app import db
 
 # Create app context so db.metadata is available
 app = create_app()
-app.app_context().push()
 
-config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
+with app.app_context():
+    config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 # Provide metadata to Alembic
-target_metadata = db.metadata
+    target_metadata = db.metadata
 
 
 # other values from the config, defined by the needs of env.py,
