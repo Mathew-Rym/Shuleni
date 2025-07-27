@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "neville-frontend" ]
+    branches: [ "main", "neville-frontend", "rym-frontend" ]
   pull_request:
-    branches: [ "main", "neville-frontend" ]
+    branches: [ "main", "neville-frontend" , "rym-frontend" ]
 
 
 jobs:
