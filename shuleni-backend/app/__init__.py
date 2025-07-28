@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from importlib import import_module
 from app.config import Config, TestingConfig
 
@@ -20,6 +21,7 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    CORS(app)
 
     from app.routes.auth_routes import auth_bp
     from app.routes.school_routes import school_bp
@@ -30,6 +32,11 @@ def create_app(config_name=None):
     from app.routes.chat_routes import chat_bp
     from app.routes.exam_submission_routes import submission_bp
     from app.routes.enrollment_routes import enrollment_bp
+    from app.routes.assignment_routes import assignment_bp
+    from app.routes.announcement_routes import announcement_bp
+    from app.routes.event_routes import event_bp
+    from app.routes.session_routes import session_bp
+    #from app.routes.club_routes import club_bp
     #from app.routes.club_routes import club_bp
     #from app.routes.video_routes import video_bp
 
@@ -43,6 +50,11 @@ def create_app(config_name=None):
     app.register_blueprint(chat_bp, url_prefix="/api/chats")
     app.register_blueprint(submission_bp, url_prefix="/api/exam_submissions")
     app.register_blueprint(enrollment_bp, url_prefix="/api/enrollments")
+    app.register_blueprint(assignment_bp, url_prefix="/api/assignments")
+    app.register_blueprint(announcement_bp, url_prefix="/api/announcements")
+    app.register_blueprint(event_bp, url_prefix="/api/events")
+    app.register_blueprint(session_bp, url_prefix="/api/sessions")
+    #app.register_blueprint(club_bp, url_prefix="/api/clubs")
     #app.register_blueprint(club_bp, url_prefix="/api/clubs")
     #app.register_blueprint(video_bp, url_prefix="/api/video")
 

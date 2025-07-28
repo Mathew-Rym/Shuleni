@@ -6,6 +6,7 @@ load_dotenv()
 
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/shuleni_db')
+    ENV = os.getenv('FLASK_ENV', 'production')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret-key')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=12)
