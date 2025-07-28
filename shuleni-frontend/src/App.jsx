@@ -1,34 +1,60 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-import Header from './components/Header.jsx';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import Class from './pages/Classes.jsx';
-import ExamTaking from './pages/Student/ExamTaking.jsx';
-import ExamOverview from './pages/Student/ExamOverview.jsx';
-import Resources from './pages/Resources.jsx';
-import ResourceDetail from './pages/Student/ResourceDetail.jsx';
-
-import 'bootstrap/dist/css/bootstrap.min.css'
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { store } from './Store/store.js';
+import { checkAuth } from './Store/slices/authSlice.js';
 import './App.css';
 
-export default function App() {
+// Import pages
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import CreateSchoolPage from './pages/CreateSchoolPage';
+import AdminDashboard from './pages/AdminDashboard';
+import TeacherDashboard from './pages/TeacherDashboard';
+import StudentDashboard from "./pages/Student/StudentDashboard";
+import ProtectedRoute from './components/ProtectedRoute';
+import NotFound from "./pages/NotFound.jsx";
+
+function App() {
+  
+  useEffect(() => {
+    store.dispatch(checkAuth());
+  }, []);
+
   return (
-    <Router>
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/classes" element={<Class />} />
-          <Route path="/exam-taking" element={<ExamTaking />} />
-          <Route path="/exam-overview" element={<ExamOverview />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/resource/:id" element={<ResourceDetail />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </main>
-    </Router>
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/create-school" element={<CreateSchoolPage />} />
+          
+           {/* Protected Routes */}
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/teacher" element={
+              <ProtectedRoute allowedRoles={['teacher']}>
+                <TeacherDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/student" element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <StudentDashboard />
+              </ProtectedRoute>
+            } />
+            
+            {/* 404 Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 }
+
+export default App;

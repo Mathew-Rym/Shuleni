@@ -19,18 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify the Node.js version you want to use
-
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'shuleni-frontend/package-lock.json'
+  
       - name: Install and Build
         run: |
           cd shuleni-frontend
-          npm install
+          npm ci
           npm run build
 
-      - name : Skip Tests
+      - name: Skip Tests
         run: echo "Skipping tests for frontend CI"
