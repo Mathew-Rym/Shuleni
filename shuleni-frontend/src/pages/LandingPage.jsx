@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const LandingPage = () => {
@@ -37,23 +37,24 @@ const LandingPage = () => {
         <Container>
           <Row className="justify-content-center text-center">
             <Col lg={8}>
-              <h1 className="display-4 fw-bold mb-4">Welcome to Shuleni</h1>
-              <p className="lead mb-4">
+              <h1 className="display-4 fw-bold mb-4 text-dark">Welcome to Shuleni</h1>
+              <p className="lead mb-4 text-secondary">
                 Create, manage and grow your school community easily with our platform.
               </p>
               <div className="d-flex justify-content-center gap-3 flex-wrap">
                 <Button 
-                  variant="outline-light"
+                  variant="outline-primary"
                   size="lg"
                   onClick={() => navigate('/about')}
+                  className="border-2"
                 >
                   Learn More
                 </Button>
                 <Button 
-                  variant="light"
+                  variant="primary"
                   size="lg"
                   onClick={() => navigate('/login')}
-                  className="fw-bold"
+                  className="fw-bold border-2"
                 >
                   Create Your School
                 </Button>
@@ -143,28 +144,28 @@ const LandingPage = () => {
             <Col md={6}>
               <div className="d-flex align-items-center mb-3">
                 <span className="fs-4 me-2"></span>
-                <span className="fw-bold fs-5">Shuleni</span>
+                <span className="fw-bold fs-5 text-white">Shuleni</span>
               </div>
-              <p className="text-muted">
+              <p className="text-light">
                 Empowering education through innovative school management solutions.
               </p>
             </Col>
             <Col md={6}>
               <Row>
                 <Col sm={6}>
-                  <h6 className="fw-bold mb-3">Quick Links</h6>
+                  <h6 className="fw-bold mb-3 text-white">Quick Links</h6>
                   <div className="d-flex flex-column">
-                    <a href="#" className="text-muted text-decoration-none mb-2">Privacy Policy</a>
-                    <a href="#" className="text-muted text-decoration-none mb-2">Terms of Use</a>
-                    <a href="#" className="text-muted text-decoration-none mb-2">Contact Support</a>
+                    <Link to="/privacy-policy" className="text-light text-decoration-none mb-2 hover-text-primary">Privacy Policy</Link>
+                    <Link to="/terms-of-use" className="text-light text-decoration-none mb-2 hover-text-primary">Terms of Use</Link>
+                    <Link to="/contact-support" className="text-light text-decoration-none mb-2 hover-text-primary">Contact Support</Link>
                   </div>
                 </Col>
                 <Col sm={6}>
-                  <h6 className="fw-bold mb-3">Support</h6>
+                  <h6 className="fw-bold mb-3 text-white">Support</h6>
                   <div className="d-flex flex-column">
-                    <a href="#" className="text-muted text-decoration-none mb-2">Help Center</a>
-                    <a href="#" className="text-muted text-decoration-none mb-2">FAQ</a>
-                    <a href="#" className="text-muted text-decoration-none mb-2">Contact Us</a>
+                    <Link to="/help-center" className="text-light text-decoration-none mb-2 hover-text-primary">Help Center</Link>
+                    <Link to="/faq" className="text-light text-decoration-none mb-2 hover-text-primary">FAQ</Link>
+                    <Link to="/contact-us" className="text-light text-decoration-none mb-2 hover-text-primary">Contact Us</Link>
                   </div>
                 </Col>
               </Row>
@@ -173,7 +174,7 @@ const LandingPage = () => {
           <hr className="my-4" />
           <Row>
             <Col className="text-center">
-              <p className="text-muted mb-0">
+              <p className="text-light mb-0">
                 © 2025 Shuleni School Management Platform. All rights reserved.
               </p>
             </Col>

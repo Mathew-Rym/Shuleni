@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, clearError } from '../Store/slices/authSlice';
 import Navbar from '../components/Navbar';
 
@@ -191,12 +191,12 @@ const LoginPage = () => {
           <Row>
             <Col className="text-center">
               <div className="d-flex justify-content-center align-items-center flex-wrap gap-4">
-                <a href="#" className="text-muted text-decoration-none">Privacy Policy</a>
-                <a href="#" className="text-muted text-decoration-none">Terms of Service</a>
-                <a href="#" className="text-muted text-decoration-none">Contact Us</a>
-                <a href="#" className="text-muted text-decoration-none">FAQ</a>
+                <Link to="/privacy-policy" className="text-light text-decoration-none">Privacy Policy</Link>
+                <Link to="/terms-of-use" className="text-light text-decoration-none">Terms of Service</Link>
+                <Link to="/contact-us" className="text-light text-decoration-none">Contact Us</Link>
+                <Link to="/faq" className="text-light text-decoration-none">FAQ</Link>
               </div>
-              <p className="text-muted mt-2 mb-0 small">
+              <p className="text-light mt-2 mb-0 small">
                 © 2025 Shuleni School Management Platform
               </p>
             </Col>
