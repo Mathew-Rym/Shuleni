@@ -3,12 +3,16 @@
 
 name: Node.js CI
 
+
 on:
   push:
-    branches: [ "main", "neville-frontend", "rym-frontend" ]
+    branches: 
+      - main
+      - '*-frontend'
   pull_request:
-    branches: [ "main", "neville-frontend" , "rym-frontend" ]
-
+    branches:
+      - main
+      - '*-frontend'
 
 jobs:
   build:
