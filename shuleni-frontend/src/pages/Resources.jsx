@@ -44,11 +44,7 @@ const Resources = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Uploading file:", {
-      name: newFileName,
-      description: newFileDescription,
-      file: newFile
-    });
+    // TODO: Implement file upload functionality
     
     setNewFile(null);
     setNewFileName('');

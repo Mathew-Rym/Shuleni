@@ -4,9 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { store } from './Store/store.js';
 import { checkAuth } from './Store/slices/authSlice.js';
 import './App.css';
-import Navbar from './components/Navbar';
 
-
+// Import pages
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import CreateSchoolPage from './pages/CreateSchoolPage';
@@ -17,10 +16,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
-  console.log('App component is loading...');
   
   useEffect(() => {
-    console.log('App useEffect running...');
     store.dispatch(checkAuth());
   }, []);
 
@@ -30,13 +27,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={
-              <div style={{padding: '20px', backgroundColor: 'white', minHeight: '100vh'}}>
-                <h1>Shuleni App is Working!</h1>
-                <p>If you can see this, React is working properly.</p>
-                <LandingPage />
-              </div>
-            } />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-school" element={<CreateSchoolPage />} />
           

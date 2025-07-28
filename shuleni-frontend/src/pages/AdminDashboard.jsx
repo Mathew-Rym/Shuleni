@@ -84,7 +84,6 @@ const AdminDashboard = () => {
     // Update the user avatar in the auth state for navbar display
     dispatch(updateUserAvatar(newPhotoUrl));
     // BACKEND TODO: Update admin photo via PUT /api/admin/profile endpoint
-    console.log('Admin photo updated:', newPhotoUrl);
   };
 
   const handleStudentPhotoUpdate = (studentId, newPhotoUrl) => {
@@ -92,7 +91,7 @@ const AdminDashboard = () => {
       ...prev,
       [studentId]: newPhotoUrl
     }));
-    console.log(`Student ${studentId} photo updated:`, newPhotoUrl);
+    // BACKEND TODO: Update student photo via PUT /api/students/{id}/photo endpoint
   };
 
   const handleTeacherPhotoUpdate = (teacherId, newPhotoUrl) => {
@@ -100,7 +99,7 @@ const AdminDashboard = () => {
       ...prev,
       [teacherId]: newPhotoUrl
     }));
-    console.log(`Teacher ${teacherId} photo updated:`, newPhotoUrl);
+    // BACKEND TODO: Update teacher photo via PUT /api/teachers/{id}/photo endpoint
   };
 
   
