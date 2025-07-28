@@ -65,8 +65,45 @@
 }
 
 .shuleni-hero {
-  background: linear-gradient(135deg, #4A90E2, #63B3ED);
+  background: transparent;
   border-radius: 10px; 
+  padding: 60px 0;
+  margin: 40px 0;
+}
+
+/* Enhanced button styling for better visibility */
+.shuleni-hero .btn {
+  min-width: 160px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shuleni-hero .btn-outline-primary {
+  border-width: 2px;
+  color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.shuleni-hero .btn-outline-primary:hover {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+}
+
+.shuleni-hero .btn-primary {
+  border-width: 2px;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.shuleni-hero .btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
 } 
 
 
@@ -126,4 +163,28 @@
 
 .text-center p {
   margin-bottom: 3px;
+}
+
+/* Footer Visibility and Hover Effects */
+.hover-text-primary:hover {
+  color: var(--bs-primary) !important;
+  transition: color 0.3s ease;
+}
+
+footer .text-light {
+  color: #f8f9fa !important;
+}
+
+footer .text-light:hover {
+  color: var(--bs-primary) !important;
+  transition: color 0.3s ease;
+}
+
+/* Ensure footer links are visible on dark background */
+footer a {
+  opacity: 0.9;
+}
+
+footer a:hover {
+  opacity: 1;
 }
