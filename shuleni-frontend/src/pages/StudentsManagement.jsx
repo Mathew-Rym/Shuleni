@@ -188,7 +188,6 @@ const StudentsManagement = () => {
     <Sidebar 
       isOpen={sidebarOpen} 
       onClose={() => setSidebarOpen(false)} 
-      onOpenSettings={() => setShowSettingsModal(true)}
     />
     
     <div className="flex-grow-1 d-flex flex-column">

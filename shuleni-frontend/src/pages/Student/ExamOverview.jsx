@@ -1,33 +1,43 @@
-import React,  {useEffect} from 'react';
+import React,  {useEffect, useState} from 'react';
 import { Container, Card, Table, ProgressBar, Button } from 'react-bootstrap';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
 import { useNavigate, useParams} from 'react-router-dom';
 
 const ExamOverview = () => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { classId } = useParams(); 
   const navigate = useNavigate();
 
   const fetchPerformanceData = async (classId) => {
-  // Fetch data based on classId
-  const response = await fetch(`/api/performance/${classId}`);
-  const data = await response.json();
-  setPerformanceData(data);
-};
+    try {
+      setLoading(true);
+      // Simulate API call with mock data
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const mockData = [
+        { id: 1, exam: 'Algebra Final', date: '2025-06-15', score: 92, max: 100 },
+        { id: 2, exam: 'Geometry Midterm', date: '2025-05-20', score: 85, max: 100 },
+        { id: 3, exam: 'Calculus Quiz', date: '2025-04-10', score: 78, max: 100 },
+        { id: 4, exam: 'Trigonometry Test', date: '2025-03-22', score: 91, max: 100 },
+        { id: 5, exam: 'Linear Equations', date: '2025-02-15', score: 87, max: 100 },
+      ];
+      
+      setPerformanceData(mockData);
+    } catch (error) {
+      console.error('Error fetching performance data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Fetch performance data for this specific class
-    fetchPerformanceData(classId);
-  }, [classId])
-  // Mock performance data
-  const performanceData = [
-    { id: 1, exam: 'Algebra Final', date: '2025-06-15', score: 92, max: 100 },
-    { id: 2, exam: 'Geometry Midterm', date: '2025-05-20', score: 85, max: 100 },
-    { id: 3, exam: 'Calculus Quiz', date: '2025-04-10', score: 78, max: 100 },
-    { id: 4, exam: 'Trigonometry Test', date: '2025-03-22', score: 91, max: 100 },
-    { id: 5, exam: 'Linear Equations', date: '2025-02-15', score: 87, max: 100 },
-  ];
+    if (classId) {
+      fetchPerformanceData(classId);
+    }
+  }, [classId]);
 
   return (
       <div className="min-vh-100 bg-light">
