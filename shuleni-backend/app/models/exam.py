@@ -12,7 +12,7 @@ class Exam(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
 
-    class_ = db.relationship('Class', back_populates='exams')
+    classes = db.relationship('Class', back_populates='exams')
     creator = db.relationship('User', back_populates='created_exams')
     submissions = db.relationship('ExamSubmission', back_populates='exam',
                                   cascade='all, delete-orphan', passive_deletes=True)

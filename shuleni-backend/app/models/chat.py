@@ -9,5 +9,5 @@ class ChatMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
     sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))   
 
-    class_ = db.relationship('Class', back_populates='chats')
+    classes = db.relationship('Class', back_populates='chats')
     sender = db.relationship('User', back_populates='sent_messages')

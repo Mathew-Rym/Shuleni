@@ -1,7 +1,7 @@
-from datetime import datetime
-from flask import request
+from datetime import datetime, timezone
+from flask import jsonify, request
 from flask_jwt_extended import get_jwt_identity
-from app.models import Class, Exam, ExamSubmission, Enrollment
+from app.models import User, Class, Exam, ExamSubmission, Enrollment
 from app.utils.helpers import save_to_db, check_plagiarism
 
 def create_exam(school_id):
@@ -62,7 +62,15 @@ def submit_exam(school_id, exam_id):
     data = request.get_json()
     if not data.get('content'):
         return {"msg": "Exam content required"}, 400
-        
+
+    enrollment = Enrollment.query.filter_by(
+    class_id=exam.class_id,
+    user_id=student_id
+    ).first()
+
+    if not enrollment:
+        return {"msg": "Student is not enrolled in this class"}, 403
+
     exam = Exam.query.join(Class).filter(
         Class.school_id == school_id,
         Exam.id == exam_id
@@ -70,7 +78,7 @@ def submit_exam(school_id, exam_id):
     if not exam:
         return {"msg": "Exam not found"}, 404
         
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     if now < exam.start_time or now > exam.end_time:
         return {"msg": "Exam is not currently active"}, 403
         
@@ -88,21 +96,38 @@ def submit_exam(school_id, exam_id):
     return {"msg": "Exam submitted", "submission_id": submission.id}, 201
 
 def grade_exam(school_id, exam_id):
+    """teacher grades a student's exam submission"""
     data = request.get_json()
-    if not data.get('student_id') or not data.get('score'):
-        return {"msg": "Student ID and score required"}, 400
-        
-    submission = ExamSubmission.query.join(Exam).join(Class).filter(
-        Class.school_id == school_id,
-        Exam.id == exam_id,
-        ExamSubmission.student_id == data['student_id']
-    ).first()
+
+    # Validate input
+    student_id = data.get('student_id')
+    score = data.get('score')
+
+    if not student_id or score is None:
+        return jsonify({"msg": "Student ID and score are required"}), 400
+
+    # Check the teacher belongs to the same school
+    teacher = User.query.get(get_jwt_identity())
+    if not teacher or teacher.school_id != school_id:
+        return jsonify({"msg": "Unauthorized"}), 403
+
+    # Find the exam and validate school context
+    exam = Exam.query.filter_by(id=exam_id).join(Class).filter(Class.school_id == school_id).first()
+    if not exam:
+        return jsonify({"msg": "Exam not found"}), 404
+
+    # Find the submission
+    submission = ExamSubmission.query.filter_by(exam_id=exam.id, student_id=student_id).first()
     if not submission:
-        return {"msg": "Submission not found"}, 404
-        
-    submission.score = data['score']
-    save_to_db(submission)
-    return {"msg": "Exam graded"}
+        return jsonify({"msg": "Submission not found"}), 404
+
+    # Grade the exam
+    try:
+        submission.score = float(score)
+        save_to_db(submission)
+        return jsonify({"msg": "Exam graded successfully", "submission_id": submission.id}), 200
+    except Exception as e:
+        return jsonify({"msg": "Failed to grade submission", "error": str(e)}), 500
 
 def get_exam_results(school_id, exam_id):
     submissions = ExamSubmission.query.join(Exam).join(Class).filter(
@@ -111,7 +136,7 @@ def get_exam_results(school_id, exam_id):
     ).all()
     return [{
         "student_id": s.student_id,
-        "student_name": s.student.name,
+        "student_name": s.student.name if s.student else "Unknown",
         "score": s.score,
         "submitted_at": s.submitted_at.isoformat()
     } for s in submissions]
