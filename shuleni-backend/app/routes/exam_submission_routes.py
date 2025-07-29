@@ -8,7 +8,8 @@ from app.controllers.exam_submission import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-submission_bp = Blueprint('exam_submissions', __name__)
+ 
+submission_bp = Blueprint('exam_submissions', __name__, url_prefix='/exam_submissions')
 
 # Student access
 submission_bp.route('/<int:submission_id>', methods=['GET'])(

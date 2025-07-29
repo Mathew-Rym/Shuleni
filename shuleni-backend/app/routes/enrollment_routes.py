@@ -8,7 +8,8 @@ from app.controllers.enrollment import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-enrollment_bp = Blueprint('enrollments', __name__)
+ 
+enrollment_bp = Blueprint('enrollments', __name__, url_prefix='/enrollments')
 
 # Class enrollments
 enrollment_bp.route('/class/<int:class_id>', methods=['GET'])(

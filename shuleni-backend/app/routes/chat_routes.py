@@ -7,7 +7,8 @@ from app.controllers.chat import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-chat_bp = Blueprint('chats', __name__)
+ 
+chat_bp = Blueprint('chats', __name__, url_prefix='/chat')
 
 chat_bp.route('/<int:class_id>', methods=['POST'])(
     jwt_required()(school_required(send_message))

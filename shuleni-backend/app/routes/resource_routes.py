@@ -9,7 +9,8 @@ from app.controllers.resources import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-resource_bp = Blueprint('resources', __name__)
+ 
+resource_bp = Blueprint('resources', __name__, url_prefix='/resources')
 
 resource_bp.route('', methods=['POST'])(
     jwt_required()(roles_required('admin', 'educator')(school_required(upload_resource)))

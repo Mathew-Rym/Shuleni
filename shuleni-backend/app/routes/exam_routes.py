@@ -10,7 +10,8 @@ from app.controllers.exam import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-exam_bp = Blueprint('exams', __name__)
+ 
+exam_bp = Blueprint('exams', __name__, url_prefix='/exams')
 
 exam_bp.route('', methods=['POST'])(
     jwt_required()(roles_required('educator')(school_required(create_exam)))

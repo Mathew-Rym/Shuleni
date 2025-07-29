@@ -8,7 +8,8 @@ from app.controllers.school import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-school_bp = Blueprint('schools', __name__)
+ 
+school_bp = Blueprint('schools', __name__, url_prefix='/schools')
 
 school_bp.route('/users', methods=['POST'])(
     jwt_required()(roles_required('admin')(school_required(create_user)))

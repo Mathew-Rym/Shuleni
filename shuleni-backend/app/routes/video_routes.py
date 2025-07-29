@@ -8,7 +8,8 @@ from app.controllers.video import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-video_bp = Blueprint('video', __name__)
+ 
+video_bp = Blueprint('video', __name__, url_prefix='/video')
 
 video_bp.route('', methods=['POST'])(
     jwt_required()(roles_required('educator')(school_required(create_session)))
