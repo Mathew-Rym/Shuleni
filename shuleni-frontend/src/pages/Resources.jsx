@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Card, ListGroup, Form, Modal } from 'react-bootstrap';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import { Link } from 'react-router-dom';
 
 const Resources = () => {
@@ -8,6 +10,8 @@ const Resources = () => {
   const [newFile, setNewFile] = useState(null);
   const [newFileName, setNewFileName] = useState('');
   const [newFileDescription, setNewFileDescription] = useState('');
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
 
   // Mock data for classes and resources
   const classes = {
@@ -65,6 +69,9 @@ const Resources = () => {
   };
 
   return (
+     <div className="min-vh-100 bg-light">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     <div className="resources-page bg-light min-vh-100">
       <Container className="py-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -295,6 +302,7 @@ const Resources = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+    </div>
     </div>
   );
 };

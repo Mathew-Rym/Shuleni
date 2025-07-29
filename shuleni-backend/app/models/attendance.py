@@ -8,12 +8,12 @@ class Attendance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id', ondelete='CASCADE'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    educator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(20), nullable=False)
 
-    class_ = db.relationship('Class', back_populates='attendance_records')
+    classes = db.relationship('Class', back_populates='attendance_records')
     student = db.relationship('User', back_populates='attendance_as_student',
                               foreign_keys=[student_id])
-    educator = db.relationship('User', back_populates='attendance_as_educator',
-                               foreign_keys=[educator_id])
+    teacher = db.relationship('User', back_populates='attendance_as_teacher',
+                               foreign_keys=[teacher_id])

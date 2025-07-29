@@ -17,7 +17,7 @@ class School(db.Model):
         'Class', back_populates='school',
         cascade='all, delete-orphan', passive_deletes=True
     )
-    clubs = db.relationship(
-        'Club', back_populates='school',
-        cascade='all, delete-orphan', passive_deletes=True
-    )
+    #clubs = db.relationship(
+    #    'Club', back_populates='school',
+    #    cascade='all, delete-orphan', passive_deletes=True
+    #)

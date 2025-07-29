@@ -1,9 +1,11 @@
 import React, { useState, useEffect} from 'react';
 import { Container, Row, Col, Card, ListGroup, Button, Badge, ProgressBar, Table } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
-import LessonCard from '../components/LessonCard';
-import ClassMembers from '../components/ClassMembers';
-import Chat from '../components/Chat';
+import LessonCard from '../../components/LessonCard'
+import ClassMembers from '../../components/ClassMembers';
+import Chat from '../../components/Chat';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
 
 const fetchClassData = async (classId) => {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -79,6 +81,8 @@ const Class= () => {
     const [isLoading, setIsLoading] = useState(true);
     const [classData, setClassData] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
+    const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
 
     const currentUser = {
     id: 1,
@@ -119,11 +123,11 @@ const Class= () => {
   }; 
 
   const handleTakeExam = (examId) => {
-    navigate(`/exam-taking`);
+    navigate(`/exam-taking/${examId}`);
   };
 
   const handleViewPerformance = () => {
-    navigate('/exam-overview');
+    navigate(`/exam-overview/${classId}`);
   };
 
   if (isLoading) {
@@ -143,6 +147,9 @@ const Class= () => {
   }
 
   return (
+      <div className="min-vh-100 bg-light">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     <div className="class-page">
       <Container fluid className="mt-3">
         <div className="mb-4">
@@ -346,6 +353,7 @@ const Class= () => {
           </Col>
         </Row>
       </Container>
+    </div>
     </div>
   );
 }

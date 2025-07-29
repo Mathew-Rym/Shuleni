@@ -54,33 +54,25 @@ const Sidebar = ({ isOpen, onClose, onOpenSettings }) => {
           { path: '/educators', icon: faUserTie, label: 'Educators' },
           { path: '/students', icon: faUserGraduate, label: 'Student Management', description: 'Comprehensive student information system' },
           { path: '/resources', icon: faBookOpen, label: 'Resources' },
-          { path: '/classes', icon: faChalkboard, label: 'Classes' },
-          { path: '/attendance', icon: faClipboardCheck, label: 'Attendance' },
-          { path: '/reports', icon: faChartLine, label: 'Analytics Dashboard', description: 'Real-time insights and reports for data-driven decision making and performance monitoring.' },
-          { path: '/fees', icon: faCreditCard, label: 'Fee Management', description: 'Complete fee collection system with payment tracking, receipts, and financial reporting.' },
+          { path: '/class-list', icon: faChalkboard, label: 'Classes' },
           { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       case 'teacher':
         return [
           ...baseItems,
           { path: '/teacher-portal', icon: faChalkboardTeacher, label: 'Teacher Portal', description: 'Dedicated teacher interface for grade management, attendance tracking, and curriculum planning.' },
-          { path: '/my-classes', icon: faUsers, label: 'My Classes' },
+          { path: '/class-list', icon: faUsers, label: 'My Classes' },
           { path: '/students', icon: faUserGraduate, label: 'Students' },
           { path: '/resources', icon: faBookOpen, label: 'Resources' },
-          { path: '/attendance', icon: faClipboardCheck, label: 'Attendance' },
-          { path: '/grades', icon: faGraduationCap, label: 'Grades' },
-          { path: '/exams', icon: faClipboardList, label: 'Exams' },
           { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       case 'student':
         return [
           ...baseItems,
-          { path: '/my-classes', icon: faUsers, label: 'My Classes' },
+          { path: '/class-list', icon: faUsers, label: 'My Classes' },
           { path: '/resources', icon: faBookOpen, label: 'Resources' },
-          { path: '/attendance', icon: faCalendarCheck, label: 'My Attendance' },
-          { path: '/grades', icon: faAward, label: 'My Grades' },
-          { path: '/exams', icon: faTasks, label: 'Exams' },
-          { path: '/chat', icon: faComments, label: 'Class Chat' },
+          { path: '/exam-overview/:classId', icon: faTasks, label: 'Grades' },
+          { path: '/class/:classId', icon: faComments, label: 'Class Chat' },
           { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       default:

@@ -7,6 +7,13 @@ from .attendance import Attendance
 from .exam import Exam
 from .exam_submission import ExamSubmission
 from .chat import ChatMessage
-from .videosession import VideoSession
-from .club import Club
-from .clubmember import ClubMember
+from .announcement import Announcement
+from .assignment import Assignment
+from .assignment_submission import AssignmentSubmission
+from .classSubject import ClassSubject
+from .event import Event
+from .session import Session
+from .subject import Subject
+#from .videosession import VideoSession
+#from .club import Club
+#from .clubmember import ClubMember

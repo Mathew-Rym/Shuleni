@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Form, Modal, Badge, InputGroup, Dropdown } from 'react-bootstrap';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import './StudentManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPlus, 
@@ -41,6 +44,7 @@ const StudentsManagement = () => {
   const [filterClass, setFilterClass] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Sample student data - replace with API calls
   useEffect(() => {
@@ -180,28 +184,40 @@ const StudentsManagement = () => {
   )];
 
   return (
-    <Container fluid className="py-4">
-      <Row className="mb-4">
-        <Col>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-0">
-                <FontAwesomeIcon icon={faUserGraduate} className="me-3 text-primary" />
-                Student Management
-              </h2>
-              <p className="text-muted mt-2">Manage student information, enrollment, and records</p>
-            </div>
-            <Button 
-              variant="primary" 
-              onClick={() => handleShowModal('add')}
-              className="d-flex align-items-center"
-            >
-              <FontAwesomeIcon icon={faPlus} className="me-2" />
-              Add New Student
-            </Button>
-          </div>
-        </Col>
-      </Row>
+  <div className="d-flex min-vh-100">
+    <Sidebar 
+      isOpen={sidebarOpen} 
+      onClose={() => setSidebarOpen(false)} 
+    />
+    
+    <div className="flex-grow-1 d-flex flex-column">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      
+      <div className="flex-grow-1 bg-light">
+        <Container fluid className="py-4" style={{ marginLeft: '250px', width: 'calc(100% - 250px)' }}>
+          {/* Content remains the same */}
+          <Row className="mb-4">
+            <Col>
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h2 className="mb-0">
+                    <FontAwesomeIcon icon={faUserGraduate} className="me-3 text-primary" />
+                    Student Management
+                  </h2>
+                  <p className="text-muted mt-2">Manage student information, enrollment, and records</p>
+                </div>
+                <Button 
+                  variant="primary" 
+                  onClick={() => handleShowModal('add')}
+                  className="d-flex align-items-center"
+                >
+                  <FontAwesomeIcon icon={faPlus} className="me-2" />
+                  Add New Student
+                </Button>
+              </div>
+            </Col>
+          </Row>
+
 
       {/* Statistics Cards */}
       <Row className="mb-4">
@@ -435,7 +451,11 @@ const StudentsManagement = () => {
         onHide={handleCloseModal}
         onSave={handleSaveStudent}
       />
-    </Container>
+    
+        </Container>
+      </div>
+    </div>
+  </div>
   );
 };
 

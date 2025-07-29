@@ -1,23 +1,53 @@
-import React from 'react';
+import React,  {useEffect, useState} from 'react';
 import { Container, Card, Table, ProgressBar, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
+import { useNavigate, useParams} from 'react-router-dom';
 
 const ExamOverview = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { classId } = useParams(); 
   const navigate = useNavigate();
-  // Mock performance data
-  const performanceData = [
-    { id: 1, exam: 'Algebra Final', date: '2025-06-15', score: 92, max: 100 },
-    { id: 2, exam: 'Geometry Midterm', date: '2025-05-20', score: 85, max: 100 },
-    { id: 3, exam: 'Calculus Quiz', date: '2025-04-10', score: 78, max: 100 },
-    { id: 4, exam: 'Trigonometry Test', date: '2025-03-22', score: 91, max: 100 },
-    { id: 5, exam: 'Linear Equations', date: '2025-02-15', score: 87, max: 100 },
-  ];
+
+  const fetchPerformanceData = async (classId) => {
+    try {
+      setLoading(true);
+      // Simulate API call with mock data
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const mockData = [
+        { id: 1, exam: 'Algebra Final', date: '2025-06-15', score: 92, max: 100 },
+        { id: 2, exam: 'Geometry Midterm', date: '2025-05-20', score: 85, max: 100 },
+        { id: 3, exam: 'Calculus Quiz', date: '2025-04-10', score: 78, max: 100 },
+        { id: 4, exam: 'Trigonometry Test', date: '2025-03-22', score: 91, max: 100 },
+        { id: 5, exam: 'Linear Equations', date: '2025-02-15', score: 87, max: 100 },
+      ];
+      
+      setPerformanceData(mockData);
+    } catch (error) {
+      console.error('Error fetching performance data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (classId) {
+      fetchPerformanceData(classId);
+    }
+  }, [classId]);
 
   return (
+      <div className="min-vh-100 bg-light">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="class-list-page"></div>
     <div className="exam-performance-page">
       <Container fluid className="mt-4">
         <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>
-          &larr; Back to Classes
+          &larr; Back to Dashboard
         </Button>
         <Card className="shadow-sm">
           <Card.Body>
@@ -89,6 +119,7 @@ const ExamOverview = () => {
           </Card.Body>
         </Card>
       </Container>
+    </div>
     </div>
   );
 };

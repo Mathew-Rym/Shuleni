@@ -10,15 +10,15 @@ class Class(db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc)) 
 
     school = db.relationship('School', back_populates='classes')
-    enrollments = db.relationship('Enrollment', back_populates='class_',
+    enrollments = db.relationship('Enrollment', back_populates='classes',
                                   cascade='all, delete-orphan', passive_deletes=True)
-    resources = db.relationship('Resource', back_populates='class_',
+    resources = db.relationship('Resource', back_populates='classes',
                                 cascade='all, delete-orphan', passive_deletes=True)
-    attendance_records = db.relationship('Attendance', back_populates='class_',
+    attendance_records = db.relationship('Attendance', back_populates='classes',
                                          cascade='all, delete-orphan', passive_deletes=True)
-    exams = db.relationship('Exam', back_populates='class_',
+    exams = db.relationship('Exam', back_populates='classes',
                             cascade='all, delete-orphan', passive_deletes=True)
-    chats = db.relationship('ChatMessage', back_populates='class_',
+    chats = db.relationship('ChatMessage', back_populates='classes',
                             cascade='all, delete-orphan', passive_deletes=True)
-    video_sessions = db.relationship('VideoSession', back_populates='class_',
-                                     cascade='all, delete-orphan', passive_deletes=True)
+    sessions = db.relationship('Session', back_populates='class_session',
+                               cascade='all, delete-orphan', passive_deletes=True)
