@@ -5,11 +5,15 @@ name: Python Flask Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - main
+      - kendy-backend
     paths:
       - 'shuleni-backend/**'
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - main
+      - kendy-backend
     paths:
       - 'shuleni-backend/**'
 
