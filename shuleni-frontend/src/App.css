@@ -1,353 +1,283 @@
-/* Combined styles: Rym's layout fixes + Neville's theme system */
-
-/* CSS Variables for Theme System */
 :root {
-  --primary-blue: #1976d2;
-  --white: #ffffff;
-  --primary-white: #ffffff;
+            --primary-blue: #1976d2;
+            --secondary-blue: #115293;
+            --light-blue: #3595e4;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #000000;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
+        /* ===== Base & Reset Styles ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--primary-blue);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        #root {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ===== Layout Structure ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navbar - Fixed Positioning (EXACTLY as in original) */
+        .shuleni-nav {
+            background-color: #3595e4; /* Original color */
+            border-bottom: 1px solid #ccc; /* Original border */
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 60px;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        /* Sidebar - Fixed Positioning (EXACTLY as in original) */
+        .shuleni-sidebar {
+            background-color: #3595e4; /* Original color */
+            color: white; /* Original color */
+            width: 250px; /* Original width */
+            position: fixed;
+            top: 60px; /* Below navbar */
+            left: 0;
+            height: calc(100vh - 60px); /* Original calculation */
+            z-index: 999; /* Original z-index */
+            overflow-y: auto;
+            padding: 20px; /* Added for content spacing */
+        }
+
+        /* Main Content Area - Positioned between navbar and sidebar */
+        .class-page {
+            margin-top: 60px; /* Below navbar */
+            margin-left: 250px; /* Beside sidebar */
+            padding: 20px;
+            flex: 1;
+            width: calc(100% - 250px);
+            background-color: var(--white);
+            color: var(--primary-blue);
+            min-height: calc(100vh - 60px);
+        }
+
+        /* ===== Component Styles ===== */
+        /* Card Styles */
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: var(--primary-blue);
+            color: var(--white) !important;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+
+        /* Button Styles */
+        .btn {
+            transition: all var(--transition-speed);
+            border-radius: 6px;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+        }
+
+        /* Chat Bubble Styles */
+        .chat-bubble {
+            background: var(--white);
+            border: 2px solid var(--primary-blue);
+            border-radius: 1.5em;
+            padding: 0.65em 1.1em;
+            margin-bottom: 0.7em;
+            color: var(--primary-blue);
+            font-size: 1em;
+            text-align: left;
+            transition: border-color var(--transition-speed);
+        }
+
+        .chat-bubble.alt {
+            border-color: var(--secondary-blue);
+            color: var(--secondary-blue);
+        }
+
+        /* Progress Bar Styles */
+        .progress {
+            background-color: rgba(25, 118, 210, 0.1);
+            border-radius: 10px;
+            height: 10px;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-blue);
+            border-radius: 10px;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 992px) {
+            .shuleni-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .class-page {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-open .shuleni-sidebar {
+                transform: translateX(0);
+            }
+
+            .sidebar-open .class-page {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 1rem;
+            }
+
+            .chat-bubble {
+                padding: 0.5em 0.9em;
+                font-size: 0.95em;
+            }
+
+            .class-page {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .shuleni-nav {
+                padding: 0 1rem;
+            }
+
+            .class-page {
+                padding: 0.75rem;
+            }
+
+            .card-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+       
+
+        /* Restored navbar and sidebar colors */
+        .navbar, .sidebar {
+            background: #3595e4; /* Original color */
+            color: var(--white);
+        }
+
+        /* Restored button hover */
+        .btn-primary:hover {
+            background: #115293;
+            border-color: #115293;
+        }
+
+        /* Restored card header text color */
+        .card-header,
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--white) !important;
+        }
+        
+        /* Restored footer styles */
+        footer .text-light {
+            color: #f8f9fa !important;
+        }
+
+        footer .text-light:hover {
+            color: var(--primary-blue) !important;
+        }  
+
+
+        .main-content {
+  margin-top: 60px;              /* below navbar */
+  margin-left: 250px;            /* beside sidebar */
+  padding: 20px;
+  min-height: calc(100vh - 60px - 60px); /* leave room for footer */
+  background: #f8f9fa;
 }
 
-/* Base Styles */
-body {
-  background: var(--white);
-  color: var(--primary-blue);
+/* When sidebar is collapsed */
+.sidebar-collapsed .main-content {
+  margin-left: 0;
+  width: 100%;
 }
 
-/* Layout Fixes for Student Dashboard */
-#root {
-  margin: 0;
-  padding: 0;
-  text-align: left; /* Changed from center to left for better alignment */
+/* Fix headings/text being forced white */
+.card-header h1, 
+.card-header h2, 
+.card-header h3, 
+.card-header h4, 
+.card-header h5, 
+.card-header h6 {
+  color: #fff !important; /* only white inside card headers */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #202124 !important; /* dark text elsewhere */
+}
+
+/* Footer stick to bottom */
+footer {
+  margin-top: auto;
+  background: #3595e4;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
 }
 
 .min-vh-100 {
-  min-height: 100vh;
-
-.btn-primary:hover {
-  background: #115293;
-  border-color: #115293;
-}
-#root {
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  width: 100%; 
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-
-.card {
-  padding: 2em;
-}
-
-}
-
-/* Chat bubble styles from Neville's theme */
-.chat-bubble {
-  background: var(--white);
-  border: 2px solid var(--primary-blue);
-  border-radius: 1.5em;
-  padding: 0.65em 1.1em;
-  margin-bottom: 0.7em;
-  color: var(--primary-blue);
-  font-size: 1em;
-  text-align: left;
-  transition: border-color 0.2s;
-}
-
-.chat-bubble.alt {
-  border-color: #115293;
-  color: #115293;
-}
-
-/* Navbar and component styles */
-.navbar .btn-outline-primary {
-  background: var(--white) !important;
-  color: var(--primary-blue) !important;
-  border-color: var(--white) !important;
-}
-
-.card-header,
-h1, h2, h3, h4, h5, h6 {
-  color: var(--primary-white) !important;
-}
-
-.navbar .card-header,
-.sidebar .card-header {
-  color: var(--white) !important;
-}
-
-.card {
-  background: var(--white);
-  color: var(--primary-blue);
-}
-
-.class-page {
-  background: var(--white);
-  color: var(--primary-blue);
-}
-
-.navbar, .sidebar {
-  background: var(--primary-blue);
-  color: var(--white);
-}
-
-.navbar a, .sidebar a {
-  color: var(--white);
-}
-
-.navbar a:hover, .sidebar a:hover {
-  color: var(--white);
-}
-
-.btn-primary {
-  background: var(--primary-blue);
-  border-color: var(--primary-blue);
-  color: var(--white);
-}
-
-.read-the-docs {
-  color: #888;
-}  
-
-.class-page {
   display: flex;
   flex-direction: column;
-} 
-
-.modal {
-  z-index: 2000 !important;
-}
-
-.flex-grow-1.bg-light {
-  margin-left: 250px; /* Matches sidebar width */
-  width: calc(100% - 250px); /* Accounts for sidebar width */
-  position: relative;
 }
 
 .main-content {
-  margin-top: 60px; /* Below navbar */
-  margin-left: 250px; /* Beside sidebar */
-  padding: 20px;
-  flex: 1;
+  flex: 1; /* push footer down */
 }
 
-/* Navbar fixes */
-.shuleni-nav {
-  background-color: #3595e4;
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 60px;
-  width: 100%;
-  z-index: 1000;
-} 
-
-.shuleni-sidebar {
-  background-color: #3595e4;
-  color: white;
-  width: 250px;
-  position: fixed;
-  top: 60px; /* Pushes sidebar below navbar */
-  left: 0;
-  height: calc(100vh - 60px); /* Full height minus navbar */
-  z-index: 999;
-  overflow-y: auto;
-}
-
-/* Card styling improvements */
-.shuleni-card {
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: none;
-  transition: transform 0.3s ease;
-}
-
-.shuleni-card:hover {
-  transform: translateY(-5px);
-}
-
-.shuleni-hero {
-  background: transparent;
-  border-radius: 10px; 
-  padding: 60px 0;
-  margin: 40px 0;
-}
-
-/* Enhanced button styling for better visibility */
-.shuleni-hero .btn {
-  min-width: 160px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.shuleni-hero .btn-outline-primary {
-  border-width: 2px;
-  color: #0d6efd;
-  border-color: #0d6efd;
-}
-
-.shuleni-hero .btn-outline-primary:hover {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
-}
-
-.shuleni-hero .btn-primary {
-  border-width: 2px;
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-}
-
-.shuleni-hero .btn-primary:hover {
-  background-color: #0b5ed7;
-  border-color: #0a58ca;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
-} 
-
-
-/* Responsive fixes - Combined from both branches */
-@media (max-width: 768px) {
-  /* Rym's layout fixes */
-  .main-content {
-    padding-top: 15px;
-  }
-  
-  .d-flex.align-items-center {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .d-flex.align-items-center img {
-    margin-bottom: 15px;
-    margin-right: 0;
-  }
-
-  /* Neville's responsive improvements */
-  .container-fluid, #root {
-    padding: 0.5rem !important;
-    max-width: 100vw !important;
-    box-sizing: border-box;
-  }
-  
-  .card {
-    padding: 0.75em !important;
-  }
-  
-  .chat-bubble {
-    font-size: 0.95em !important;
-    padding: 0.45em 0.7em !important;
-    margin-bottom: 0.55em !important;
-  }
-  
-  .chat-bubble.alt {
-    border-color: #115293 !important;
-    color: #115293 !important;
-  }
-  
-  .list-group-horizontal {
-    flex-direction: column !important;
-  }
-  
-  .list-group-horizontal .list-group-item {
-    border-right: none !important;
-    border-bottom: 1px solid rgba(0,0,0,.125) !important;
-    font-size: 0.95em !important;
-  }
-  
-  .d-flex.border-bottom {
-    flex-wrap: wrap !important;
-  }
-  
-  .d-flex.border-bottom .btn {
-    margin-bottom: 5px !important;
-    width: 100% !important;
-  }
-  
-  .btn-primary, .btn-outline-primary {
-    font-size: 0.95em !important;
-    padding: 0.5em 0.75em !important;
-  }
-}
-
-/* Additional improvements */
-.class-card {
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.class-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Fix progress bar alignment */
-.progress {
-  background-color: #e9ecef;
-  border-radius: 10px;
-}
-
-.progress-bar {
-  border-radius: 10px;
-}
-
-/* Button styling */
-.btn-outline-primary {
-  border-width: 2px;
-}
-
-/* Remove unnecessary margins */
-.mb-4:last-child,
-.mb-4:last-of-type {
-  margin-bottom: 0 !important;
-}
-
-/* Fix alignment in student cards */
-.text-center h3 {
-  margin-bottom: 5px;
-}
-
-.text-center p {
-  margin-bottom: 3px;
-}
-
-/* Footer Visibility and Hover Effects */
-.hover-text-primary:hover {
-  color: var(--bs-primary) !important;
-  transition: color 0.3s ease;
-}
-
-footer .text-light {
-  color: #f8f9fa !important;
-}
-
-footer .text-light:hover {
-  color: var(--bs-primary) !important;
-  transition: color 0.3s ease;
-}
-
-/* Ensure footer links are visible on dark background */
-footer a {
-  opacity: 0.9;
-}
-
-footer a:hover {
-  opacity: 1;
-}

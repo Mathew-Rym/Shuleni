@@ -287,7 +287,7 @@ const Navbar = ({ toggleSidebar, showSidebarToggle = false }) => {
                 <Nav.Link 
                   href="#" 
                   className="text-white"
-                  onClick={() => handleNavigation('/classes')}
+                  onClick={() => handleNavigation('/class-list')}
                 >
                   Classes
                 </Nav.Link>

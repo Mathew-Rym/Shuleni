@@ -1,9 +1,13 @@
 import React from 'react';
 import { Container, Button, Card, Row, Col, Badge } from 'react-bootstrap';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
 import { Link, useParams } from 'react-router-dom';
 
 const ResourceDetail = () => {
   const { id } = useParams();
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
   
   // Mock data for resource details
   const resource = {
@@ -57,6 +61,10 @@ const ResourceDetail = () => {
   };
 
   return (
+     <div className="min-vh-100 bg-light">
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
     <div className="resource-detail-page bg-light min-vh-100">
       <Container className="py-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -113,6 +121,7 @@ const ResourceDetail = () => {
           </Card.Body>
         </Card>
       </Container>
+    </div>
     </div>
   );
 };

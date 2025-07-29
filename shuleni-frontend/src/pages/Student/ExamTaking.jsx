@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Card, ListGroup, Form, Button, ProgressBar, Alert } from 'react-bootstrap';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const ExamTaking = () => {
@@ -11,6 +13,8 @@ const ExamTaking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
 
  
   const currentUser = { role: "student" }; 
@@ -173,6 +177,9 @@ const ExamTaking = () => {
   const progressPercentage = 100 - (timeRemaining / (exam.duration_minutes * 60 * 1000)) * 100;
 
   return (
+      <div className="min-vh-100 bg-light">
+          <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     <Container className="my-4">
       <Card className="shadow-sm mb-4">
         <Card.Body>
@@ -299,6 +306,7 @@ const ExamTaking = () => {
         </Card.Body>
       </Card>
     </Container>
+    </div>
   );
 };
 
