@@ -110,7 +110,7 @@ function App() {
             } />
 
             <Route path="/exam-overview/:classId" element={
-              <ProtectedRoute allowedRoles={['student']}>
+              <ProtectedRoute allowedRoles={['student', 'teacher']}>
                 <ExamOverview />
               </ProtectedRoute>
             } />

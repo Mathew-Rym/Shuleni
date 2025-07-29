@@ -12,22 +12,22 @@ const ClassList = () => {
     {
       id: 1,
       color: '#3689e6',
-      code: "GC GoTTALK",
-      name: "GoTTALK",
+      code: "M101",
+      name: "Mathematics 101",
       term: ""
     },
     {
       id: 2,
       color: '#68b723',
-      code: "SANDBOX",
-      name: "Colan - Sandbox",
+      code: "G102",
+      name: "Geography 102",
       term: ""
     },
     {
       id: 3,
       color: '#f9c440',
-      code: "GC Boost Your Accessibility Capab...",
-      name: "Boost Your Accessibility Capabilities...",
+      code: "H495",
+      name: "History of Art 495",
       term: ""
     },
     {
@@ -35,13 +35,13 @@ const ClassList = () => {
       color: '#ed5353',
       code: "CIS120AF 18329",
       name: "PHOTOSHOP",
-      term: "GC 2018 FALL CRED"
+      term: "FINAL YEAR"
     },
     {
       id: 5,
       color: '#8e44ad',
-      code: "GC Biology Instruction, Classroom...",
-      name: "Biology Instruction, Classroom Management...",
+      code: "BIO 101",
+      name: "Biology 101",
       term: ""
     },
     {

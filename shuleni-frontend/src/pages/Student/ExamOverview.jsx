@@ -37,7 +37,7 @@ const ExamOverview = () => {
     <div className="exam-performance-page">
       <Container fluid className="mt-4">
         <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>
-          &larr; Back to Classes
+          &larr; Back to Dashboard
         </Button>
         <Card className="shadow-sm">
           <Card.Body>

@@ -22,8 +22,8 @@ const ClassCard = ({ id, color, code, name, term }) => {
         style={{ backgroundColor: color || '#1976d2' }}
       />
       <div className="class-card-content">
-        <div className="class-code">{code}</div>
-        <h3 className="class-name">{name}</h3>
+        <div className="class-name">{name}</div>
+        <h3 className="class-code">{code}</h3>
         <div className="class-term">{term}</div>
       </div>
     </div>
