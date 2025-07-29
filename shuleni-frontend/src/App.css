@@ -1,12 +1,128 @@
-/* Fixes for Student Dashboard Layout */
+/* Combined styles: Rym's layout fixes + Neville's theme system */
+
+/* CSS Variables for Theme System */
+:root {
+  --primary-blue: #1976d2;
+  --white: #ffffff;
+  --primary-white: #ffffff;
+}
+
+/* Base Styles */
+body {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+/* Layout Fixes for Student Dashboard */
 #root {
   margin: 0;
   padding: 0;
-  text-align: left/* Changed from center to left for better alignment */
+  text-align: left; /* Changed from center to left for better alignment */
 }
 
 .min-vh-100 {
   min-height: 100vh;
+
+.btn-primary:hover {
+  background: #115293;
+  border-color: #115293;
+}
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  width: 100%; 
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+
+.card {
+  padding: 2em;
+}
+
+}
+
+/* Chat bubble styles from Neville's theme */
+.chat-bubble {
+  background: var(--white);
+  border: 2px solid var(--primary-blue);
+  border-radius: 1.5em;
+  padding: 0.65em 1.1em;
+  margin-bottom: 0.7em;
+  color: var(--primary-blue);
+  font-size: 1em;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+
+.chat-bubble.alt {
+  border-color: #115293;
+  color: #115293;
+}
+
+/* Navbar and component styles */
+.navbar .btn-outline-primary {
+  background: var(--white) !important;
+  color: var(--primary-blue) !important;
+  border-color: var(--white) !important;
+}
+
+.card-header,
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-white) !important;
+}
+
+.navbar .card-header,
+.sidebar .card-header {
+  color: var(--white) !important;
+}
+
+.card {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+.class-page {
+  background: var(--white);
+  color: var(--primary-blue);
+}
+
+.navbar, .sidebar {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+.navbar a, .sidebar a {
+  color: var(--white);
+}
+
+.navbar a:hover, .sidebar a:hover {
+  color: var(--white);
+}
+
+.btn-primary {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: var(--white);
+}
+
+.read-the-docs {
+  color: #888;
+}  
+
+.class-page {
   display: flex;
   flex-direction: column;
 } 
@@ -107,8 +223,9 @@
 } 
 
 
-/* Responsive fixes */
+/* Responsive fixes - Combined from both branches */
 @media (max-width: 768px) {
+  /* Rym's layout fixes */
   .main-content {
     padding-top: 15px;
   }
@@ -121,6 +238,52 @@
   .d-flex.align-items-center img {
     margin-bottom: 15px;
     margin-right: 0;
+  }
+
+  /* Neville's responsive improvements */
+  .container-fluid, #root {
+    padding: 0.5rem !important;
+    max-width: 100vw !important;
+    box-sizing: border-box;
+  }
+  
+  .card {
+    padding: 0.75em !important;
+  }
+  
+  .chat-bubble {
+    font-size: 0.95em !important;
+    padding: 0.45em 0.7em !important;
+    margin-bottom: 0.55em !important;
+  }
+  
+  .chat-bubble.alt {
+    border-color: #115293 !important;
+    color: #115293 !important;
+  }
+  
+  .list-group-horizontal {
+    flex-direction: column !important;
+  }
+  
+  .list-group-horizontal .list-group-item {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0,0,0,.125) !important;
+    font-size: 0.95em !important;
+  }
+  
+  .d-flex.border-bottom {
+    flex-wrap: wrap !important;
+  }
+  
+  .d-flex.border-bottom .btn {
+    margin-bottom: 5px !important;
+    width: 100% !important;
+  }
+  
+  .btn-primary, .btn-outline-primary {
+    font-size: 0.95em !important;
+    padding: 0.5em 0.75em !important;
   }
 }
 
