@@ -1,0 +1,28 @@
+venv/
+# Ignore virtual environment folder
+venv/
+.env/
+.venv/
+
+# Ignore Pipenv files
+Pipfile.lock
+ # Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment folders
+venv/
+.venv/
+.env/
+
+# Pipenv
+Pipfile.lock
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
