@@ -67,7 +67,7 @@ const realTimeReducer = (state, action) => {
         lastUpdated: new Date()
       };
 
-    case ACTIONS.RESOURCE_UPLOADED:
+    case ACTIONS.RESOURCE_UPLOADED: {
       const newResource = {
         id: Date.now(),
         ...action.payload,
@@ -83,6 +83,7 @@ const realTimeReducer = (state, action) => {
         },
         lastUpdated: new Date()
       };
+    }
 
     case ACTIONS.RESOURCE_DELETED:
       return {
@@ -107,7 +108,7 @@ const realTimeReducer = (state, action) => {
         lastUpdated: new Date()
       };
 
-    case ACTIONS.EXAM_CONDUCTED:
+    case ACTIONS.EXAM_CONDUCTED: {
       const newExam = {
         id: Date.now(),
         ...action.payload,
@@ -122,6 +123,7 @@ const realTimeReducer = (state, action) => {
         },
         lastUpdated: new Date()
       };
+    }
 
     case ACTIONS.UPDATE_ACTIVE_CLASSES:
       return {
@@ -136,7 +138,7 @@ const realTimeReducer = (state, action) => {
         lastUpdated: new Date()
       };
 
-    case ACTIONS.CLASS_ACTIVATED:
+    case ACTIONS.CLASS_ACTIVATED: {
       const newActiveClass = {
         id: Date.now(),
         ...action.payload,
@@ -154,6 +156,7 @@ const realTimeReducer = (state, action) => {
         },
         lastUpdated: new Date()
       };
+    }
 
     case ACTIONS.UPDATE_DETAILED_REPORT:
       return {

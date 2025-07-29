@@ -16,8 +16,26 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
-      'no-unused-vars': 'warn',
-      'no-undef': 'error'
+      // Convert most warnings to off to reduce noise in CI
+      'no-unused-vars': 'off',
+      'no-undef': 'error', // Keep undefined variable errors
+      'no-case-declarations': 'error', // Keep case declaration errors
+      'no-useless-escape': 'error', // Keep useless escape errors
+      // Keep only critical errors, disable warnings for development
+      'no-console': 'off',
+      'no-debugger': 'warn',
+      'no-unreachable': 'error',
+      'no-dupe-keys': 'error',
+      'no-duplicate-case': 'error',
+      'no-empty': 'warn',
+      'no-extra-semi': 'warn',
+      'no-func-assign': 'error',
+      'no-irregular-whitespace': 'error',
+      'no-obj-calls': 'error',
+      'no-sparse-arrays': 'error',
+      'no-unexpected-multiline': 'error',
+      'use-isnan': 'error',
+      'valid-typeof': 'error'
     },
   },
 ]

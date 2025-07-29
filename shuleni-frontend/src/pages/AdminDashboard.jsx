@@ -291,7 +291,7 @@ const AdminDashboard = () => {
     if (!editingTeacher) {
       setTimeout(() => {
         const classNames = selectedClasses.map(c => c.name).join(', ');
-        const message = `Teacher "${teacherData.name}" created successfully!\n\n✅ Dashboard Access Created:\n- Email: ${teacherData.email}\n- Role: Teacher\n- Dashboard URL: /teacher?id=${newTeacherId || 'ID'}\n\n✅ Classes Assigned (${selectedClasses.length}):\n${classNames || 'None'}\n\n🎯 The teacher can now log in and manage their assigned classes immediately!\n\nWould you like to open their dashboard?`;
+        const message = `Teacher "${teacherData.name}" created successfully!\n\n✅ Dashboard Access Created:\n- Email: ${teacherData.email}\n- Role: Teacher\n- Dashboard URL: /teacher?id=${teacherData.id || 'NEW'}\n\n✅ Classes Assigned (${selectedClasses.length}):\n${classNames || 'None'}\n\n🎯 The teacher can now log in and manage their assigned classes immediately!\n\nWould you like to open their dashboard?`;
         
         if (window.confirm(message)) {
           handleOpenTeacherDashboard(teacherData);

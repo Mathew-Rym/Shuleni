@@ -7,6 +7,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../Store/slices/authSlice';
 
+// Mock data for search functionality
+const mockData = {
+  students: [
+    { id: 1, name: 'John Doe', email: 'john@student.com', class: 'Grade 10A' },
+    { id: 2, name: 'Jane Smith', email: 'jane@student.com', class: 'Grade 9B' }
+  ],
+  teachers: [
+    { id: 1, name: 'Mr. Johnson', email: 'johnson@teacher.com', subject: 'Mathematics' },
+    { id: 2, name: 'Ms. Williams', email: 'williams@teacher.com', subject: 'English' }
+  ],
+  classes: [
+    { id: 1, name: 'Grade 10A', subject: 'Mathematics', teacher: 'Mr. Johnson' },
+    { id: 2, name: 'Grade 9B', subject: 'English', teacher: 'Ms. Williams' }
+  ],
+  resources: [
+    { id: 1, title: 'Math Textbook', type: 'PDF', subject: 'Mathematics' },
+    { id: 2, title: 'English Grammar', type: 'Video', subject: 'English' }
+  ],
+  exams: [
+    { id: 1, title: 'Math Midterm', subject: 'Mathematics', date: '2024-03-15' },
+    { id: 2, title: 'English Quiz', subject: 'English', date: '2024-03-20' }
+  ]
+};
+
 const Navbar = ({ toggleSidebar, showSidebarToggle = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
