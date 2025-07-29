@@ -441,8 +441,3 @@ body, .bg-light {
   position: relative;
   z-index: 1;
 }
-
-/* Fix for content positioning */
-.class-list-page {
-  display: none; /* This element seems unnecessary */
-}
