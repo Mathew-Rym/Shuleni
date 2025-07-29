@@ -21,7 +21,7 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    CORS(app)
+    CORS(app, supports_credentials=True)
 
     from app.routes.auth_routes import auth_bp
     from app.routes.school_routes import school_bp
@@ -40,9 +40,6 @@ def create_app(config_name=None):
     from app.routes.upload_routes import upload_bp
     from app.routes.student_routes import student_bp
     from app.routes.teacher_routes import teacher_bp
-    #from app.routes.club_routes import club_bp
-    #from app.routes.club_routes import club_bp
-    #from app.routes.video_routes import video_bp
 
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -62,9 +59,5 @@ def create_app(config_name=None):
     app.register_blueprint(upload_bp, url_prefix="/api/upload")
     app.register_blueprint(student_bp, url_prefix="/api/students")
     app.register_blueprint(teacher_bp, url_prefix="/api/teachers")
-    #app.register_blueprint(club_bp, url_prefix="/api/clubs")
-    #app.register_blueprint(club_bp, url_prefix="/api/clubs")
-    #app.register_blueprint(video_bp, url_prefix="/api/video")
-
 
     return app
