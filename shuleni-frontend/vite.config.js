@@ -9,6 +9,18 @@ export default defineConfig({
       'Content-Security-Policy': "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; object-src 'none';"
     }
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          chartjs: ['chart.js', 'react-chartjs-2'],
+          bootstrap: ['react-bootstrap', 'bootstrap']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  },
   define: {
     global: 'globalThis',
   }
