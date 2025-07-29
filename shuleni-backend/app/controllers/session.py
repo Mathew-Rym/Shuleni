@@ -50,7 +50,7 @@ def get_class_sessions(class_id, school_id):
     sessions = Session.query.filter_by(class_id=class_id).order_by(Session.start_time.desc()).all()
     return jsonify([s.to_dict() for s in sessions]), 200
 
-# CANCEL a session (educator only)
+# CANCEL a session (teacher only)
 def cancel_session(session_id, school_id):
     session = Session.query.join(Class).filter(
         Session.id == session_id,

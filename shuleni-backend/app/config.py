@@ -1,3 +1,4 @@
+import cloudinary
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -22,3 +23,9 @@ class TestingConfig(Config):
     JWT_TOKEN_LOCATION = ['headers']
     JWT_HEADER_NAME = 'Authorization'
     JWT_HEADER_TYPE = 'Bearer'
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_URL").split('@')[-1],
+    api_key=os.getenv("CLOUDINARY_URL").split(':')[1][2:],
+    api_secret=os.getenv("CLOUDINARY_URL").split(':')[2].split('@')[0]
+)

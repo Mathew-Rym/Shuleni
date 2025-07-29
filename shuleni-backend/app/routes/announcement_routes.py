@@ -7,14 +7,14 @@ from app.controllers.announcement import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-announcement_bp = Blueprint('announcements', __name__)
+announcement_bp = Blueprint('announcements', __name__, url_prefix='/api/classes')
 
-announcement_bp.route('/<int:class_id>', methods=['POST'])(
-    jwt_required()(roles_required('educator')(school_required(post_announcement)))
+announcement_bp.route('/<int:class_id>/announcements', methods=['POST'])(
+    jwt_required()(roles_required('teacher')(school_required(post_announcement)))
 )
-announcement_bp.route('/<int:class_id>', methods=['GET'])(
+announcement_bp.route('/<int:class_id>/announcements', methods=['GET'])(
     jwt_required()(school_required(get_class_announcements))
 )
-announcement_bp.route('/<int:announcement_id>', methods=['DELETE'])(
-    jwt_required()(roles_required('educator')(school_required(delete_announcement)))
+announcement_bp.route('/announcements/<int:announcement_id>', methods=['DELETE'])(
+    jwt_required()(roles_required('teacher')(school_required(delete_announcement)))
 )

@@ -10,7 +10,8 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     role = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))   
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    avatar_url = db.Column(db.String)
 
     school = db.relationship('School', back_populates='users')
     enrollments = db.relationship('Enrollment', back_populates='user',
@@ -21,9 +22,9 @@ class User(db.Model):
         'Attendance', foreign_keys='Attendance.student_id',
         back_populates='student', cascade='all, delete-orphan', passive_deletes=True
     )
-    attendance_as_educator = db.relationship(
-        'Attendance', foreign_keys='Attendance.educator_id',
-        back_populates='educator', cascade='all, delete-orphan', passive_deletes=True
+    attendance_as_teacher = db.relationship(
+        'Attendance', foreign_keys='Attendance.teacher_id',
+        back_populates='teacher', cascade='all, delete-orphan', passive_deletes=True
     )
     created_exams = db.relationship('Exam', back_populates='creator',
                                     cascade='all, delete-orphan', passive_deletes=True)
@@ -31,8 +32,8 @@ class User(db.Model):
                                        cascade='all, delete-orphan', passive_deletes=True)
     sent_messages = db.relationship('ChatMessage', back_populates='sender',
                                     cascade='all, delete-orphan', passive_deletes=True)
-    #hosted_sessions = db.relationship('VideoSession', back_populates='host',
-    #                                  cascade='all, delete-orphan', passive_deletes=True)
+    sessions = db.relationship('Session', back_populates='host',
+                                  cascade='all, delete-orphan', passive_deletes=True)
     #club_memberships = db.relationship('ClubMember', back_populates='user',
     #                                   cascade='all, delete-orphan', passive_deletes=True)
 

@@ -13,8 +13,8 @@ class Session(db.Model):
     end_time = db.Column(db.DateTime)
     hosted_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    class_ = db.relationship('Class', backref='sessions')
-    host = db.relationship('User', backref='sessions_hosted')
+    class_session = db.relationship('Class', back_populates='sessions')
+    host = db.relationship('User', back_populates='sessions')
 
     def to_dict(self):
         return {"id": self.id, "title": self.title, "link": self.link}

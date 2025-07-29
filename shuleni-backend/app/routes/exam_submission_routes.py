@@ -8,7 +8,7 @@ from app.controllers.exam_submission import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-submission_bp = Blueprint('exam_submissions', __name__)
+submission_bp = Blueprint('exam_submissions', __name__, url_prefix='/api/exam_submissions')
 
 # Student access
 submission_bp.route('/<int:submission_id>', methods=['GET'])(
@@ -18,10 +18,10 @@ submission_bp.route('/student', methods=['GET'])(
     jwt_required()(roles_required('student')(school_required(get_student_submissions)))
 )
 
-# Educator/admin access
+# teacher/admin access
 submission_bp.route('/exam/<int:exam_id>', methods=['GET'])(
-    jwt_required()(roles_required('educator', 'admin')(school_required(get_exam_submissions)))
+    jwt_required()(roles_required('teacher', 'admin')(school_required(get_exam_submissions)))
 )
 submission_bp.route('/<int:submission_id>/download', methods=['GET'])(
-    jwt_required()(roles_required('educator', 'admin')(school_required(download_submission_file)))
+    jwt_required()(roles_required('teacher', 'admin')(school_required(download_submission_file)))
 )

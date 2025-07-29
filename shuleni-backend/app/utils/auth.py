@@ -2,6 +2,7 @@ from functools import wraps
 from flask import request, jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, get_jwt
 from app.models import User
+from app import db
 
 def roles_required(*roles):
     def wrapper(fn):
@@ -30,3 +31,7 @@ def school_required(fn):
         return fn(school_id=user.school_id, *args, **kwargs)
 
     return decorator
+
+def get_current_user():
+    user_id = get_jwt_identity()
+    return db.session.get(User, user_id)

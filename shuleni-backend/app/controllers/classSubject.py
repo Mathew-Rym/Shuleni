@@ -1,41 +1,59 @@
 from flask import request, jsonify
-from app.models import db, ClassSubject, Subject, User, Class
-from flask_jwt_extended import get_jwt_identity
+from app.models import ClassSubject, Subject, Class, User
+from app import db
 
-
-def assign_subject_to_class(class_id):
+# ASSIGN subject to a class with teacher
+def assign_subject_to_class(school_id, class_id):
     data = request.get_json()
-    subject_id = data.get("subject_id")
-    educator_id = data.get("educator_id")
+    subject_id = data.get('subject_id')
+    teacher_id = data.get('teacher_id')
 
-    if not subject_id or not educator_id:
-        return {"msg": "subject_id and educator_id are required"}, 400
+    if not subject_id or not teacher_id:
+        return jsonify({"error": "subject_id and teacher_id are required"}), 400
 
-    # Optional: validate existence
-    subject = Subject.query.get(subject_id)
-    educator = User.query.get(educator_id)
-    clazz = Class.query.get(class_id)
+    # Check subject, teacher, and class belong to school
+    subject = Subject.query.filter_by(id=subject_id, school_id=school_id).first()
+    class_ = Class.query.filter_by(id=class_id, school_id=school_id).first()
+    teacher = User.query.filter_by(id=teacher_id, school_id=school_id, role='teacher').first()
 
-    if not subject or not educator or not clazz:
-        return {"msg": "Invalid subject, class, or educator"}, 404
+    if not all([subject, class_, teacher]):
+        return jsonify({"error": "Invalid class, subject, or teacher"}), 404
 
-    cs = ClassSubject(class_id=class_id, subject_id=subject_id, educator_id=educator_id)
+    # Prevent duplicate
+    existing = ClassSubject.query.filter_by(class_id=class_id, subject_id=subject_id).first()
+    if existing:
+        return jsonify({"error": "Subject already assigned to class"}), 409
+
+    cs = ClassSubject(class_id=class_id, subject_id=subject_id, teacher_id=teacher_id)
     db.session.add(cs)
     db.session.commit()
+    return jsonify(cs.to_dict()), 201
 
-    return {"msg": "Subject assigned to class", "class_subject": cs.to_dict()}, 201
+# LIST subjects for a class
+def get_class_subjects(school_id, class_id):
+    class_ = Class.query.filter_by(id=class_id, school_id=school_id).first()
+    if not class_:
+        return jsonify({"error": "Class not found"}), 404
 
-
-def get_class_subjects(class_id):
     class_subjects = ClassSubject.query.filter_by(class_id=class_id).all()
     return jsonify([cs.to_dict() for cs in class_subjects]), 200
 
+# REMOVE subject from a class
+def remove_subject_from_class(school_id, class_id, subject_id):
+    cs = (
+        ClassSubject.query
+        .join(Class)
+        .filter(
+            ClassSubject.class_id == class_id,
+            ClassSubject.subject_id == subject_id,
+            Class.school_id == school_id
+        )
+        .first()
+    )
 
-def remove_subject_from_class(class_id, subject_id):
-    cs = ClassSubject.query.filter_by(class_id=class_id, subject_id=subject_id).first()
     if not cs:
-        return {"msg": "Subject not found in this class"}, 404
+        return jsonify({"error": "Subject not assigned to this class or not found"}), 404
 
     db.session.delete(cs)
     db.session.commit()
-    return {"msg": "Subject removed from class"}, 200
+    return jsonify({"message": "Subject removed from class"}), 200

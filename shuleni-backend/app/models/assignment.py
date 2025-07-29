@@ -13,7 +13,7 @@ class Assignment(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    class_ = db.relationship('Class', backref='assignments')
+    classes = db.relationship('Class', backref='assignments')
     creator = db.relationship('User', backref='assignments_created')
 
     def to_dict(self):

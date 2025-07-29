@@ -7,15 +7,17 @@ from app.controllers.assignment import (
     delete_assignment,
     submit_assignment,
     get_submissions,
-    grade_submission
+    grade_assignment,
+    grade_submission,
+    grade_assignment_submission
 )
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-assignment_bp = Blueprint('assignments', __name__)
+assignment_bp = Blueprint('assignments', __name__, url_prefix='/api/assignments')
 
 assignment_bp.route('/', methods=['POST'])(
-    jwt_required()(roles_required('educator')(school_required(create_assignment)))
+    jwt_required()(roles_required('teacher')(school_required(create_assignment)))
 )
 assignment_bp.route('/class/<int:class_id>', methods=['GET'])(
     jwt_required()(school_required(list_assignments))
@@ -24,17 +26,23 @@ assignment_bp.route('/<int:assignment_id>', methods=['GET'])(
     jwt_required()(school_required(get_assignment))
 )
 assignment_bp.route('/<int:assignment_id>', methods=['PUT'])(
-    jwt_required()(roles_required('educator')(school_required(update_assignment)))
+    jwt_required()(roles_required('teacher')(school_required(update_assignment)))
 )
 assignment_bp.route('/<int:assignment_id>', methods=['DELETE'])(
-    jwt_required()(roles_required('educator')(school_required(delete_assignment)))
+    jwt_required()(roles_required('teacher')(school_required(delete_assignment)))
 )
 assignment_bp.route('/<int:assignment_id>/submit', methods=['POST'])(
     jwt_required()(roles_required('student')(school_required(submit_assignment)))
 )
 assignment_bp.route('/<int:assignment_id>/submissions', methods=['GET'])(
-    jwt_required()(roles_required('educator')(school_required(get_submissions)))
+    jwt_required()(roles_required('teacher')(school_required(get_submissions)))
+)
+assignment_bp.route('/<int:id>/grade', methods=['PUT'])(
+    jwt_required()(roles_required('teacher')(school_required(grade_assignment)))
 )
 assignment_bp.route('/<int:assignment_id>/submissions/<int:submission_id>/grade', methods=['PATCH'])(
-    jwt_required()(roles_required('educator')(school_required(grade_submission)))
+    jwt_required()(roles_required('teacher')(school_required(grade_submission)))
+)
+assignment_bp.route('/<int:submission_id>/grade', methods=['PUT'])(
+    jwt_required()(roles_required('teacher')(school_required(grade_assignment_submission)))
 )

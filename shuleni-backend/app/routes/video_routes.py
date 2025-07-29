@@ -11,7 +11,7 @@
 #video_bp = Blueprint('video', __name__)
 
 #video_bp.route('/', methods=['POST'])(
-#    jwt_required()(roles_required('educator')(school_required(create_session)))
+#    jwt_required()(roles_required('teacher')(school_required(create_session)))
 #)
 #video_bp.route('/<int:class_id>', methods=['GET'])(
 #    jwt_required()(school_required(get_class_sessions))
@@ -20,5 +20,5 @@
  #   jwt_required()(school_required(get_session_details))
 #)
 #video_bp.route('/<int:session_id>/end', methods=['POST'])(
- #   jwt_required()(roles_required('educator')(school_required(end_session)))
+ #   jwt_required()(roles_required('teacher')(school_required(end_session)))
 #)

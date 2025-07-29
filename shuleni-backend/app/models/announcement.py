@@ -9,11 +9,18 @@ class Announcement(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
     title = db.Column(db.String(120), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    class_ = db.relationship('Class', backref='announcements')
+    classes = db.relationship('Class', backref='announcements')
     creator = db.relationship('User', backref='announcements_created')
 
     def to_dict(self):
-        return {"id": self.id, "title": self.title, "message": self.message}
+        return {
+            "id": self.id,
+            "class_id": self.class_id,
+            "title": self.title,
+            "message": self.message,
+            "created_by": self.created_by,
+            "created_at": self.created_at.isoformat()
+        }

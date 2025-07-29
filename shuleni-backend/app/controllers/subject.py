@@ -1,41 +1,52 @@
 from flask import request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import db, Subject
-from utils.auth import roles_required, school_required
+from app.models import Subject, db
+from flask_jwt_extended import get_jwt_identity
+from app.models.user import User
 
-def create_subject():
+# CREATE subject
+def create_subject(school_id):
     data = request.get_json()
-    name = data.get("name")
-    school_id = data.get("school_id")  # school_id is typically inferred from user in production
+    name = data.get('name')
 
-    if not name or not school_id:
-        return {"msg": "Name and school_id are required"}, 400
+    if not name:
+        return jsonify({"error": "Subject name is required"}), 400
 
     subject = Subject(name=name, school_id=school_id)
     db.session.add(subject)
     db.session.commit()
+    return jsonify(subject.to_dict()), 201
 
-    return {"msg": "Subject created", "subject": subject.to_dict()}, 201
-
-def list_subjects():
-    subjects = Subject.query.all()
+# LIST all subjects for the current school
+def list_subjects(school_id):
+    subjects = Subject.query.filter_by(school_id=school_id).all()
     return jsonify([s.to_dict() for s in subjects]), 200
 
-def get_subject(subject_id):
-    subject = Subject.query.get_or_404(subject_id)
+# GET one subject by id
+def get_subject(school_id, subject_id):
+    subject = Subject.query.filter_by(id=subject_id, school_id=school_id).first()
+    if not subject:
+        return jsonify({"error": "Subject not found"}), 404
     return jsonify(subject.to_dict()), 200
 
-def update_subject(subject_id):
-    subject = Subject.query.get_or_404(subject_id)
+# UPDATE subject
+def update_subject(school_id, subject_id):
+    subject = Subject.query.filter_by(id=subject_id, school_id=school_id).first()
+    if not subject:
+        return jsonify({"error": "Subject not found"}), 404
+
     data = request.get_json()
-    name = data.get("name")
+    name = data.get('name')
     if name:
         subject.name = name
-    db.session.commit()
-    return {"msg": "Subject updated", "subject": subject.to_dict()}, 200
+        db.session.commit()
+    return jsonify(subject.to_dict()), 200
 
-def delete_subject(subject_id):
-    subject = Subject.query.get_or_404(subject_id)
+# DELETE subject
+def delete_subject(school_id, subject_id):
+    subject = Subject.query.filter_by(id=subject_id, school_id=school_id).first()
+    if not subject:
+        return jsonify({"error": "Subject not found"}), 404
+
     db.session.delete(subject)
     db.session.commit()
-    return {"msg": "Subject deleted"}, 200
+    return jsonify({"message": "Subject deleted"}), 200

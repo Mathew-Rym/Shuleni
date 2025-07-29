@@ -36,6 +36,10 @@ def create_app(config_name=None):
     from app.routes.announcement_routes import announcement_bp
     from app.routes.event_routes import event_bp
     from app.routes.session_routes import session_bp
+    from app.routes.class_subject_routes import class_subject_bp
+    from app.routes.upload_routes import upload_bp
+    from app.routes.student_routes import student_bp
+    from app.routes.teacher_routes import teacher_bp
     #from app.routes.club_routes import club_bp
     #from app.routes.club_routes import club_bp
     #from app.routes.video_routes import video_bp
@@ -51,9 +55,13 @@ def create_app(config_name=None):
     app.register_blueprint(submission_bp, url_prefix="/api/exam_submissions")
     app.register_blueprint(enrollment_bp, url_prefix="/api/enrollments")
     app.register_blueprint(assignment_bp, url_prefix="/api/assignments")
-    app.register_blueprint(announcement_bp, url_prefix="/api/announcements")
+    app.register_blueprint(announcement_bp, url_prefix="/api/classes")
     app.register_blueprint(event_bp, url_prefix="/api/events")
     app.register_blueprint(session_bp, url_prefix="/api/sessions")
+    app.register_blueprint(class_subject_bp, url_prefiX="/api/class_subjects")
+    app.register_blueprint(upload_bp, url_prefix="/api/upload")
+    app.register_blueprint(student_bp, url_prefix="/api/students")
+    app.register_blueprint(teacher_bp, url_prefix="/api/teachers")
     #app.register_blueprint(club_bp, url_prefix="/api/clubs")
     #app.register_blueprint(club_bp, url_prefix="/api/clubs")
     #app.register_blueprint(video_bp, url_prefix="/api/video")

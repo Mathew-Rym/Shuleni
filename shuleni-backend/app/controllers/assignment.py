@@ -134,6 +134,27 @@ def get_submissions(assignment_id, school_id):
     submissions = AssignmentSubmission.query.filter_by(assignment_id=assignment_id).all()
     return jsonify([s.to_dict() for s in submissions]), 200
 
+def grade_assignment(school_id, id):
+    data = request.get_json()
+    score = data.get('score')
+
+    if score is None or not isinstance(score, (int, float)) or score < 0 or score > 100:
+        return jsonify({'error': 'Invalid score'}), 400
+
+    submission = AssignmentSubmission.query.get(id)
+
+    if not submission:
+        return jsonify({'error': 'Assignment submission not found'}), 404
+
+    student = User.query.get(submission.student_id)
+    if student.school_id != school_id:
+        return jsonify({'error': 'Forbidden'}), 403
+
+    submission.score = score
+    db.session.commit()
+
+    return jsonify({'message': 'Assignment graded successfully', 'score': score}), 200
+
 # GRADE an assignment submission
 def grade_submission(assignment_id, submission_id, school_id):
     data = request.get_json()
@@ -152,6 +173,28 @@ def grade_submission(assignment_id, submission_id, school_id):
         return jsonify({"msg": "Submission not found"}), 404
 
     submission.score = float(score)
+    db.session.commit()
+
+    return jsonify(submission.to_dict()), 200
+
+def grade_assignment_submission(submission_id, school_id):
+    data = request.get_json()
+    score = data.get("score")
+
+    if score is None:
+        return jsonify({"msg": "Score is required"}), 400
+
+    submission = AssignmentSubmission.query.join(Assignment).join(Class).filter(
+        AssignmentSubmission.id == submission_id,
+        Assignment.id == AssignmentSubmission.assignment_id,
+        Class.id == Assignment.class_id,
+        Class.school_id == school_id
+    ).first()
+
+    if not submission:
+        return jsonify({"msg": "Submission not found"}), 404
+
+    submission.score = score
     db.session.commit()
 
     return jsonify(submission.to_dict()), 200

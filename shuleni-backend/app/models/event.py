@@ -13,7 +13,7 @@ class Event(db.Model):
     end_time = db.Column(db.DateTime)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    clazz = db.relationship('Class', backref='events')
+    classes = db.relationship('Class', backref='events')
     creator = db.relationship('User', backref='events_created')
 
     def to_dict(self):

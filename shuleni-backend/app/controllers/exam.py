@@ -96,7 +96,7 @@ def submit_exam(school_id, exam_id):
     return {"msg": "Exam submitted", "submission_id": submission.id}, 201
 
 def grade_exam(school_id, exam_id):
-    """Educator grades a student's exam submission"""
+    """teacher grades a student's exam submission"""
     data = request.get_json()
 
     # Validate input
@@ -106,9 +106,9 @@ def grade_exam(school_id, exam_id):
     if not student_id or score is None:
         return jsonify({"msg": "Student ID and score are required"}), 400
 
-    # Check the educator belongs to the same school
-    educator = User.query.get(get_jwt_identity())
-    if not educator or educator.school_id != school_id:
+    # Check the teacher belongs to the same school
+    teacher = User.query.get(get_jwt_identity())
+    if not teacher or teacher.school_id != school_id:
         return jsonify({"msg": "Unauthorized"}), 403
 
     # Find the exam and validate school context

@@ -23,14 +23,14 @@
 #     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=False)
 #     name = db.Column(db.String(255), nullable=False)
 #     email = db.Column(db.String(255), unique=True, nullable=False)
-#     role = db.Column(db.String(50), nullable=False)  # student, educator, admin
+#     role = db.Column(db.String(50), nullable=False)  # student, teacher, admin
 #     password_hash = db.Column(db.Text, nullable=False)
 #     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 #     enrollments = db.relationship('Enrollment', backref='user', cascade="all, delete-orphan")
 #     uploaded_resources = db.relationship('Resource', backref='uploader')
 #     attendance_records = db.relationship('Attendance', foreign_keys='Attendance.student_id', backref='student')
-#     attendance_signed = db.relationship('Attendance', foreign_keys='Attendance.educator_id', backref='educator')
+#     attendance_signed = db.relationship('Attendance', foreign_keys='Attendance.teacher_id', backref='teacher')
 #     created_exams = db.relationship('Exam', backref='creator')
 #     exam_submissions = db.relationship('ExamSubmission', backref='student')
 #     sent_messages = db.relationship('Chat', backref='sender')
@@ -86,7 +86,7 @@
 #     id = db.Column(db.Integer, primary_key=True)
 #     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
 #     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     educator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+#     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 #     date = db.Column(db.Date, nullable=False)
 #     status = db.Column(db.String(20))  # present, absent, late
 

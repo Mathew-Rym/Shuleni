@@ -2,9 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from app import db
 
-# -----------------------
-# Subject Model
-# -----------------------
 class Subject(db.Model):
     __tablename__ = 'subjects'
 

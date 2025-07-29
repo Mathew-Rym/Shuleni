@@ -13,7 +13,7 @@
 #club_bp = Blueprint('clubs', __name__)
 
 #club_bp.route('/', methods=['POST'])(
-#    jwt_required()(roles_required('admin', 'educator')(school_required(create_club)))
+#    jwt_required()(roles_required('admin', 'teacher')(school_required(create_club)))
 #)
 #club_bp.route('/', methods=['GET'])(
  #   jwt_required()(school_required(list_clubs))

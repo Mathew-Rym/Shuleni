@@ -63,7 +63,7 @@ def delete_message(school_id, message_id):
     if not message:
         return {"msg": "Message not found"}, 404
 
-    if message.sender_id != current_user_id and user.role not in ['admin', 'educator']:
+    if message.sender_id != current_user_id and user.role not in ['admin', 'teacher']:
         return {"msg": "Unauthorized to delete this message"}, 403
 
     delete_from_db(message)

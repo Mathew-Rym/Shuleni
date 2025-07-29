@@ -37,7 +37,7 @@ def upload_resource():
         return {"msg": "Invalid file type"}, 400
 
     filename = secure_filename(file.filename)
-    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
     unique_filename = f"{timestamp}_{filename}"
     file_path = os.path.join(upload_folder, unique_filename)
 

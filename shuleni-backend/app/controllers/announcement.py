@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_jwt_extended import get_jwt_identity
 from app.models import Announcement, Class, User
 from app import db
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 # POST announcement to a class
 def post_announcement(class_id, school_id):
@@ -24,7 +24,7 @@ def post_announcement(class_id, school_id):
         title=title,
         message=message,
         created_by=current_user_id,
-        created_at=datetime.utcnow()
+        created_at=datetime.now(timezone.utc)
     )
 
     db.session.add(announcement)

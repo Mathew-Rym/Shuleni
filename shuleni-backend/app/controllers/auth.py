@@ -73,3 +73,7 @@ def refresh_token():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity)
     return jsonify(access_token=access_token), 200
+
+def logout():
+    # Stateless logout – no token storage on backend
+    return '', 204

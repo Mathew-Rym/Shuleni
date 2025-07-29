@@ -8,16 +8,16 @@ from app.controllers.event import (
 from app.utils.auth import roles_required, school_required
 from flask_jwt_extended import jwt_required
 
-event_bp = Blueprint('events', __name__)
+event_bp = Blueprint('events', __name__, url_prefix='/api/events')
 
 event_bp.route('/', methods=['POST'])(
-    jwt_required()(roles_required('admin', 'educator')(school_required(create_event)))
+    jwt_required()(roles_required('admin', 'teacher')(school_required(create_event)))
 )
 event_bp.route('/', methods=['GET'])(
     jwt_required()(school_required(list_events))
 )
 event_bp.route('/<int:event_id>', methods=['PUT'])(
-    jwt_required()(roles_required('admin', 'educator')(school_required(update_event)))
+    jwt_required()(roles_required('admin', 'teacher')(school_required(update_event)))
 )
 event_bp.route('/<int:event_id>', methods=['DELETE'])(
     jwt_required()(roles_required('admin')(school_required(delete_event)))
