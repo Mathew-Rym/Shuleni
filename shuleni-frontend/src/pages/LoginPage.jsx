@@ -164,9 +164,9 @@ const LoginPage = () => {
                 {/* Additional Links */}
                 <div className="text-center mt-4">
                   <div className="mb-2">
-                    <a href="#" className="text-decoration-none">
+                    <Link to="/forgot-password" className="text-decoration-none">
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                   <div>
                     <span className="text-muted">Don't have a school? </span>
@@ -196,7 +196,14 @@ const LoginPage = () => {
                 <Link to="/contact-us" className="text-light text-decoration-none">Contact Us</Link>
                 <Link to="/faq" className="text-light text-decoration-none">FAQ</Link>
               </div>
-              <p className="text-light mt-2 mb-0 small">
+              <p className="text-light mt-2 mb-0 small d-flex align-items-center justify-content-center">
+                <img 
+                  src="/favicon.svg" 
+                  alt="Shuleni Logo" 
+                  width="16" 
+                  height="16" 
+                  className="me-2"
+                />
                 © 2025 Shuleni School Management Platform
               </p>
             </Col>

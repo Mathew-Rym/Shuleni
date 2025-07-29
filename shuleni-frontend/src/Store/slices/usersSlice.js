@@ -63,31 +63,73 @@ const mockStudents = [
 const mockTeachers = [
   {
     id: 1,
-    name: 'Ms. Jane',
-    email: 'jane@teacher.com',
-    avatar: 'https://via.placeholder.com/150/9B59B6/FFFFFF?text=JA',
-    subject: 'Mathematics',
+    name: 'Ms. Jane Smith',
+    email: 'jane.smith@teacher.com',
+    avatar: 'https://via.placeholder.com/150/9B59B6/FFFFFF?text=JS',
+    subjects: ['Mathematics', 'Statistics'],
     phone: '+1234567893',
-    address: '321 Teacher Ave',
+    address: '321 Teacher Ave, City, State',
     hireDate: '2020-08-15',
     status: 'active',
-    classes: ['Math - Grade 10', 'Advanced Math'],
-    qualifications: 'M.Ed Mathematics',
+    classes: ['Grade 10', 'Grade 11'],
+    qualifications: 'M.Ed Mathematics, B.Sc Statistics',
     experience: '8 years',
   },
   {
     id: 2,
-    name: 'Mr. Jones',
-    email: 'jones@teacher.com',
-    avatar: 'https://via.placeholder.com/150/3498DB/FFFFFF?text=JO',
-    subject: 'Science',
+    name: 'Mr. David Jones',
+    email: 'david.jones@teacher.com',
+    avatar: 'https://via.placeholder.com/150/3498DB/FFFFFF?text=DJ',
+    subjects: ['Physics', 'Chemistry'],
     phone: '+1234567894',
-    address: '654 Science Blvd',
+    address: '654 Science Blvd, City, State',
     hireDate: '2019-09-01',
     status: 'active',
-    classes: ['Physics', 'Chemistry'],
-    qualifications: 'M.Sc Physics',
+    classes: ['Grade 11', 'Grade 12'],
+    qualifications: 'M.Sc Physics, B.Sc Chemistry',
     experience: '12 years',
+  },
+  {
+    id: 3,
+    name: 'Ms. Sarah Brown',
+    email: 'sarah.brown@teacher.com',
+    avatar: 'https://via.placeholder.com/150/E74C3C/FFFFFF?text=SB',
+    subjects: ['English', 'Literature'],
+    phone: '+1234567895',
+    address: '789 Literature Lane, City, State',
+    hireDate: '2021-03-10',
+    status: 'active',
+    classes: ['Grade 9', 'Grade 10'],
+    qualifications: 'M.A English Literature',
+    experience: '5 years',
+  },
+  {
+    id: 4,
+    name: 'Mr. Michael Wilson',
+    email: 'michael.wilson@teacher.com',
+    avatar: 'https://via.placeholder.com/150/27AE60/FFFFFF?text=MW',
+    subjects: ['History', 'Geography'],
+    phone: '+1234567896',
+    address: '456 History Hill, City, State',
+    hireDate: '2018-06-20',
+    status: 'active',
+    classes: ['Grade 8', 'Grade 9', 'Grade 10'],
+    qualifications: 'M.A History, B.A Geography',
+    experience: '15 years',
+  },
+  {
+    id: 5,
+    name: 'Ms. Emily Davis',
+    email: 'emily.davis@teacher.com',
+    avatar: 'https://via.placeholder.com/150/F39C12/FFFFFF?text=ED',
+    subjects: ['Art', 'Music'],
+    phone: '+1234567897',
+    address: '123 Creative Court, City, State',
+    hireDate: '2022-01-15',
+    status: 'active',
+    classes: ['Grade 6', 'Grade 7', 'Grade 8'],
+    qualifications: 'B.F.A Fine Arts, Diploma in Music',
+    experience: '3 years',
   },
 ];
 
@@ -152,6 +194,22 @@ const usersSlice = createSlice({
     },
     deleteTeacher: (state, action) => {
       state.teachers = state.teachers.filter(t => t.id !== action.payload);
+    },
+    
+    // Photo update actions
+    updateTeacherPhoto: (state, action) => {
+      const { teacherId, photoUrl } = action.payload;
+      const index = state.teachers.findIndex(t => t.id === teacherId);
+      if (index !== -1) {
+        state.teachers[index].avatar = photoUrl;
+      }
+    },
+    updateStudentPhoto: (state, action) => {
+      const { studentId, photoUrl } = action.payload;
+      const index = state.students.findIndex(s => s.id === studentId);
+      if (index !== -1) {
+        state.students[index].avatar = photoUrl;
+      }
     },
   },
 });
@@ -270,6 +328,8 @@ export const {
   addTeacher,
   updateTeacher,
   deleteTeacher,
+  updateTeacherPhoto,
+  updateStudentPhoto,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

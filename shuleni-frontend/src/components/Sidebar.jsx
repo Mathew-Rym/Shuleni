@@ -2,14 +2,39 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faTachometerAlt,
+  faUserTie,
+  faUserGraduate,
+  faBookOpen,
+  faChalkboard,
+  faClipboardCheck,
+  faChartLine,
+  faCreditCard,
+  faCog,
+  faChalkboardTeacher,
+  faUsers,
+  faGraduationCap,
+  faClipboardList,
+  faCalendarCheck,
+  faAward,
+  faTasks,
+  faComments
+} from '@fortawesome/free-solid-svg-icons';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, onOpenSettings }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
 
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleNavigation = (path, action) => {
+    if (action === 'settings') {
+      onOpenSettings();
+    } else {
+      navigate(path);
+    }
+    
     // Close sidebar on mobile after navigation
     if (window.innerWidth < 768) {
       onClose();
@@ -19,40 +44,44 @@ const Sidebar = ({ isOpen, onClose }) => {
   // Define navigation items based on user role
   const getNavigationItems = () => {
     const baseItems = [
-      { path: `/${user?.role}`, icon: '📊', label: 'Dashboard' },
+      { path: `/${user?.role}`, icon: faTachometerAlt, label: 'Dashboard' },
     ];
 
     switch (user?.role) {
       case 'admin':
         return [
           ...baseItems,
-          { path: '/educators', icon: '👨‍🏫', label: 'Educators' },
-          { path: '/students', icon: '👥', label: 'Students' },
-          { path: '/resources', icon: '📚', label: 'Resources' },
-          { path: '/classes', icon: '🏛️', label: 'Classes' },
-          { path: '/attendance', icon: '✅', label: 'Attendance' },
-          { path: '/reports', icon: '📈', label: 'Reports' },
-          { path: '/settings', icon: '⚙️', label: 'Settings' },
+          { path: '/educators', icon: faUserTie, label: 'Educators' },
+          { path: '/students', icon: faUserGraduate, label: 'Student Management', description: 'Comprehensive student information system' },
+          { path: '/resources', icon: faBookOpen, label: 'Resources' },
+          { path: '/classes', icon: faChalkboard, label: 'Classes' },
+          { path: '/attendance', icon: faClipboardCheck, label: 'Attendance' },
+          { path: '/reports', icon: faChartLine, label: 'Analytics Dashboard', description: 'Real-time insights and reports for data-driven decision making and performance monitoring.' },
+          { path: '/fees', icon: faCreditCard, label: 'Fee Management', description: 'Complete fee collection system with payment tracking, receipts, and financial reporting.' },
+          { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       case 'teacher':
         return [
           ...baseItems,
-          { path: '/my-classes', icon: '🏛️', label: 'My Classes' },
-          { path: '/students', icon: '👥', label: 'Students' },
-          { path: '/resources', icon: '📚', label: 'Resources' },
-          { path: '/attendance', icon: '✅', label: 'Attendance' },
-          { path: '/grades', icon: '📝', label: 'Grades' },
-          { path: '/exams', icon: '📋', label: 'Exams' },
+          { path: '/teacher-portal', icon: faChalkboardTeacher, label: 'Teacher Portal', description: 'Dedicated teacher interface for grade management, attendance tracking, and curriculum planning.' },
+          { path: '/my-classes', icon: faUsers, label: 'My Classes' },
+          { path: '/students', icon: faUserGraduate, label: 'Students' },
+          { path: '/resources', icon: faBookOpen, label: 'Resources' },
+          { path: '/attendance', icon: faClipboardCheck, label: 'Attendance' },
+          { path: '/grades', icon: faGraduationCap, label: 'Grades' },
+          { path: '/exams', icon: faClipboardList, label: 'Exams' },
+          { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       case 'student':
         return [
           ...baseItems,
-          { path: '/my-classes', icon: '🏛️', label: 'My Classes' },
-          { path: '/resources', icon: '📚', label: 'Resources' },
-          { path: '/attendance', icon: '✅', label: 'My Attendance' },
-          { path: '/grades', icon: '📝', label: 'My Grades' },
-          { path: '/exams', icon: '📋', label: 'Exams' },
-          { path: '/chat', icon: '💬', label: 'Class Chat' },
+          { path: '/my-classes', icon: faUsers, label: 'My Classes' },
+          { path: '/resources', icon: faBookOpen, label: 'Resources' },
+          { path: '/attendance', icon: faCalendarCheck, label: 'My Attendance' },
+          { path: '/grades', icon: faAward, label: 'My Grades' },
+          { path: '/exams', icon: faTasks, label: 'Exams' },
+          { path: '/chat', icon: faComments, label: 'Class Chat' },
+          { action: 'settings', icon: faCog, label: 'Settings' },
         ];
       default:
         return baseItems;
@@ -95,7 +124,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               backgroundColor: location.pathname === item.path ? 
                 'rgba(255,255,255,0.2)' : 'transparent',
             }}
-            onClick={() => handleNavigation(item.path)}
+            onClick={() => handleNavigation(item.path, item.action)}
             onMouseEnter={(e) => {
               if (location.pathname !== item.path) {
                 e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
@@ -106,10 +135,13 @@ const Sidebar = ({ isOpen, onClose }) => {
                 e.target.style.backgroundColor = 'transparent';
               }
             }}
+            title={item.description || item.label}
           >
-            <span className="me-3" style={{ fontSize: '1.2rem' }}>
-              {item.icon}
-            </span>
+            <FontAwesomeIcon 
+              icon={item.icon} 
+              className="me-3" 
+              style={{ fontSize: '1.2rem', width: '20px' }} 
+            />
             <span>{item.label}</span>
           </Nav.Link>
         ))}
@@ -118,7 +150,16 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar footer */}
       <div className="mt-auto p-3 border-top border-light border-opacity-25">
         <div className="text-white text-center small opacity-75">
-          <div>Shuleni School Management</div>
+          <div className="d-flex align-items-center justify-content-center mb-1">
+            <img 
+              src="/favicon.svg" 
+              alt="Shuleni Logo" 
+              width="16" 
+              height="16" 
+              className="me-2"
+            />
+            Shuleni School Management
+          </div>
           <div>© 2025 All Rights Reserved</div>
         </div>
       </div>

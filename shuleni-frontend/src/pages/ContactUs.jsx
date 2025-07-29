@@ -38,28 +38,28 @@ const ContactUs = () => {
 
   const developers = [
     {
-      name: "Rym",
+      name: "Rym Mathew",
       role: "Frontend Developer",
       email: "mathew.njuguna@student.moringaschool.com",
       phone: "+254 ",
       specialization: "React.js, UI/UX Design"
     },
     {
-      name: "Neville",
+      name: "Neville Ng'ang'a",
       role: "Frontend Developer", 
       email: "neville.nganga@student.moringaschool.com",
       phone: "+254 ",
       specialization: "JavaScript, User Experience"
     },
     {
-      name: "Clavis",
+      name: "Calvis Onyango",
       role: "Backend Developer",
       email: "calvis.onyango@student.moringaschool.com", 
       phone: "+254 ",
       specialization: "Python, Flask, Database Design"
     },
     {
-      name: "Sharon",
+      name: "Sharon Njue",
       role: "Backend Developer",
       email: "sharon.njue@student.moringaschool.com",
       phone: "+254 ", 

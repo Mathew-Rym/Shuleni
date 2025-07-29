@@ -8,6 +8,12 @@ const initialState = {
   role: null, // 'admin', 'teacher', 'student'
   loading: false,
   error: null,
+  // Password reset states
+  resetLoading: false,
+  resetError: null,
+  resetSuccess: false,
+  verificationSent: false,
+  codeVerified: false,
 };
 
 const authSlice = createSlice({
@@ -42,6 +48,44 @@ const authSlice = createSlice({
     },
     updateProfile: (state, action) => {
       state.user = { ...state.user, ...action.payload };
+    },
+    updateUserAvatar: (state, action) => {
+      if (state.user) {
+        state.user.avatar = action.payload;
+      }
+    },
+    // Password reset reducers
+    resetPasswordStart: (state) => {
+      state.resetLoading = true;
+      state.resetError = null;
+      state.resetSuccess = false;
+    },
+    resetPasswordSuccess: (state) => {
+      state.resetLoading = false;
+      state.resetSuccess = true;
+      state.resetError = null;
+    },
+    resetPasswordFailure: (state, action) => {
+      state.resetLoading = false;
+      state.resetError = action.payload;
+      state.resetSuccess = false;
+    },
+    verificationCodeSent: (state) => {
+      state.verificationSent = true;
+      state.resetLoading = false;
+      state.resetError = null;
+    },
+    verificationCodeVerified: (state) => {
+      state.codeVerified = true;
+      state.resetLoading = false;
+      state.resetError = null;
+    },
+    clearResetState: (state) => {
+      state.resetError = null;
+      state.resetSuccess = false;
+      state.verificationSent = false;
+      state.codeVerified = false;
+      state.resetLoading = false;
     },
   },
 });
@@ -110,5 +154,111 @@ export const checkAuth = () => (dispatch) => {
   }
 };
 
-export const { loginStart, loginSuccess, loginFailure, logout, clearError, updateProfile } = authSlice.actions;
+// Password reset actions
+export const sendVerificationCode = (email) => async (dispatch) => {
+  dispatch(resetPasswordStart());
+  
+  try {
+    // Mock API call - replace with actual backend endpoint
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Simulate email validation
+    if (!email || !email.includes('@')) {
+      throw new Error('Please enter a valid email address');
+    }
+    
+    // In real implementation, call your backend API:
+    // const response = await fetch('/api/auth/forgot-password', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ email })
+    // });
+    // 
+    // if (!response.ok) {
+    //   throw new Error('Failed to send verification code');
+    // }
+    
+    dispatch(verificationCodeSent());
+    return { success: true, message: `Verification code sent to ${email}` };
+    
+  } catch (error) {
+    dispatch(resetPasswordFailure(error.message));
+    throw error;
+  }
+};
+
+export const verifyResetCode = (email, code) => async (dispatch) => {
+  dispatch(resetPasswordStart());
+  
+  try {
+    // Mock API call - replace with actual backend endpoint
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    if (!code || code.length !== 6) {
+      throw new Error('Please enter a valid 6-digit code');
+    }
+    
+    // Mock verification - in real app, verify with backend
+    if (code !== '123456') {
+      throw new Error('Invalid verification code');
+    }
+    
+    // In real implementation:
+    // const response = await fetch('/api/auth/verify-reset-code', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ email, code })
+    // });
+    
+    dispatch(verificationCodeVerified());
+    return { success: true, message: 'Code verified successfully' };
+    
+  } catch (error) {
+    dispatch(resetPasswordFailure(error.message));
+    throw error;
+  }
+};
+
+export const resetPassword = (email, code, newPassword) => async (dispatch) => {
+  dispatch(resetPasswordStart());
+  
+  try {
+    // Mock API call - replace with actual backend endpoint
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    if (!newPassword || newPassword.length < 8) {
+      throw new Error('Password must be at least 8 characters long');
+    }
+    
+    // In real implementation:
+    // const response = await fetch('/api/auth/reset-password', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ email, code, newPassword })
+    // });
+    
+    dispatch(resetPasswordSuccess());
+    return { success: true, message: 'Password reset successfully' };
+    
+  } catch (error) {
+    dispatch(resetPasswordFailure(error.message));
+    throw error;
+  }
+};
+
+export const { 
+  loginStart, 
+  loginSuccess, 
+  loginFailure, 
+  logout, 
+  clearError, 
+  updateProfile,
+  updateUserAvatar,
+  resetPasswordStart,
+  resetPasswordSuccess,
+  resetPasswordFailure,
+  verificationCodeSent,
+  verificationCodeVerified,
+  clearResetState
+} = authSlice.actions;
 export default authSlice.reducer;
