@@ -29,13 +29,13 @@ const Chat= ({ messages, onSendMessage, currentUser }) => {
                   {new Date(message.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </small>
               </div>
-              <div>{message.message}</div>
+              <div className="chat-bubble mt-2">{message.message}</div>
             </ListGroup.Item>
           ))}
         </ListGroup>
       </Card.Body>
       
-      <Card.Footer>
+      <Card.Footer className="chat-footer">
         <Form onSubmit={handleSend}>
           <Form.Group className="mb-2">
             <Form.Control

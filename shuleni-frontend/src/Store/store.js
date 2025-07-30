@@ -6,6 +6,7 @@ import classesSlice from './slices/classesSlice';
 import dashboardSlice from './slices/dashboardSlice';
 import schoolsSlice from './slices/schoolsSlice';
 import studentMetricsSlice from './slices/studentMetricsSlice';
+import calendarSlice from './slices/calendarSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     dashboard: dashboardSlice,
     schools: schoolsSlice,
     studentMetrics: studentMetricsSlice,
+    calendar: calendarSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

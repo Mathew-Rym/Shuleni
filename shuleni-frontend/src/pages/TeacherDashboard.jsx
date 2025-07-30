@@ -1,20 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Form, Badge, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faGraduationCap, 
+  faUsers, 
+  faChalkboardTeacher, 
+  faBook,
+  faPlus,
+  faEdit,
+  faTrash,
+  faEye,
+  faCalendarCheck,
+  faUpload,
+  faChartLine,
+  faClipboardList
+} from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import SettingsModal from '../components/SettingsModal';
+import Calendar from '../components/Calendar';
+import DetailedReportModal from '../components/DetailedReportModal';
+import MonthlyAttendanceComponent from '../components/MonthlyAttendanceComponent';
+import { RealTimeProvider, useRealTime } from '../contexts/RealTimeContext';
 import { fetchStudents, createStudent, updateStudent, deleteStudent } from '../Store/slices/usersSlice';
 import { fetchClasses } from '../Store/slices/classesSlice';
+import { fetchEvents } from '../Store/slices/calendarSlice';
+
+// Events selector
+const selectEvents = createSelector(
+  [(state) => state.calendar],
+  (calendar) => calendar.events || []
+);
 
 const TeacherDashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { students } = useSelector((state) => state.users);
   const { classes } = useSelector((state) => state.classes);
+  const allEvents = useSelector(selectEvents);
+
+  // Filter events for teachers (show events targeted to teachers or both)
+  const events = allEvents.filter(event => 
+    !event.targetAudience || event.targetAudience === 'teachers' || event.targetAudience === 'both'
+  );
 
   // States
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showStudentModal, setShowStudentModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showDetailedReportModal, setShowDetailedReportModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [studentForm, setStudentForm] = useState({
     name: '', email: '', class: '', dateOfBirth: '', parentName: '', phone: ''
@@ -28,7 +64,8 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     dispatch(fetchStudents());
-    dispatch(fetchClasses() );
+    dispatch(fetchClasses());
+    dispatch(fetchEvents());
   }, [dispatch]);
 
   // Student management functions
@@ -66,7 +103,11 @@ const TeacherDashboard = () => {
   return (
     <div className="min-vh-100 bg-light">
       <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+        onOpenSettings={() => setShowSettingsModal(true)}
+      />
       
       <div className="main-content">
         <Container fluid className="py-4">
@@ -82,37 +123,131 @@ const TeacherDashboard = () => {
             </Col>
           </Row>
 
-          {/* Teacher Stats */}
+          {/* Enhanced Teacher Stats */}
           <Row className="g-4 mb-4">
             <Col lg={3} sm={6}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{teacherClasses.length}</h3>
-                  <p className="text-muted mb-0">My Classes</p>
+              <Card className="shuleni-card h-100 border-0 shadow-sm">
+                <Card.Body className="text-center p-4">
+                  <div className="mb-3">
+                    <FontAwesomeIcon 
+                      icon={faChalkboardTeacher} 
+                      className="text-primary" 
+                      style={{ fontSize: '2.5rem' }}
+                    />
+                  </div>
+                  <h3 className="fw-bold text-primary mb-2">{teacherClasses.length}</h3>
+                  <p className="text-muted mb-1">My Classes</p>
+                  <small className="text-success">Active teaching load</small>
                 </Card.Body>
               </Card>
             </Col>
             <Col lg={3} sm={6}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{teacherStudents.length}</h3>
-                  <p className="text-muted mb-0">My Students</p>
+              <Card className="shuleni-card h-100 border-0 shadow-sm">
+                <Card.Body className="text-center p-4">
+                  <div className="mb-3">
+                    <FontAwesomeIcon 
+                      icon={faUsers} 
+                      className="text-success" 
+                      style={{ fontSize: '2.5rem' }}
+                    />
+                  </div>
+                  <h3 className="fw-bold text-success mb-2">{teacherStudents.length}</h3>
+                  <p className="text-muted mb-1">My Students</p>
+                  <small className="text-success">Under your guidance</small>
                 </Card.Body>
               </Card>
             </Col>
             <Col lg={3} sm={6}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">95%</h3>
-                  <p className="text-muted mb-0">Attendance Rate</p>
+              <Card className="shuleni-card h-100 border-0 shadow-sm">
+                <Card.Body className="text-center p-4">
+                  <div className="mb-3">
+                    <FontAwesomeIcon 
+                      icon={faGraduationCap} 
+                      className="text-warning" 
+                      style={{ fontSize: '2.5rem' }}
+                    />
+                  </div>
+                  <h3 className="fw-bold text-warning mb-2">95%</h3>
+                  <p className="text-muted mb-1">Attendance Rate</p>
+                  <small className="text-warning">Excellent performance</small>
                 </Card.Body>
               </Card>
             </Col>
             <Col lg={3} sm={6}>
-              <Card className="shuleni-card h-100 text-center">
+              <Card className="shuleni-card h-100 border-0 shadow-sm">
+                <Card.Body className="text-center p-4">
+                  <div className="mb-3">
+                    <FontAwesomeIcon 
+                      icon={faBook} 
+                      className="text-info" 
+                      style={{ fontSize: '2.5rem' }}
+                    />
+                  </div>
+                  <h3 className="fw-bold text-info mb-2">12</h3>
+                  <p className="text-muted mb-1">Assignments</p>
+                  <small className="text-info">Ready for review</small>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* Real-time Dashboard Components */}
+          <Row className="g-4 mb-4">
+            {/* Monthly Attendance Component */}
+            <Col lg={8}>
+              <MonthlyAttendanceComponent userRole="teacher" />
+            </Col>
+            
+            {/* Quick Actions & Report */}
+            <Col lg={4}>
+              <Card className="h-100 shuleni-card">
                 <Card.Body>
-                  <h3 className="fw-bold text-primary">12</h3>
-                  <p className="text-muted mb-0">Assignments</p>
+                  <h6 className="fw-bold mb-3">
+                    <FontAwesomeIcon icon={faClipboardList} className="me-2 text-primary" />
+                    Quick Actions
+                  </h6>
+                  
+                  <div className="d-grid gap-2">
+                    <Button 
+                      variant="primary" 
+                      className="shuleni-btn-primary"
+                      onClick={() => window.open('/resources', '_blank')}
+                    >
+                      <FontAwesomeIcon icon={faUpload} className="me-2" />
+                      Upload Resources
+                    </Button>
+                    
+                    <Button 
+                      variant="outline-primary"
+                      onClick={() => setShowDetailedReportModal(true)}
+                    >
+                      <FontAwesomeIcon icon={faChartLine} className="me-2" />
+                      View Detailed Report
+                    </Button>
+                    
+                    <Button variant="outline-secondary">
+                      <FontAwesomeIcon icon={faCalendarCheck} className="me-2" />
+                      Take Attendance
+                    </Button>
+                  </div>
+
+                  <hr className="my-3" />
+                  
+                  <h6 className="fw-bold mb-3">Today's Schedule</h6>
+                  <div className="small">
+                    {teacherClasses.slice(0, 3).map((classItem, index) => (
+                      <div key={index} className="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                        <div>
+                          <div className="fw-semibold">{classItem.name}</div>
+                          <small className="text-muted">Subject: {classItem.subject || 'N/A'}</small>
+                        </div>
+                        <Badge bg="primary">Active</Badge>
+                      </div>
+                    ))}
+                    {teacherClasses.length === 0 && (
+                      <p className="text-muted text-center">No classes today</p>
+                    )}
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
@@ -252,6 +387,26 @@ const TeacherDashboard = () => {
               </Card>
             </Col>
           </Row>
+
+          {/* School Calendar */}
+          <Row>
+            <Col>
+              <Card className="shuleni-card">
+                <Card.Header>
+                  <h5 className="fw-bold mb-0">
+                    <FontAwesomeIcon icon={faCalendarCheck} className="me-2" />
+                    School Calendar
+                  </h5>
+                </Card.Header>
+                <Card.Body>
+                  <Calendar 
+                    events={events}
+                    isAdmin={false}
+                  />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Container>
       </div>
 
@@ -350,8 +505,30 @@ const TeacherDashboard = () => {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        show={showSettingsModal}
+        onHide={() => setShowSettingsModal(false)}
+      />
+
+      {/* Detailed Report Modal */}
+      <DetailedReportModal 
+        show={showDetailedReportModal}
+        onHide={() => setShowDetailedReportModal(false)}
+        userRole="teacher"
+      />
     </div>
   );
 };
 
-export default TeacherDashboard;
+// Wrap the component with RealTimeProvider
+const TeacherDashboardWithRealTime = () => {
+  return (
+    <RealTimeProvider userRole="teacher">
+      <TeacherDashboard />
+    </RealTimeProvider>
+  );
+};
+
+export default TeacherDashboardWithRealTime;

@@ -1,17 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Modal, Form, Table, Badge, Alert, Tabs, Tab } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Modal, Form, Table, Badge, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector, Provider} from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faUsers, 
+  faChalkboardTeacher, 
+  faPercentage, 
+  faGraduationCap,
+  faUserGraduate,
+  faMoneyBillWave,
+  faChartLine,
+  faSchool,
+  faPlus,
+  faEdit,
+  faTrash,
+  faEye,
+  faClipboardList,
+  faBookOpen,
+  faCalendarAlt
+} from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import PhotoUpload from '../components/PhotoUpload';
+import SettingsModal from '../components/SettingsModal';
 import Calendar from '../components/Calendar';
-import TeacherDashboardModal from '../components/TeacherDashboardModal';
 import ClassManagement from '../components/ClassManagement';
 import SubjectManagement from '../components/SubjectManagement';
 import StudentSearch from '../components/StudentSearch';
+import DetailedReportModal from '../components/DetailedReportModal';
+import { RealTimeProvider } from '../contexts/RealTimeContext';
 import { fetchDashboardData } from '../Store/slices/dashboardSlice';
+import { updateUserAvatar } from '../Store/slices/authSlice';
+import { updateStudentPhoto, updateTeacherPhoto } from '../Store/slices/usersSlice';
 import { fetchStudents, fetchTeachers, createStudent, createTeacher, updateStudent, updateTeacher, deleteStudent, deleteTeacher, assignClassesToTeacher } from '../Store/slices/usersSlice';
 import { fetchClasses, createClass, assignTeacherToClass } from '../Store/slices/classesSlice';
 import { fetchEvents, createEvent, updateEventData, deleteEventData } from '../Store/slices/calendarSlice';
@@ -20,6 +42,17 @@ const selectEvents = createSelector(
   (state) => state.calendar || {}, // Handle undefined state.calendar
   (calendar) => calendar.events || [] // Provide default if events is undefined
 ); 
+
+// Available classes and subjects for student assignment
+const availableClasses = [
+  'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8',
+  'Form 1', 'Form 2', 'Form 3', 'Form 4'
+];
+
+const availableSubjects = [
+  'Math', 'Science', 'History', 'English', 'Kiswahili', 'Geography', 
+  'Chemistry', 'Physics', 'Biology', 'Computer Science', 'Art', 'Music', 'Physical Education'
+];
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -36,9 +69,10 @@ const AdminDashboard = () => {
   const [showClassModal, setShowClassModal] = useState(false);
   const [showClassAssignmentModal, setShowClassAssignmentModal] = useState(false);
   const [showTeacherDetailsModal, setShowTeacherDetailsModal] = useState(false);
-  const [showTeacherDashboardModal, setShowTeacherDashboardModal] = useState(false);
-  const [selectedTeacherForDashboard, setSelectedTeacherForDashboard] = useState(null);
+  const [showSchoolsModal, setShowSchoolsModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showDetailedReportModal, setShowDetailedReportModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [editingTeacher, setEditingTeacher] = useState(null);
   const [editingEvent, setEditingEvent] = useState(null);
@@ -46,17 +80,15 @@ const AdminDashboard = () => {
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminPhoto, setAdminPhoto] = useState(null);
-  const [studentPhotos, setStudentPhotos] = useState({});
-  const [teacherPhotos, setTeacherPhotos] = useState({});
-  const [activeTab, setActiveTab] = useState('students');
+  // Tab state removed since tabs are not needed anymore
 
   
   const [studentForm, setStudentForm] = useState({
-    name: '', email: '', dateOfBirth: '', parentName: '', phone: '', address: '', class: '', photo: '',
-    admissionNo: '', idNumber: '', gender: '', county: '', country: '', postalAddress: '', canGraduate: false
+    name: '', email: '', dateOfBirth: '', parentName: '', phone: '', address: '', classes: [], subjects: [], photo: '',
+    admissionNo: '', idNumber: '', gender: '', county: '', country: '', postalAddress: '', canGraduate: false, bloodGroup: ''
   });
   const [teacherForm, setTeacherForm] = useState({
-    name: '', email: '', subject: '', phone: '', address: '', qualifications: '', experience: '', photo: '', assignedClasses: []
+    name: '', email: '', subject: '', phone: '', address: '', qualifications: '', experience: '', photo: '', assignedClasses: [], status: 'active'
   });
   const [classForm, setClassForm] = useState({
     name: '', teacher: '', grade: '', description: '', schedule: '', room: ''
@@ -67,7 +99,8 @@ const AdminDashboard = () => {
     date: '',
     time: '',
     type: 'general',
-    priority: 'medium'
+    priority: 'medium',
+    targetAudience: 'both' // 'students', 'teachers', 'both'
   });
 
  
@@ -87,18 +120,14 @@ const AdminDashboard = () => {
   };
 
   const handleStudentPhotoUpdate = (studentId, newPhotoUrl) => {
-    setStudentPhotos(prev => ({
-      ...prev,
-      [studentId]: newPhotoUrl
-    }));
+    // Update the user photo in the global state for real-time updates
+    dispatch(updateStudentPhoto({ studentId, photoUrl: newPhotoUrl }));
     // BACKEND TODO: Update student photo via PUT /api/students/{id}/photo endpoint
   };
 
   const handleTeacherPhotoUpdate = (teacherId, newPhotoUrl) => {
-    setTeacherPhotos(prev => ({
-      ...prev,
-      [teacherId]: newPhotoUrl
-    }));
+    // Update the user photo in the global state for real-time updates
+    dispatch(updateTeacherPhoto({ teacherId, photoUrl: newPhotoUrl }));
     // BACKEND TODO: Update teacher photo via PUT /api/teachers/{id}/photo endpoint
   };
 
@@ -127,7 +156,8 @@ const AdminDashboard = () => {
     setEditingStudent(null);
     setStudentForm({ 
       name: '', email: '', dateOfBirth: '', parentName: '', phone: '', address: '', class: '', photo: '',
-      admissionNo: '', idNumber: '', gender: '', county: '', country: '', postalAddress: '', canGraduate: false
+      admissionNo: '', idNumber: '', gender: '', county: '', country: '', postalAddress: '', canGraduate: false,
+      bloodGroup: ''
     });
   };
 
@@ -140,7 +170,8 @@ const AdminDashboard = () => {
       parentName: student.parentName,
       phone: student.phone,
       address: student.address,
-      class: student.class,
+      classes: student.classes || [],
+      subjects: student.subjects || [],
       photo: student.photo || '',
       admissionNo: student.admissionNo || '',
       idNumber: student.idNumber || '',
@@ -148,7 +179,8 @@ const AdminDashboard = () => {
       county: student.county || '',
       country: student.country || '',
       postalAddress: student.postalAddress || '',
-      canGraduate: student.canGraduate || false
+      canGraduate: student.canGraduate || false,
+      bloodGroup: student.bloodGroup || ''
     });
     setShowStudentModal(true);
   };
@@ -162,7 +194,8 @@ const AdminDashboard = () => {
       parentName: '',
       phone: '',
       address: '',
-      class: '',
+      classes: [],
+      subjects: [],
       photo: '',
       admissionNo: '',
       idNumber: '',
@@ -170,7 +203,8 @@ const AdminDashboard = () => {
       county: '',
       country: '',
       postalAddress: '',
-      canGraduate: false
+      canGraduate: false,
+      bloodGroup: ''
     });
     setShowStudentModal(true);
   };
@@ -179,6 +213,24 @@ const AdminDashboard = () => {
     if (window.confirm('Are you sure you want to delete this student?')) {
       dispatch(deleteStudent(studentId));
     }
+  };
+
+  const handleClassSelection = (className) => {
+    setStudentForm(prev => ({
+      ...prev,
+      classes: prev.classes.includes(className)
+        ? prev.classes.filter(c => c !== className)
+        : [...prev.classes, className]
+    }));
+  };
+
+  const handleSubjectSelection = (subjectName) => {
+    setStudentForm(prev => ({
+      ...prev,
+      subjects: prev.subjects.includes(subjectName)
+        ? prev.subjects.filter(s => s !== subjectName)
+        : [...prev.subjects, subjectName]
+    }));
   };
 
   
@@ -239,7 +291,7 @@ const AdminDashboard = () => {
     if (!editingTeacher) {
       setTimeout(() => {
         const classNames = selectedClasses.map(c => c.name).join(', ');
-        const message = `Teacher "${teacherData.name}" created successfully!\n\n✅ Dashboard Access Created:\n- Email: ${teacherData.email}\n- Role: Teacher\n- Dashboard URL: /teacher?id=${newTeacherId || 'ID'}\n\n✅ Classes Assigned (${selectedClasses.length}):\n${classNames || 'None'}\n\n🎯 The teacher can now log in and manage their assigned classes immediately!\n\nWould you like to open their dashboard?`;
+        const message = `Teacher "${teacherData.name}" created successfully!\n\n✅ Dashboard Access Created:\n- Email: ${teacherData.email}\n- Role: Teacher\n- Dashboard URL: /teacher?id=${teacherData.id || 'NEW'}\n\n✅ Classes Assigned (${selectedClasses.length}):\n${classNames || 'None'}\n\n🎯 The teacher can now log in and manage their assigned classes immediately!\n\nWould you like to open their dashboard?`;
         
         if (window.confirm(message)) {
           handleOpenTeacherDashboard(teacherData);
@@ -259,7 +311,8 @@ const AdminDashboard = () => {
           qualifications: '',
           experience: '',
           photo: '',
-          assignedClasses: []
+          assignedClasses: [],
+          status: 'active'
         });
         setSelectedClasses([]);
         setShowTeacherModal(true);
@@ -288,7 +341,8 @@ const AdminDashboard = () => {
       date: '',
       time: '',
       type: 'general',
-      priority: 'medium'
+      priority: 'medium',
+      targetAudience: 'both'
     });
   };
 
@@ -300,7 +354,8 @@ const AdminDashboard = () => {
       date: event.date,
       time: event.time,
       type: event.type,
-      priority: event.priority
+      priority: event.priority,
+      targetAudience: event.targetAudience || 'both'
     });
     setShowEventModal(true);
   };
@@ -315,7 +370,8 @@ const AdminDashboard = () => {
       address: teacher.address,
       qualifications: teacher.qualifications,
       experience: teacher.experience,
-      assignedClasses: teacher.classes || []
+      assignedClasses: teacher.classes || [],
+      status: teacher.status || 'active'
     });
     // Set selected classes for editing
     if (teacher.classes) {
@@ -325,9 +381,9 @@ const AdminDashboard = () => {
     setShowTeacherModal(true);
   };
 
-  const handleViewTeacherDashboard = (teacher) => {
-    setSelectedTeacherForDashboard(teacher);
-    setShowTeacherDashboardModal(true);
+  const handleViewTeacherDetails = (teacher) => {
+    setSelectedTeacher(teacher);
+    setShowTeacherDetailsModal(true);
   };
 
   const handleDeleteTeacher = (teacherId) => {
@@ -341,11 +397,6 @@ const AdminDashboard = () => {
     // Simulate opening teacher dashboard with their credentials
     const teacherDashboardUrl = `/teacher?id=${teacher.id}&email=${teacher.email}`;
     window.open(teacherDashboardUrl, '_blank');
-  };
-
-  const handleViewTeacherDetails = (teacher) => {
-    setSelectedTeacher(teacher);
-    setShowTeacherDetailsModal(true);
   };
 
   const handleAssignClasses = (teacher) => {
@@ -421,7 +472,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="d-flex min-vh-100">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+        onOpenSettings={() => setShowSettingsModal(true)}
+      />
       
       <div className="flex-grow-1 d-flex flex-column">
         <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
@@ -447,10 +502,16 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2">
-                  <Button variant="outline-primary" onClick={() => window.location.reload()}>
+                  <Button 
+                    variant="outline-primary" 
+                    onClick={() => setShowSchoolsModal(true)}
+                  >
                     Access Existing School
                   </Button>
-                  <Button className="shuleni-btn-primary">
+                  <Button 
+                    className="shuleni-btn-primary"
+                    onClick={() => navigate('/create-school')}
+                  >
                     Create New School
                   </Button>
                 </div>
@@ -458,471 +519,81 @@ const AdminDashboard = () => {
             </Col>
           </Row>
 
-          {/* Metrics Cards - Enhanced Responsive */}
-          <Row className="g-4 mb-4">
-            <Col xl={3} lg={3} md={6} sm={6} xs={12}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{metrics.totalStudents}</h3>
-                  <p className="text-muted mb-0">Total Students</p>
-                  <small className="text-success">↑ 5% from last month</small>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xl={3} lg={3} md={6} sm={6} xs={12}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{metrics.totalTeachers}</h3>
-                  <p className="text-muted mb-0">Total Teachers</p>
-                  <small className="text-success">↑ 2% from last month</small>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xl={3} lg={3} md={6} sm={6} xs={12}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{metrics.attendanceRate}%</h3>
-                  <p className="text-muted mb-0">Attendance Rate</p>
-                  <small className="text-success">↑ 3% from last month</small>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xl={3} lg={3} md={6} sm={6} xs={12}>
-              <Card className="shuleni-card h-100 text-center">
-                <Card.Body>
-                  <h3 className="fw-bold text-primary">{metrics.activeClasses}</h3>
-                  <p className="text-muted mb-0">Active Classes</p>
-                  <small className="text-success">Steady</small>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-          {/* Management Navigation Tabs */}
+          {/* Dashboard Overview (formerly in tabs) */}
           <Row className="g-4 mb-4">
             <Col>
               <Card className="shuleni-card">
                 <Card.Body className="p-0">
-                  <Tabs
-                    activeKey={activeTab}
-                    onSelect={(k) => setActiveTab(k)}
-                    className="nav-fill border-bottom-0"
-                  >
-                    <Tab eventKey="students" title="Students Management">
-                      <div className="p-4">
-                        <StudentSearch userRole="admin" />
-                      </div>
-                    </Tab>
-                    <Tab eventKey="classes" title="Classes Management">
-                      <div className="p-4">
-                        <ClassManagement userRole="admin" />
-                      </div>
-                    </Tab>
-                    <Tab eventKey="subjects" title="Subjects Management">
-                      <div className="p-4">
-                        <SubjectManagement userRole="admin" />
-                      </div>
-                    </Tab>
-                    <Tab eventKey="teachers" title="Teachers Management">
-                      <div className="p-4">
-                        <Row className="g-4">
-                          <Col>
-                            <Card className="shadow-sm border-0">
-                              <Card.Header className="bg-warning text-dark">
-                                <div className="d-flex justify-content-between align-items-center">
-                                  <h5 className="mb-0">Teacher Management</h5>
-                                  <Button 
-                                    size="sm" 
-                                    variant="dark"
-                                    onClick={handleAddNewTeacher}
-                                  >
-                                    Add Teacher
-                                  </Button>
+                  {/* Dashboard Overview Content - No Tabs */}
+                  <div className="p-4">
+                    <Row className="g-4 mb-4">
+                      <Col lg={6}>
+                        <Card className="shuleni-card h-100">
+                          <Card.Body>
+                            <h5 className="fw-bold mb-3">School Performance Metrics</h5>
+                            <p className="text-muted">Key metrics to monitor your school's performance.</p>
+                            <Button 
+                              variant="primary" 
+                              onClick={() => setShowDetailedReportModal(true)}
+                              className="shuleni-btn-primary"
+                            >
+                              <FontAwesomeIcon icon={faChartLine} className="me-2" />
+                              View Real-time Detailed Report
+                            </Button>
+                            
+                            <Row className="mt-4">
+                              <Col sm={4}>
+                                <div className="text-center">
+                                  <h4 className="fw-bold">{metrics.examsCompleted}</h4>
+                                  <small className="text-muted">Exams Conducted</small>
                                 </div>
-                              </Card.Header>
-                              <Card.Body>
-                                <Table responsive hover>
-                                  <thead className="table-light">
-                                    <tr>
-                                      <th>Teacher</th>
-                                      <th>Subject</th>
-                                      <th>Classes</th>
-                                      <th>Phone</th>
-                                      <th>Actions</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {teachers.slice(0, 10).map((teacher) => (
-                                      <tr key={teacher.id}>
-                                        <td>
-                                          <div className="d-flex align-items-center">
-                                            <PhotoUpload
-                                              currentPhoto={teacherPhotos[teacher.id]}
-                                              onPhotoUpdate={(photo) => handleTeacherPhotoUpdate(teacher.id, photo)}
-                                              userRole="teacher"
-                                              size={40}
-                                              name={teacher.name}
-                                              showEditButton={false}
-                                              className="me-3"
-                                            />
-                                            <div>
-                                              <div className="fw-bold">{teacher.name}</div>
-                                              <small className="text-muted">{teacher.email}</small>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td>
-                                          <Badge bg="info">{teacher.subject}</Badge>
-                                        </td>
-                                        <td>
-                                          <Badge bg="secondary">
-                                            {teacher.assignedClasses?.length || 0} classes
-                                          </Badge>
-                                        </td>
-                                        <td>{teacher.phone}</td>
-                                        <td>
-                                          <div className="d-flex gap-1">
-                                            <Button
-                                              size="sm"
-                                              variant="outline-primary"
-                                              onClick={() => handleViewTeacherDashboard(teacher)}
-                                              title="View Dashboard"
-                                            >
-                                              View Dashboard
-                                            </Button>
-                                            <Button
-                                              size="sm"
-                                              variant="outline-secondary"
-                                              onClick={() => handleEditTeacher(teacher)}
-                                              title="Edit Teacher"
-                                            >
-                                              Edit
-                                            </Button>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </Table>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Tab>
-                    <Tab eventKey="overview" title="Dashboard Overview">
-                      <div className="p-4">
-                        <Row className="g-4 mb-4">
-                          <Col lg={6}>
-                            <Card className="shuleni-card h-100">
-                              <Card.Body>
-                                <h5 className="fw-bold mb-3">School Performance Metrics</h5>
-                                <p className="text-muted">Key metrics to monitor your school's performance.</p>
-                                <Button variant="primary">View Detailed Report</Button>
-                                
-                                <Row className="mt-4">
-                                  <Col sm={4}>
-                                    <div className="text-center">
-                                      <h4 className="fw-bold">{metrics.examsCompleted}</h4>
-                                      <small className="text-muted">Exams Conducted</small>
-                                    </div>
-                                  </Col>
-                                  <Col sm={4}>
-                                    <div className="text-center">
-                                      <h4 className="fw-bold">{metrics.resourcesUploaded}</h4>
-                                      <small className="text-muted">Resources Uploaded</small>
-                                    </div>
-                                  </Col>
-                                  <Col sm={4}>
-                                    <div className="text-center">
-                                      <h4 className="fw-bold">{metrics.activeClasses}</h4>
-                                      <small className="text-muted">Active Classes</small>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-
-                          <Col lg={6}>
-                            <Card className="shuleni-card h-100">
-                              <Card.Body>
-                                <h5 className="fw-bold mb-3">Monthly Attendance</h5>
-                                <p className="text-muted">Attendance (%)</p>
-                                
-                                {/* Simple attendance chart using CSS bars */}
-                                <div className="mt-4">
-                                  {attendanceData.map((data, index) => (
-                                    <div key={index} className="mb-3">
-                                      <div className="d-flex justify-content-between mb-1">
-                                        <small>{data.month}</small>
-                                        <small>{data.attendance}%</small>
-                                      </div>
-                                      <div className="progress" style={{ height: '8px' }}>
-                                        <div 
-                                          className="progress-bar bg-primary" 
-                                          style={{ width: `${data.attendance}%` }}
-                                        ></div>
-                                      </div>
-                                    </div>
-                                  ))}
+                              </Col>
+                              <Col sm={4}>
+                                <div className="text-center">
+                                  <h4 className="fw-bold">{metrics.resourcesUploaded}</h4>
+                                  <small className="text-muted">Resources Uploaded</small>
                                 </div>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-                        </Row>
-
-                        <Row className="g-4">
-                          <Col>
-                            <Calendar events={events} />
-                          </Col>
-                        </Row>
-                      </div>
-                    </Tab>
-                  </Tabs>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-          <Row className="g-4 mb-4">
-            <Col lg={6}>
-              <Card className="shuleni-card h-100">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3">Monthly Attendance</h5>
-                  <p className="text-muted">Attendance (%)</p>
-                  
-                  {/* Simple attendance chart using CSS bars */}
-                  <div className="mt-4">
-                    {attendanceData.map((data, index) => (
-                      <div key={index} className="mb-3">
-                        <div className="d-flex justify-content-between mb-1">
-                          <small>{data.month}</small>
-                          <small>{data.attendance}%</small>
-                        </div>
-                        <div className="progress" style={{ height: '8px' }}>
-                          <div 
-                            className="progress-bar bg-primary" 
-                            style={{ width: `${data.attendance}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-          {/* Add New Student Section */}
-          <Row className="g-4 mb-4">
-            <Col lg={6}>
-              <Card className="shuleni-card">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5 className="fw-bold">Manage Students</h5>
-                    <Button 
-                      className="shuleni-btn-primary"
-                      onClick={handleAddNewStudent}
-                    >
-                      Add Student
-                    </Button>
-                  </div>
-                  <p className="text-muted mb-4">Fill in the details to add a new student.</p>
-                  
-                  {/* Students Table */}
-                  <div className="table-responsive">
-                    <table className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Class</th>
-                          <th>Email</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {students.slice(0, 5).map((student) => (
-                          <tr key={student.id}>
-                            <td>
-                              <div className="d-flex align-items-center">
-                                <PhotoUpload
-                                  currentPhoto={studentPhotos[student.id] || student.avatar}
-                                  onPhotoUpdate={(newPhotoUrl) => handleStudentPhotoUpdate(student.id, newPhotoUrl)}
-                                  userRole="student"
-                                  size={32}
-                                  name={student.name}
-                                  className="me-2"
-                                  showEditButton={true}
-                                />
-                                <span>{student.name}</span>
-                              </div>
-                            </td>
-                            <td>
-                              <Badge bg="primary">{student.class}</Badge>
-                            </td>
-                            <td>{student.email}</td>
-                            <td>
-                              <div className="d-flex gap-1">
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-primary"
-                                  onClick={() => handleEditStudent(student)}
-                                >
-                                  Edit
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-danger"
-                                  onClick={() => handleDeleteStudent(student.id)}
-                                >
-                                  Delete
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            {/* Enhanced Teacher Management Section */}
-            <Col lg={6}>
-              <Card className="shuleni-card">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5 className="fw-bold">Manage Teachers & Dashboards</h5>
-                    <div className="d-flex gap-2">
-                      <Button 
-                        className="shuleni-btn-primary"
-                        onClick={handleAddNewTeacher}
-                      >
-                        <i className="fas fa-plus me-2"></i>
-                        Add Teacher
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-muted mb-4">Add teachers, assign classes, and manage their dashboards automatically.</p>
-                  
-                  {/* Enhanced Teachers Table */}
-                  <div className="table-responsive">
-                    <table className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Subject</th>
-                          <th>Classes</th>
-                          <th>Dashboard</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teachers.map((teacher) => (
-                          <tr key={teacher.id}>
-                            <td>
-                              <div className="d-flex align-items-center">
-                                <PhotoUpload
-                                  currentPhoto={teacherPhotos[teacher.id] || teacher.avatar}
-                                  onPhotoUpdate={(newPhotoUrl) => handleTeacherPhotoUpdate(teacher.id, newPhotoUrl)}
-                                  userRole="teacher"
-                                  size={32}
-                                  name={teacher.name}
-                                  className="me-2"
-                                  showEditButton={true}
-                                />
-                                <div>
-                                  <div className="fw-bold">{teacher.name}</div>
-                                  <small className="text-muted">{teacher.email}</small>
+                              </Col>
+                              <Col sm={4}>
+                                <div className="text-center">
+                                  <h4 className="fw-bold">{metrics.activeClasses}</h4>
+                                  <small className="text-muted">Active Classes</small>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <Badge bg="success">{teacher.subject}</Badge>
-                            </td>
-                            <td>
-                              <div className="d-flex flex-wrap gap-1">
-                                {teacher.classes && teacher.classes.length > 0 ? (
-                                  classes
-                                    .filter(cls => teacher.classes.includes(cls.id))
-                                    .slice(0, 2)
-                                    .map((cls) => (
-                                      <Badge key={cls.id} bg="info" className="small">
-                                        {cls.name}
-                                      </Badge>
-                                    ))
-                                ) : (
-                                  <small className="text-muted">No classes</small>
-                                )}
-                                {teacher.classes && teacher.classes.length > 2 && (
-                                  <Badge bg="secondary" className="small">
-                                    +{teacher.classes.length - 2} more
-                                  </Badge>
-                                )}
-                              </div>
-                            </td>
-                            <td>
-                              <Button
-                                size="sm"
-                                variant="outline-success"
-                                onClick={() => handleViewTeacherDashboard(teacher)}
-                                title="View Teacher Dashboard"
-                              >
-                                <i className="fas fa-tachometer-alt me-1"></i>
-                                Dashboard
-                              </Button>
-                            </td>
-                            <td>
-                              <div className="d-flex gap-1 flex-wrap">
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-primary"
-                                  onClick={() => handleEditTeacher(teacher)}
-                                  title="Edit Teacher"
-                                >
-                                  <i className="fas fa-edit"></i>
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-info"
-                                  onClick={() => handleAssignClasses(teacher)}
-                                  title="Assign Classes"
-                                >
-                                  <i className="fas fa-chalkboard-teacher"></i>
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-secondary"
-                                  onClick={() => handleViewTeacherDetails(teacher)}
-                                  title="View Details"
-                                >
-                                  <i className="fas fa-eye"></i>
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline-danger"
-                                  onClick={() => handleDeleteTeacher(teacher.id)}
-                                  title="Delete Teacher"
-                                >
-                                  <i className="fas fa-trash"></i>
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                              </Col>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+
+                      <Col lg={6}>
+                        <Card className="shuleni-card h-100">
+                          <Card.Body>
+                            <h5 className="fw-bold mb-3">Monthly Attendance</h5>
+                            <p className="text-muted">Attendance (%)</p>
+                            
+                            {/* Simple attendance chart using CSS bars */}
+                            <div className="mt-4">
+                              {attendanceData.map((data, index) => (
+                                <div key={index} className="mb-3">
+                                  <div className="d-flex justify-content-between mb-1">
+                                    <small>{data.month}</small>
+                                    <small>{data.attendance}%</small>
+                                  </div>
+                                  <div className="progress" style={{ height: '8px' }}>
+                                    <div 
+                                      className="progress-bar bg-primary" 
+                                      style={{ width: `${data.attendance}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
                   </div>
-                  
-                  {teachers.length === 0 && (
-                    <div className="text-center py-4">
-                      <i className="fas fa-users fa-3x text-muted mb-3"></i>
-                      <h6 className="text-muted">No Teachers Added Yet</h6>
-                      <p className="text-muted">Add your first teacher to get started with class management.</p>
-                    </div>
-                  )}
+
                 </Card.Body>
               </Card>
             </Col>
@@ -947,13 +618,13 @@ const AdminDashboard = () => {
                     </Button>
                   </div>
                   <p className="text-muted mb-4">
-                    Create and manage important dates that students can view on their dashboards.
+                    Create and manage important dates. Choose to push events to all teachers, all students, or both audiences.
                   </p>
                   
                   {/* Calendar Component */}
                   <Calendar 
                     events={events}
-                    onEventAdd={handleEventAdd}
+                    onEventAdd={() => setShowEventModal(true)}
                     onEventEdit={handleEditEvent}
                     onEventDelete={handleEventDelete}
                     isAdmin={true}
@@ -1024,44 +695,6 @@ const AdminDashboard = () => {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Class</Form.Label>
-                  <Form.Select
-                    value={studentForm.class}
-                    onChange={(e) => setStudentForm({...studentForm, class: e.target.value})}
-                  >
-                    <option value="">Select Class</option>
-                    <option value="Grade 1">Grade 1</option>
-                    <option value="Grade 2">Grade 2</option>
-                    <option value="Grade 3">Grade 3</option>
-                    <option value="Grade 4">Grade 4</option>
-                    <option value="Grade 5">Grade 5</option>
-                    <option value="Grade 6">Grade 6</option>
-                    <option value="Grade 7">Grade 7</option>
-                    <option value="Grade 8">Grade 8</option>
-                    <option value="Form 1">Form 1</option>
-                    <option value="Form 2">Form 2</option>
-                    <option value="Form 3">Form 3</option>
-                    <option value="Form 4">Form 4</option>
-                    <option value="Math">Math</option>
-                    <option value="Science">Science</option>
-                    <option value="History">History</option>
-                    <option value="English">English</option>
-                    <option value="Kiswahili">Kiswahili</option>
-                    <option value="Geography">Geography</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Art">Art</option>
-                    <option value="Music">Music</option>
-                    <option value="Physical Education">Physical Education</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
                   <Form.Label>Parent/Guardian Name</Form.Label>
                   <Form.Control
                     type="text"
@@ -1071,6 +704,64 @@ const AdminDashboard = () => {
                   />
                 </Form.Group>
               </Col>
+            </Row>
+
+            {/* Class Assignment Section */}
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Assign Classes</Form.Label>
+                  <div 
+                    style={{ 
+                      border: '1px solid #ced4da', 
+                      borderRadius: '0.375rem', 
+                      padding: '10px', 
+                      maxHeight: '200px', 
+                      overflowY: 'auto' 
+                    }}
+                  >
+                    {availableClasses.map((className, index) => (
+                      <Form.Check
+                        key={index}
+                        type="checkbox"
+                        id={`class-${index}`}
+                        label={className}
+                        checked={studentForm.classes.includes(className)}
+                        onChange={() => handleClassSelection(className)}
+                        className="mb-2"
+                      />
+                    ))}
+                  </div>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Assign Subjects</Form.Label>
+                  <div 
+                    style={{ 
+                      border: '1px solid #ced4da', 
+                      borderRadius: '0.375rem', 
+                      padding: '10px', 
+                      maxHeight: '200px', 
+                      overflowY: 'auto' 
+                    }}
+                  >
+                    {availableSubjects.map((subjectName, index) => (
+                      <Form.Check
+                        key={index}
+                        type="checkbox"
+                        id={`subject-${index}`}
+                        label={subjectName}
+                        checked={studentForm.subjects.includes(subjectName)}
+                        onChange={() => handleSubjectSelection(subjectName)}
+                        className="mb-2"
+                      />
+                    ))}
+                  </div>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Phone Number</Form.Label>
@@ -1173,6 +864,31 @@ const AdminDashboard = () => {
                 placeholder="Enter full postal address"
               />
             </Form.Group>
+            
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Blood Group</Form.Label>
+                  <Form.Select
+                    value={studentForm.bloodGroup}
+                    onChange={(e) => setStudentForm({...studentForm, bloodGroup: e.target.value})}
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                {/* Space for future field if needed */}
+              </Col>
+            </Row>
             
             <Form.Group className="mb-3">
               <Form.Label>Address</Form.Label>
@@ -1288,6 +1004,23 @@ const AdminDashboard = () => {
                     placeholder="Years of experience"
                   />
                 </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    value={teacherForm.status}
+                    onChange={(e) => setTeacherForm({...teacherForm, status: e.target.value})}
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                {/* Empty column for spacing */}
               </Col>
             </Row>
             <Form.Group className="mb-3">
@@ -1714,6 +1447,22 @@ const AdminDashboard = () => {
               </Form.Select>
             </Form.Group>
             
+            <Form.Group className="mb-3">
+              <Form.Label>Target Audience *</Form.Label>
+              <Form.Select
+                value={eventForm.targetAudience}
+                onChange={(e) => setEventForm({...eventForm, targetAudience: e.target.value})}
+                required
+              >
+                <option value="both">All (Teachers & Students)</option>
+                <option value="teachers">Teachers Only</option>
+                <option value="students">Students Only</option>
+              </Form.Select>
+              <Form.Text className="text-muted">
+                Choose who can see this event on their dashboard calendars.
+              </Form.Text>
+            </Form.Group>
+            
             <div className="d-flex gap-2 justify-content-end">
               <Button variant="secondary" onClick={() => setShowEventModal(false)}>
                 Cancel
@@ -1726,16 +1475,51 @@ const AdminDashboard = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Teacher Dashboard Modal */}
-      <TeacherDashboardModal
-        show={showTeacherDashboardModal}
-        onHide={() => setShowTeacherDashboardModal(false)}
-        teacherId={selectedTeacherForDashboard?.id}
-        teacherData={selectedTeacherForDashboard}
+      {/* Settings Modal */}
+      <SettingsModal
+        show={showSettingsModal}
+        onHide={() => setShowSettingsModal(false)}
+      />
+
+      {/* Schools Modal */}
+      <Modal show={showSchoolsModal} onHide={() => setShowSchoolsModal(false)} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Existing Schools</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center py-4">
+            <h5>Schools Management</h5>
+            <p className="text-muted">Here you can view and manage existing schools created by you.</p>
+            <div className="mt-3">
+              <Button variant="primary" className="me-2">
+                View All Schools
+              </Button>
+              <Button variant="outline-secondary">
+                Export Schools Data
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Detailed Report Modal */}
+      <DetailedReportModal 
+        show={showDetailedReportModal}
+        onHide={() => setShowDetailedReportModal(false)}
+        userRole="admin"
       />
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+// Wrap the component with RealTimeProvider
+const AdminDashboardWithRealTime = () => {
+  return (
+    <RealTimeProvider userRole="admin">
+      <AdminDashboard />
+    </RealTimeProvider>
+  );
+};
+
+export default AdminDashboardWithRealTime;

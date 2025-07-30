@@ -1,0 +1,21 @@
+# Commit Message Cleanup
+
+## Emojis and Symbols Removed from Previous Commits
+
+This file documents the cleanup of commit messages by removing emojis and symbols:
+
+- c620553: "🔧 Resolve merge conflicts with main branch" → "Resolve merge conflicts with main branch"
+- 5be4935: "🧹 Code cleanup: Remove debug code, console.logs, and test components" → "Code cleanup: Remove debug code, console.logs, and test components"
+- Any commits with green checkmarks (✅) → Removed checkmarks for clean formatting
+
+## Reason for Cleanup
+
+- Maintain consistent, professional commit message format
+- Improve compatibility with automated tools and CI/CD systems
+- Follow conventional commit message standards
+## Future Commits
+
+- Follow conventional commit message format
+- Use clear, descriptive messages without emojis or symbols
+- Focus on the content and purpose of changes
+- Avoid decorative elements like ✅, 🔧, 🧹, etc.

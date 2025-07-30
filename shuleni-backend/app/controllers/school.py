@@ -1,29 +1,44 @@
 from flask import request
 from werkzeug.security import generate_password_hash
-
-from app.models import User
+from app.models.user import User
+from app import db
 from app.utils.helpers import save_to_db, delete_from_db
 from app.utils.validation import validate_user_creation
 
 def create_user(school_id):
+    """Create a new user for a given school"""
     data = request.get_json()
-    role = data.get('role', 'student')
-    
-    if errors := validate_user_creation(data, role):
+
+    errors = validate_user_creation(data)
+    if errors:
         return {"errors": errors}, 400
-        
-    if User.query.filter_by(school_id=school_id, email=data['email']).first():
+
+    role = data.get("role", "student").lower()
+
+    if User.query.filter_by(email=data["email"], school_id=school_id).first():
         return {"msg": "Email already registered in this school"}, 400
-        
+
     user = User(
         school_id=school_id,
-        name=data['name'],
-        email=data['email'],
+        name=data["name"],
+        email=data["email"],
         role=role,
-        password_hash=generate_password_hash(data.get('password', 'defaultpassword'))
+        password_hash=generate_password_hash(data["password"])
     )
-    save_to_db(user)
-    return {"msg": f"{role.capitalize()} created", "user_id": user.id}, 201
+    db.session.add(user)
+    db.session.commit()
+
+    print(f"✅ User created: {user.email} | Role: {user.role} | School ID: {school_id}")
+
+    return {
+        "msg": "User created successfully",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role
+        }
+    }, 201
 
 def delete_user(school_id, user_id):
     user = User.query.filter_by(school_id=school_id, id=user_id).first()
@@ -55,3 +70,6 @@ def get_school_info(school_id):
         "owner_name": school.owner_name,
         "created_at": school.created_at.isoformat()
     }
+
+def __repr__(self):
+    return f"<School {self.name} ({self.email})>"

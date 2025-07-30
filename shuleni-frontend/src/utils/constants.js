@@ -1,7 +1,7 @@
 // Application constants for Shuleni School Management System
 
 // API Base URLs - Update these when backend is ready
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 // API Endpoints - Replace with actual backend endpoints
 export const API_ENDPOINTS = {

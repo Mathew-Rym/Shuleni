@@ -14,9 +14,40 @@ export const fetchEvents = createAsyncThunk('calendar/fetchEvents', async (_, { 
     // const response = await fetch('/api/events');
     // return await response.json();
 
-    // Mock API call
+    // Mock API call with sample events for testing
     return await new Promise((resolve) => 
-      setTimeout(() => resolve([{ id: 1, title: 'Sample Event', date: '2024-02-20' }]), 500)
+      setTimeout(() => resolve([
+        { 
+          id: 1, 
+          title: 'Staff Meeting', 
+          date: '2025-07-30', 
+          time: '09:00',
+          description: 'Monthly staff meeting',
+          type: 'meeting',
+          priority: 'high',
+          targetAudience: 'teachers'
+        },
+        { 
+          id: 2, 
+          title: 'Parent-Teacher Conference', 
+          date: '2025-08-01', 
+          time: '14:00',
+          description: 'Quarterly parent-teacher conferences',
+          type: 'meeting',
+          priority: 'medium',
+          targetAudience: 'both'
+        },
+        { 
+          id: 3, 
+          title: 'Student Assembly', 
+          date: '2025-08-05', 
+          time: '10:00',
+          description: 'Monthly student assembly',
+          type: 'event',
+          priority: 'medium',
+          targetAudience: 'students'
+        }
+      ]), 500)
     );
   } catch (error) {
     return rejectWithValue(error.message);

@@ -3,7 +3,6 @@
 
 name: Node.js CI
 
-
 on:
   push:
     branches: 
@@ -28,10 +27,22 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'shuleni-frontend/package-lock.json'
   
-      - name: Install and Build
+      - name: Clear npm cache
+        run: npm cache clean --force
+        
+      - name: Install dependencies
         run: |
           cd shuleni-frontend
-          npm ci
+          npm ci --verbose
+          
+      - name: Run lint
+        run: |
+          cd shuleni-frontend
+          npm run lint
+          
+      - name: Build application
+        run: |
+          cd shuleni-frontend
           npm run build
 
       - name: Skip Tests

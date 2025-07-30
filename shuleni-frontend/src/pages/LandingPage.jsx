@@ -1,26 +1,29 @@
-import React from 'react';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers, faTools, faHeadset } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const features = [
     {
-      icon: '👥',
+      icon: faUsers,
       title: 'User-Friendly',
       description: 'Our interface is simple and intuitive for all users.',
       color: '#FF6B6B'
     },
     {
-      icon: '⚛️',
+      icon: faTools,
       title: 'Comprehensive Tools',
       description: 'All necessary tools for managing schools in one place.',
       color: '#4ECDC4'
     },
     {
-      icon: '',
+      icon: faHeadset,
       title: '24/7 Support',
       description: 'We provide around-the-clock support to ensure your success.',
       color: '#45B7D1'
@@ -37,6 +40,15 @@ const LandingPage = () => {
         <Container>
           <Row className="justify-content-center text-center">
             <Col lg={8}>
+              <div className="mb-4">
+                <img 
+                  src="/favicon.svg" 
+                  alt="Shuleni Logo" 
+                  width="80" 
+                  height="80" 
+                  className="mb-3"
+                />
+              </div>
               <h1 className="display-4 fw-bold mb-4 text-dark">Welcome to Shuleni</h1>
               <p className="lead mb-4 text-secondary">
                 Create, manage and grow your school community easily with our platform.
@@ -56,7 +68,7 @@ const LandingPage = () => {
                   onClick={() => navigate('/login')}
                   className="fw-bold border-2"
                 >
-                  Create Your School
+                  Login
                 </Button>
               </div>
             </Col>
@@ -72,9 +84,7 @@ const LandingPage = () => {
             <p className="lead text-muted">
               Learn about the key features that make our platform stand out.
             </p>
-            <Button variant="primary" className="shuleni-btn-primary">
-              Get Started
-            </Button>
+        
           </Col>
         </Row>
 
@@ -93,7 +103,10 @@ const LandingPage = () => {
                       fontSize: '2rem'
                     }}
                   >
-                    {feature.icon}
+                    <FontAwesomeIcon 
+                      icon={feature.icon} 
+                      style={{ fontSize: '2rem', color: 'white' }}
+                    />
                   </div>
                   <Card.Title className="h4 fw-bold">{feature.title}</Card.Title>
                   <Card.Text className="text-muted">
@@ -120,14 +133,14 @@ const LandingPage = () => {
                   variant="primary"
                   size="lg"
                   className="shuleni-btn-primary"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/create-school')}
                 >
                   Start Your School Today
                 </Button>
                 <Button 
                   variant="outline-primary"
                   size="lg"
-                  onClick={() => navigate('/demo')}
+                  onClick={() => setShowVideoModal(true)}
                 >
                   Watch Demo
                 </Button>
@@ -143,7 +156,13 @@ const LandingPage = () => {
           <Row>
             <Col md={6}>
               <div className="d-flex align-items-center mb-3">
-                <span className="fs-4 me-2"></span>
+                <img 
+                  src="/favicon.svg" 
+                  alt="Shuleni Logo" 
+                  width="24" 
+                  height="24" 
+                  className="me-2"
+                />
                 <span className="fw-bold fs-5 text-white">Shuleni</span>
               </div>
               <p className="text-light">
@@ -174,13 +193,44 @@ const LandingPage = () => {
           <hr className="my-4" />
           <Row>
             <Col className="text-center">
-              <p className="text-light mb-0">
+              <p className="text-light mb-0 d-flex align-items-center justify-content-center">
+                <img 
+                  src="/favicon.svg" 
+                  alt="Shuleni Logo" 
+                  width="20" 
+                  height="20" 
+                  className="me-2"
+                />
                 © 2025 Shuleni School Management Platform. All rights reserved.
               </p>
             </Col>
           </Row>
         </Container>
       </footer>
+
+      {/* Video Modal */}
+      <Modal 
+        show={showVideoModal} 
+        onHide={() => setShowVideoModal(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton className="bg-dark text-white">
+          <Modal.Title>Shuleni Demo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="p-0">
+          <div className="ratio ratio-16x9">
+            <iframe
+              src="https://www.youtube.com/embed/n_6eelBgMHs"
+              title="Shuleni Demo Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ width: '100%', height: '100%' }}
+            ></iframe>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
