@@ -18,7 +18,7 @@ class ErrorBoundary extends React.Component {
     });
     
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('Error Boundary caught an error:', error, errorInfo);
     }
   }
@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component {
           <Alert variant="danger" className="text-center">
             <Alert.Heading>Oops! Something went wrong</Alert.Heading>
             <p>
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We&apos;re sorry, but something unexpected happened. Please try refreshing the page.
             </p>
             <hr />
             <div className="d-flex justify-content-center gap-3">
@@ -51,7 +51,7 @@ class ErrorBoundary extends React.Component {
                 Go Home
               </Button>
             </div>
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {import.meta.env.DEV && this.state.error && (
               <details className="mt-3 text-start">
                 <summary>Error Details (Development Mode)</summary>
                 <pre className="mt-2 p-3 bg-light border rounded">
