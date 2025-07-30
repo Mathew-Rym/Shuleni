@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 
 const NotFound = () => {
@@ -37,7 +39,8 @@ const NotFound = () => {
                     className="shuleni-btn-primary"
                     onClick={() => navigate('/')}
                   >
-                    🏠 Return to Home
+                    <FontAwesomeIcon icon={faHome} className="me-2" />
+                    Return to Home
                   </Button>
                   <Button 
                     variant="outline-primary"

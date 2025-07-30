@@ -246,7 +246,11 @@ const TeacherDashboard = () => {
 
   return (
     <div className="min-vh-100 bg-light">
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+      <Navbar 
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
+        showSidebarToggle={true}
+        onOpenSettings={() => setShowSettingsModal(true)}
+      />
       <Sidebar 
         isOpen={sidebarOpen} 
         onClose={() => setSidebarOpen(false)} 

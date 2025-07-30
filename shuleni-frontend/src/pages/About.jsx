@@ -10,7 +10,10 @@ import {
   faGlobe,
   faLaptop,
   faBookOpen,
-  faMobile
+  faMobile,
+  faBook,
+  faSchool,
+  faDollarSign
 } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 
@@ -126,7 +129,10 @@ const About = () => {
               <Col md={6}>
                 <Card className="h-100 border-0 shadow-sm">
                   <Card.Body className="p-4">
-                    <h4 className="fw-bold mb-3">🌍 Vision 2030 Aligned</h4>
+                    <h4 className="fw-bold mb-3 d-flex align-items-center">
+                      <FontAwesomeIcon icon={faGlobe} className="text-primary me-2" />
+                      Vision 2030 Aligned
+                    </h4>
                     <p className="text-muted">
                       Supporting Kenya's Vision 2030 by enhancing digital literacy, 
                       improving educational outcomes, and ensuring every Kenyan child 
@@ -218,7 +224,10 @@ const About = () => {
               <Row className="g-4">
                 <Col md={4}>
                   <div className="text-center">
-                    <h4 className="fw-bold text-primary">📚 CBC Integration</h4>
+                    <h4 className="fw-bold text-primary d-flex align-items-center justify-content-center">
+                      <FontAwesomeIcon icon={faBook} className="me-2" />
+                      CBC Integration
+                    </h4>
                     <p className="text-muted">
                       Full support for Kenya's Competency-Based Curriculum with 
                       subject tracking, learning area management, and assessment tools 
@@ -228,7 +237,10 @@ const About = () => {
                 </Col>
                 <Col md={4}>
                   <div className="text-center">
-                    <h4 className="fw-bold text-primary">🏫 School Types</h4>
+                    <h4 className="fw-bold text-primary d-flex align-items-center justify-content-center">
+                      <FontAwesomeIcon icon={faSchool} className="me-2" />
+                      School Types
+                    </h4>
                     <p className="text-muted">
                       Supporting all Kenyan school types: Public Primary & Secondary, 
                       Private Schools, Boarding Schools, Day Schools, and Special Needs 
@@ -238,7 +250,10 @@ const About = () => {
                 </Col>
                 <Col md={4}>
                   <div className="text-center">
-                    <h4 className="fw-bold text-primary">💰 Affordable Pricing</h4>
+                    <h4 className="fw-bold text-primary d-flex align-items-center justify-content-center">
+                      <FontAwesomeIcon icon={faDollarSign} className="me-2" />
+                      Affordable Pricing
+                    </h4>
                     <p className="text-muted">
                       Flexible pricing models designed for Kenyan schools, including 
                       special rates for public schools and rural institutions to ensure 

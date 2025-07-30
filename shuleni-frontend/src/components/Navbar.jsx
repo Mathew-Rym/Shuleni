@@ -4,7 +4,7 @@ import { Navbar as BNavbar, Nav, Container, Dropdown, Button, Form, InputGroup }
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUserGraduate, faChalkboardTeacher, faBook, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../Store/slices/authSlice';
 
 // Mock data for search functionality
@@ -31,7 +31,7 @@ const mockData = {
   ]
 };
 
-const Navbar = ({ toggleSidebar, showSidebarToggle = false }) => {
+const Navbar = ({ toggleSidebar, showSidebarToggle = false, onOpenSettings }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -353,11 +353,11 @@ const Navbar = ({ toggleSidebar, showSidebarToggle = false }) => {
                         }}
                       >
                         <div className="d-flex align-items-center">
-                          <div className="me-2">
-                            {result.type === 'student' && '👨‍🎓'}
-                            {result.type === 'teacher' && '👨‍🏫'}
-                            {result.type === 'class' && '📚'}
-                            {result.type === 'resource' && '📄'}
+                          <div className="me-2 text-primary">
+                            {result.type === 'student' && <FontAwesomeIcon icon={faUserGraduate} />}
+                            {result.type === 'teacher' && <FontAwesomeIcon icon={faChalkboardTeacher} />}
+                            {result.type === 'class' && <FontAwesomeIcon icon={faBook} />}
+                            {result.type === 'resource' && <FontAwesomeIcon icon={faFileAlt} />}
                           </div>
                           <div>
                             <div className="fw-medium text-dark">{result.name}</div>
@@ -397,6 +397,11 @@ const Navbar = ({ toggleSidebar, showSidebarToggle = false }) => {
                     <div className="text-capitalize small">Role: {user?.role}</div>
                   </Dropdown.Header>
                   <Dropdown.Divider />
+                  {onOpenSettings && (
+                    <Dropdown.Item onClick={onOpenSettings}>
+                      Settings
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item onClick={handleLogout}>
                     Logout
                   </Dropdown.Item>

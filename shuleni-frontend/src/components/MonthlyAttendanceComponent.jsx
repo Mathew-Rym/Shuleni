@@ -3,7 +3,8 @@ import { Card, Table, Badge, Row, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt, faUsers, faPercentage, faDownload,
-  faCheckCircle, faTimesCircle, faSync, faFilter
+  faCheckCircle, faTimesCircle, faSync, faFilter,
+  faArrowUp, faArrowDown, faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useRealTime, useRoleBasedData } from '../contexts/RealTimeContext';
 
@@ -276,7 +277,8 @@ const MonthlyAttendanceComponent = ({ userRole, className = '', showTitle = true
                     {attendanceData.data.slice(-7).map((item, index, array) => {
                       const attendanceRate = (item.present / item.totalStudents) * 100;
                       const prevRate = index > 0 ? (array[index - 1].present / array[index - 1].totalStudents) * 100 : attendanceRate;
-                      const trend = attendanceRate > prevRate ? '↗️' : attendanceRate < prevRate ? '↘️' : '➡️';
+                      const trendIcon = attendanceRate > prevRate ? faArrowUp : attendanceRate < prevRate ? faArrowDown : faArrowRight;
+                      const trendColor = attendanceRate > prevRate ? 'text-success' : attendanceRate < prevRate ? 'text-danger' : 'text-muted';
                       
                       return (
                         <tr key={index}>
@@ -290,7 +292,9 @@ const MonthlyAttendanceComponent = ({ userRole, className = '', showTitle = true
                               {Math.round(attendanceRate)}%
                             </Badge>
                           </td>
-                          <td>{trend}</td>
+                          <td>
+                            <FontAwesomeIcon icon={trendIcon} className={trendColor} />
+                          </td>
                         </tr>
                       );
                     })}

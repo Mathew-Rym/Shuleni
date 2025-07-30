@@ -6,6 +6,7 @@ import ClassMembers from '../../components/ClassMembers';
 import Chat from '../../components/Chat';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
+import SettingsModal from '../../components/SettingsModal';
 
 const fetchClassData = async (classId) => {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -50,7 +51,7 @@ const fetchClassData = async (classId) => {
     ],
     chatMessages: [
       { id: 1, class_id: classId, sender_id: 1, message: "Who knows the HW?", sent_at: "2025-07-22T10:30:00Z", user: { name: "Nathan" } },
-      { id: 2, class_id: classId, sender_id: 4, message: "No Idea 💺️", sent_at: "2025-07-22T10:32:00Z", user: { name: "Harry" } },
+      { id: 2, class_id: classId, sender_id: 4, message: "No Idea", sent_at: "2025-07-22T10:32:00Z", user: { name: "Harry" } },
       { id: 3, class_id: classId, sender_id: 5, message: "Where are you Guys?", sent_at: "2025-07-22T10:35:00Z", user: { name: "Dejon" } },
       { id: 4, class_id: classId, sender_id: 3, message: "Check the resources section for homework details", sent_at: "2025-07-22T10:40:00Z", user: { name: "Dr. Smith" } }
     ],
@@ -82,6 +83,7 @@ const Class= () => {
     const [classData, setClassData] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
 
 
     const currentUser = {
@@ -132,53 +134,66 @@ const Class= () => {
 
   if (isLoading) {
     return (
-      <div className="class-page d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
-        <h2>Loading class data...</h2>
+      <div className="min-vh-100 bg-light">
+        <Navbar onOpenSettings={() => setShowSettingsModal(true)} />
+        <div className="d-flex">
+          <Sidebar />
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center" style={{ marginLeft: '250px', minHeight: '60vh' }}>
+            <h2>Loading class data...</h2>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!classData) {
     return (
-      <div className="class-page d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
-        <h2>Class data not found.</h2>
+      <div className="min-vh-100 bg-light">
+        <Navbar onOpenSettings={() => setShowSettingsModal(true)} />
+        <div className="d-flex">
+          <Sidebar />
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center" style={{ marginLeft: '250px', minHeight: '60vh' }}>
+            <h2>Class data not found.</h2>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
       <div className="min-vh-100 bg-light">
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-    <div className="class-page">
-      <Container fluid className="mt-3">
-        <div className="mb-4">
-          <h1 className="mb-1">{classData.classDetails.name}</h1>
-          <p className="text-muted">Grade: {classData.classDetails.grade_level}</p>
-          <div className="d-flex border-bottom">
-            <Button
-              variant={activeTab === 'stream' ? 'primary' : 'light'}
-              className="me-2 rounded-0 border-bottom-0"
-              onClick={() => setActiveTab('stream')}
-            >
-              Stream
-            </Button>
-            <Button
-              variant={activeTab === 'resources' ? 'primary' : 'light'}
-              className="me-2 rounded-0 border-bottom-0"
-              onClick={() => setActiveTab('resources')}
-            >
-              Resources
-            </Button>
-            <Button
-              variant={activeTab === 'examinations' ? 'primary' : 'light'}
-              className="rounded-0 border-bottom-0"
-              onClick={() => setActiveTab('examinations')}
-            >
-              Examinations
-            </Button>
-          </div>
-        </div>
+        <Navbar onOpenSettings={() => setShowSettingsModal(true)} />
+        <div className="d-flex">
+          <Sidebar />
+          <div className="flex-grow-1" style={{ marginLeft: '250px' }}>
+            <Container fluid className="p-4">
+              <div className="mb-4">
+                <h1 className="mb-1">{classData.classDetails.name}</h1>
+                <p className="text-muted">Grade: {classData.classDetails.grade_level}</p>
+                <div className="d-flex border-bottom">
+                  <Button
+                    variant={activeTab === 'stream' ? 'primary' : 'light'}
+                    className="me-2 rounded-0 border-bottom-0"
+                    onClick={() => setActiveTab('stream')}
+                  >
+                    Stream
+                  </Button>
+                  <Button
+                    variant={activeTab === 'resources' ? 'primary' : 'light'}
+                    className="me-2 rounded-0 border-bottom-0"
+                    onClick={() => setActiveTab('resources')}
+                  >
+                    Resources
+                  </Button>
+                  <Button
+                    variant={activeTab === 'examinations' ? 'primary' : 'light'}
+                    className="rounded-0 border-bottom-0"
+                    onClick={() => setActiveTab('examinations')}
+                  >
+                    Examinations
+                  </Button>
+                </div>
+              </div>
 
         {activeTab === 'resources' && (
           <Card className="mb-4">
@@ -352,9 +367,15 @@ const Class= () => {
             />
           </Col>
         </Row>
-      </Container>
-    </div>
-    </div>
+            </Container>
+          </div>
+        </div>
+        
+        <SettingsModal
+          show={showSettingsModal}
+          onHide={() => setShowSettingsModal(false)}
+        />
+      </div>
   );
 }
 

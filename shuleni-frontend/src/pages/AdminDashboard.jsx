@@ -484,7 +484,11 @@ const AdminDashboard = () => {
       />
       
       <div className="flex-grow-1 d-flex flex-column">
-        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} showSidebarToggle={true} />
+        <Navbar 
+          toggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
+          showSidebarToggle={true}
+          onOpenSettings={() => setShowSettingsModal(true)}
+        />
         
         <div className="flex-grow-1 bg-light">
           <Container fluid className="py-4">
