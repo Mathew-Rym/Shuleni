@@ -112,6 +112,11 @@ const AdminDashboard = () => {
     dispatch(fetchEvents());
   }, [dispatch]);
 
+  // Navigation handlers
+  const handleNavigateToResources = () => {
+    navigate('/resources');
+  };
+
   const handleAdminPhotoUpdate = (newPhotoUrl) => {
     setAdminPhoto(newPhotoUrl);
     // Update the user avatar in the auth state for navbar display
@@ -532,14 +537,23 @@ const AdminDashboard = () => {
                           <Card.Body>
                             <h5 className="fw-bold mb-3">School Performance Metrics</h5>
                             <p className="text-muted">Key metrics to monitor your school's performance.</p>
-                            <Button 
-                              variant="primary" 
-                              onClick={() => setShowDetailedReportModal(true)}
-                              className="shuleni-btn-primary"
-                            >
-                              <FontAwesomeIcon icon={faChartLine} className="me-2" />
-                              View Real-time Detailed Report
-                            </Button>
+                            <div className="d-flex gap-2 mb-3">
+                              <Button 
+                                variant="primary" 
+                                onClick={() => setShowDetailedReportModal(true)}
+                                className="shuleni-btn-primary"
+                              >
+                                <FontAwesomeIcon icon={faChartLine} className="me-2" />
+                                View Real-time Report
+                              </Button>
+                              <Button 
+                                variant="outline-primary" 
+                                onClick={handleNavigateToResources}
+                              >
+                                <FontAwesomeIcon icon={faBookOpen} className="me-2" />
+                                Manage Resources
+                              </Button>
+                            </div>
                             
                             <Row className="mt-4">
                               <Col sm={4}>

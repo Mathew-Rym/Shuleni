@@ -4,12 +4,15 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/',
   server: {
-    headers: {
-      'Content-Security-Policy': "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; object-src 'none';"
-    }
+    port: 5173,
+    host: true
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -23,5 +26,8 @@ export default defineConfig({
   },
   define: {
     global: 'globalThis',
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom']
   }
 })

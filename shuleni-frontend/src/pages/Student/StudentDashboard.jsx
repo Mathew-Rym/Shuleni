@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge, ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { createSelector } from '@reduxjs/toolkit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -34,6 +35,7 @@ const selectEvents = createSelector(
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { classes, resources } = useSelector((state) => state.classes);
   const { attendanceData } = useSelector((state) => state.dashboard);
@@ -92,6 +94,11 @@ const StudentDashboard = () => {
   const studentResources = resources.filter(resource => 
     studentData.currentClasses.includes(resource.subject)
   );
+
+  // Navigation handlers
+  const handleNavigateToResources = () => {
+    navigate('/resources');
+  };
 
   useEffect(() => {
     dispatch(fetchClasses());
@@ -222,7 +229,7 @@ const StudentDashboard = () => {
                     <Button 
                       variant="primary" 
                       className="shuleni-btn-primary"
-                      onClick={() => window.open('/resources', '_blank')}
+                      onClick={handleNavigateToResources}
                     >
                       <FontAwesomeIcon icon={faBook} className="me-2" />
                       View Resources
@@ -434,8 +441,9 @@ const StudentDashboard = () => {
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <h5 className="fw-bold">Available Resources</h5>
                     <div className="d-flex gap-2">
-                      <Button variant="outline-primary" size="sm">Manage Permissions</Button>
-                      <Button variant="primary" size="sm">Upload Resource</Button>
+                      <Button variant="outline-primary" size="sm" onClick={handleNavigateToResources}>
+                        View All Resources
+                      </Button>
                     </div>
                   </div>
                   <p className="text-muted mb-4">A collection of notes, books, and learning materials.</p>
