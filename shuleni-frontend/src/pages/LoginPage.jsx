@@ -62,7 +62,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-vh-100 bg-light">
+    <div className="min-vh-100 bg-light login-page">
       {/* Navigation */}
       <Navbar />
 
@@ -75,7 +75,6 @@ const LoginPage = () => {
                 <div className="text-center mb-4">
                   <div className="shuleni-hero rounded p-4 mb-4">
                     <h2 className="text-white fw-bold mb-2">Login</h2>
-                    <p className="text-white opacity-75 mb-0">Access your dashboard</p>
                   </div>
                 </div>
 

@@ -31,7 +31,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-vh-100">
+    <div className="min-vh-100 landing-page">
       {/* Navigation */}
       <Navbar />
 

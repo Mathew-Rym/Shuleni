@@ -82,25 +82,60 @@
         /* Main Content Area - Positioned below navbar and beside sidebar */
         .main-content {
             margin-top: 60px !important; /* Below navbar */
-            margin-left: 0; /* Will be adjusted by sidebar */
+            margin-left: 0; /* Default no sidebar */
             padding: 20px;
             min-height: calc(100vh - 60px);
             overflow-y: auto;
             position: relative;
             z-index: 1; /* Base content layer */
+            width: 100% !important;
+            transition: margin-left 0.3s ease, width 0.3s ease;
         }
 
-        /* When sidebar is open */
+        /* Layout with sidebar */
+        .with-sidebar .main-content,
         .sidebar-open .main-content {
-            margin-left: 250px;
-            width: calc(100% - 250px);
+            margin-left: 250px !important; /* Space for sidebar */
+            width: calc(100% - 250px) !important; /* Adjust width for sidebar */
         }
 
-        /* Dashboard specific adjustments */
-        .min-vh-100.bg-light {
-            padding-top: 60px !important; /* Space for fixed navbar */
+        /* Force layout for dashboard pages */
+        .d-flex.min-vh-100 {
             min-height: 100vh !important;
-            overflow-y: auto;
+        }
+
+        .d-flex.min-vh-100 .flex-grow-1 {
+            margin-left: 250px !important; /* Always account for sidebar */
+            width: calc(100% - 250px) !important;
+            padding-top: 60px !important; /* Account for navbar */
+        }
+
+        /* Alternative: pages without sidebar */
+        .no-sidebar .main-content {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        /* All dashboard pages need proper spacing */
+        .min-vh-100, 
+        .bg-light,
+        .flex-grow-1 {
+            padding-top: 0 !important; /* Navbar is fixed, content doesn't need top padding */
+            position: relative;
+        }
+
+        /* Dashboard container with sidebar support */
+        .min-vh-100.bg-light {
+            min-height: 100vh !important;
+            padding-top: 60px !important; /* Space for fixed navbar */
+        }
+
+        /* Dashboard main content when using min-vh-100 pattern */
+        .min-vh-100.bg-light .main-content {
+            margin-left: 250px !important; /* Always account for sidebar on desktop */
+            width: calc(100% - 250px) !important;
+            margin-top: 0 !important; /* Parent already has padding-top */
+            padding: 20px;
         }
 
         /* Landing page hero section */
@@ -113,10 +148,31 @@
             align-items: center;
         }
 
+        /* Login page and other pages without sidebar */
+        .no-sidebar {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
         /* Ensure content is visible on all pages */
         .min-vh-100 {
             padding-top: 60px !important;
             min-height: 100vh;
+        }
+
+        /* Override for pages that shouldn't have sidebar spacing */
+        .login-page,
+        .landing-page,
+        .no-sidebar-page {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        .login-page .min-vh-100,
+        .landing-page .min-vh-100,
+        .no-sidebar-page .min-vh-100 {
+            margin-left: 0 !important;
+            width: 100% !important;
         }
 
         /* ===== Component Styles ===== */
@@ -216,19 +272,41 @@
                 transition: transform 0.3s;
             }
 
+            /* On mobile, content should fill full width when sidebar is hidden */
+            .d-flex.min-vh-100 .flex-grow-1,
+            .min-vh-100.bg-light .main-content,
             .main-content,
             .flex-grow-1.bg-light {
                 margin-left: 0 !important;
                 width: 100% !important;
             }
 
+            /* When sidebar is open on mobile, slide it in */
             .sidebar-open .shuleni-sidebar {
                 transform: translateX(0);
             }
 
+            /* When sidebar is open on mobile, don't shift content (overlay) */
+            .sidebar-open .d-flex.min-vh-100 .flex-grow-1,
+            .sidebar-open .min-vh-100.bg-light .main-content,
             .sidebar-open .main-content,
             .sidebar-open .flex-grow-1.bg-light {
-                margin-left: 250px !important;
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Desktop behavior (992px and above) */
+        @media (min-width: 993px) {
+            .shuleni-sidebar {
+                transform: translateX(0) !important; /* Always visible */
+            }
+
+            .d-flex.min-vh-100 .flex-grow-1,
+            .min-vh-100.bg-light .main-content,
+            .main-content,
+            .flex-grow-1.bg-light {
+                margin-left: 250px !important; /* Always account for sidebar */
                 width: calc(100% - 250px) !important;
             }
         }
