@@ -21,48 +21,62 @@
             color: var(--primary-blue);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
+            padding-top: 0 !important; /* Remove any top padding */
+            margin: 0 !important;
         }
 
         #root {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            position: relative;
         }
 
         /* ===== Layout Structure ===== */
         .app-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
+        }
+
+        /* Content wrapper to ensure proper positioning */
+        .content-wrapper {
+            padding-top: 60px !important; /* Space for fixed navbar */
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
         }
 
         /* Navbar - Fixed Positioning - CONSISTENT ACROSS ALL DASHBOARDS */
         .shuleni-nav {
-            background-color: #3595e4; /* Original color */
-            border-bottom: 1px solid #ccc; /* Original border */
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            border-bottom: 2px solid #1e40af !important;
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             height: 60px !important;
             width: 100% !important;
-            z-index: 1000 !important;
+            z-index: 1030 !important; /* Higher than Bootstrap modals */
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.15);
         }
 
         /* Sidebar - Fixed Positioning (EXACTLY as in original) */
         .shuleni-sidebar {
-            background-color: #3595e4; /* Original color */
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
             color: white; /* Original color */
             width: 250px; /* Original width */
             position: fixed;
             top: 60px; /* Below navbar */
             left: 0;
             height: calc(100vh - 60px); /* Original calculation */
-            z-index: 999; /* Original z-index */
+            z-index: 1020; /* Below navbar but above content */
             overflow-y: auto;
             padding: 20px; /* Added for content spacing */
+            box-shadow: 2px 0 10px rgba(37, 99, 235, 0.1);
         }
 
         /* Main Content Area - Positioned below navbar and beside sidebar */
@@ -73,7 +87,7 @@
             min-height: calc(100vh - 60px);
             overflow-y: auto;
             position: relative;
-            z-index: 1;
+            z-index: 1; /* Base content layer */
         }
 
         /* When sidebar is open */
@@ -89,7 +103,37 @@
             overflow-y: auto;
         }
 
+        /* Landing page hero section */
+        .shuleni-hero {
+            padding-top: 120px !important; /* Extra space from navbar */
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Ensure content is visible on all pages */
+        .min-vh-100 {
+            padding-top: 60px !important;
+            min-height: 100vh;
+        }
+
         /* ===== Component Styles ===== */
+        /* Modal and overlay fixes */
+        .modal {
+            z-index: 1050 !important; /* Above navbar */
+        }
+
+        .modal-backdrop {
+            z-index: 1040 !important; /* Between navbar and modal */
+        }
+
+        /* Dropdown fixes */
+        .dropdown-menu {
+            z-index: 1025 !important; /* Above sidebar */
+        }
+
         /* Card Styles */
         .card {
             background: var(--white);
@@ -98,6 +142,8 @@
             border: none;
             transition: transform var(--transition-speed), box-shadow var(--transition-speed);
             overflow: hidden;
+            position: relative;
+            z-index: 2; /* Above base content */
             margin-bottom: 1.5rem;
         }
 
