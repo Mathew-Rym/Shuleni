@@ -35,16 +35,16 @@
             min-height: 100vh;
         }
 
-        /* Navbar - Fixed Positioning (EXACTLY as in original) */
+        /* Navbar - Fixed Positioning - CONSISTENT ACROSS ALL DASHBOARDS */
         .shuleni-nav {
             background-color: #3595e4; /* Original color */
             border-bottom: 1px solid #ccc; /* Original border */
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 60px;
-            width: 100%;
-            z-index: 1000;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 60px !important;
+            width: 100% !important;
+            z-index: 1000 !important;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -65,16 +65,28 @@
             padding: 20px; /* Added for content spacing */
         }
 
-        /* Main Content Area - Positioned between navbar and sidebar */
-        .class-page {
-            margin-top: 60px; /* Below navbar */
-            margin-left: 250px; /* Beside sidebar */
+        /* Main Content Area - Positioned below navbar and beside sidebar */
+        .main-content {
+            margin-top: 60px !important; /* Below navbar */
+            margin-left: 0; /* Will be adjusted by sidebar */
             padding: 20px;
-            flex: 1;
-            width: calc(100% - 250px);
-            background-color: var(--white);
-            color: var(--primary-blue);
             min-height: calc(100vh - 60px);
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* When sidebar is open */
+        .sidebar-open .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        /* Dashboard specific adjustments */
+        .min-vh-100.bg-light {
+            padding-top: 60px !important; /* Space for fixed navbar */
+            min-height: 100vh !important;
+            overflow-y: auto;
         }
 
         /* ===== Component Styles ===== */
@@ -151,23 +163,27 @@
             border-radius: 10px;
         }
 
-        /* ===== Responsive Design ===== */
+        /* ===== Updated Responsive Design ===== */
         @media (max-width: 992px) {
             .shuleni-sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s;
             }
 
-            .class-page {
-                margin-left: 0;
-                width: 100%;
+            .main-content,
+            .flex-grow-1.bg-light {
+                margin-left: 0 !important;
+                width: 100% !important;
             }
 
             .sidebar-open .shuleni-sidebar {
                 transform: translateX(0);
             }
 
-            .sidebar-open .class-page {
-                margin-left: 250px;
+            .sidebar-open .main-content,
+            .sidebar-open .flex-grow-1.bg-light {
+                margin-left: 250px !important;
+                width: calc(100% - 250px) !important;
             }
         }
 
@@ -181,7 +197,7 @@
                 font-size: 0.95em;
             }
 
-            .class-page {
+            .main-content {
                 padding: 1rem;
             }
         }
@@ -191,7 +207,7 @@
                 padding: 0 1rem;
             }
 
-            .class-page {
+            .main-content {
                 padding: 0.75rem;
             }
 
@@ -205,239 +221,151 @@
             }
         }
 
-       
-
-        /* Restored navbar and sidebar colors */
-        .navbar, .sidebar {
-            background: #3595e4; /* Original color */
-            color: var(--white);
+        /* ===== Student Management Styles ===== */
+        .student-management-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
         }
 
-        /* Restored button hover */
-        .btn-primary:hover {
-            background: #115293;
-            border-color: #115293;
+        /* ===== Center Statistics Cards ===== */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
 
-        /* Restored card header text color */
-        .card-header,
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--white) !important;
-        }
-        
-        /* Restored footer styles */
-        footer .text-light {
-            color: #f8f9fa !important;
+        .stats-card {
+            flex: 1;
+            max-width: 300px;
         }
 
-        footer .text-light:hover {
-            color: var(--primary-blue) !important;
-        }  
+        /* ===== Exam Performance Page Layout ===== */
+        .exam-performance-page {
+            margin-top: 60px;
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
 
+        /* ===== Text Visibility Fixes - Comprehensive Solution ===== */
+        .text-muted {
+            color: #6c757d !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-        .main-content {
-  margin-top: 60px;              /* below navbar */
-  margin-left: 250px;            /* beside sidebar */
-  padding: 20px;
-  min-height: calc(100vh - 60px - 60px); /* leave room for footer */
-  background: #f8f9fa;
-}
+        .text-secondary {
+            color: #6c757d !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-/* When sidebar is collapsed */
-.sidebar-collapsed .main-content {
-  margin-left: 0;
-  width: 100%;
-}
+        .text-muted, 
+        .text-secondary, 
+        .small, 
+        .text-sm {
+            color: #495057 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-/* Fix headings/text being forced white */
-.card-header h1, 
-.card-header h2, 
-.card-header h3, 
-.card-header h4, 
-.card-header h5, 
-.card-header h6 {
-  color: #fff !important; /* only white inside card headers */
-}
+        /* Specific text element fixes */
+        p.text-muted,
+        div.text-muted,
+        small.text-muted,
+        span.text-muted {
+            color: #6c757d !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #202124 !important; /* dark text elsewhere */
-}
+        small, .small {
+            color: #6c757d !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-/* Footer stick to bottom */
-footer {
-  margin-top: auto;
-  background: #3595e4;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
-}
+        .form-text.text-muted {
+            color: #6c757d !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-.min-vh-100 {
-  display: flex;
-  flex-direction: column;
-}
+        .list-group-item .text-muted {
+            color: #6c757d !important;
+        }
 
-.main-content {
-  flex: 1; /* push footer down */
-} 
+        .list-group-item small.text-muted {
+            color: #6c757d !important;
+            font-size: 0.875rem;
+        }
 
+        .card .text-muted {
+            color: #6c757d !important;
+        }
 
-/* Admin Dashboard Layout Fix */
-.d-flex.min-vh-100 {
-  position: relative;
-  overflow-x: hidden;
-}
+        .form-label {
+            color: #212529 !important;
+            font-weight: 500;
+        }
 
-.flex-grow-1.d-flex.flex-column {
-  width: 100%;
-  transition: margin-left 0.3s;
-}
+        .nav-link .text-muted {
+            color: #6c757d !important;
+        }
 
-/* Content area positioning */
-.flex-grow-1.bg-light {
-  margin-left: 250px; /* Matches sidebar width */
-  width: calc(100% - 250px); /* Accounts for sidebar width */
-  min-height: calc(100vh - 60px); /* Accounts for navbar height */
-  padding-top: 20px;
-  padding-bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
+        .sidebar .text-muted {
+            color: #adb5bd !important;
+        }
 
-/* NAVBAR FIX - ONLY CHANGE MADE */
-.shuleni-nav {
-  position: relative; /* Changed from fixed */
-  top: unset; /* Remove fixed positioning */
-}
+        .table .text-muted {
+            color: #6c757d !important;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .flex-grow-1.bg-light {
-    margin-left: 0;
-    width: 100%;
-    padding-top: 80px; /* Extra space for mobile */
-  }
-  
-  .shuleni-sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-  }
-  
-  .sidebar-open .shuleni-sidebar {
-    transform: translateX(0);
-  }
-  
-  .sidebar-open .flex-grow-1.bg-light {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-  }
-}
+        .modal .text-muted {
+            color: #6c757d !important;
+        }
 
-/* Ensure content doesn't overlap */
-.main-content {
-  padding-top: 60px; /* Space for fixed navbar */
-}
+        /* Calendar specific fixes */
+        .calendar-grid {
+            color: #212529 !important;
+        }
 
-/* Fix text colors */
-.card-header h1, 
-.card-header h2, 
-.card-header h3, 
-.card-header h4, 
-.card-header h5, 
-.card-header h6 {
-  color: #fff !important; /* White text in card headers */
-}
+        .calendar-weekday {
+            color: #495057 !important;
+            opacity: 1 !important;
+        }
 
-/* Dark text for other elements */
-h1, h2, h3, h4, h5, h6:not(.card-header *) {
-  color: #202124 !important; /* Dark text elsewhere */
-}
+        .day-number {
+            color: #495057 !important;
+            opacity: 1 !important;
+        }
 
-body, .bg-light {
-  background-color: #f8f9fa !important;
-  color: #202124 !important;
-}
+        .calendar-day.today .day-number {
+            color: #1976d2 !important;
+            opacity: 1 !important;
+        }
 
-/* Button adjustments */
-.shuleni-btn-primary {
-  background-color: #3595e4;
-  border-color: #3595e4;
-  color: white !important;
-}
+        .calendar-navigation,
+        .calendar-title,
+        .fw-bold {
+            color: #212529 !important;
+            opacity: 1 !important;
+        }
 
-.shuleni-btn-primary:hover {
-  background-color: #1976d2;
-  border-color: #1976d2;
-}
+        /* Badge and button text visibility */
+        .badge {
+            opacity: 1 !important;
+        }
 
-/* Card styling */
-.shuleni-card {
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: none;
-  transition: transform 0.3s ease;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
+        .btn {
+            opacity: 1 !important;
+        }
 
-.shuleni-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-} 
-
-/* Add this to your CSS */
-.student-management-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1600px; /* Adjust as needed */
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
-}
-
-/* Adjust the table to be more centered */
-.student-management-table {
-  width: 100%;
-  max-width: 1400px; /* Adjust as needed */
-  margin: 0 auto;
-}
-
-/* Center the statistics cards */
-.stats-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.stats-card {
-  flex: 1;
-  max-width: 300px; /* Adjust as needed */
-}  
-
-/* Add this to your CSS */
-.exam-performance-page {
-  margin-top: 60px; /* Account for navbar height */
-  margin-left: 250px; /* Account for sidebar width */
-  padding: 20px;
-  width: calc(100% - 250px); /* Full width minus sidebar */
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .exam-performance-page {
-    margin-left: 0;
-    width: 100%;
-  }
-  
-  .sidebar-open .exam-performance-page {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-  }
-}
-
-/* Ensure content doesn't overlap with sidebar */
-.min-vh-100.bg-light {
-  position: relative;
-  z-index: 1;
-}
+        .btn .text-muted {
+            color: inherit !important;
+        }

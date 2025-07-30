@@ -37,8 +37,25 @@
 }
 
 /* Global Styles */
-* {
-  color: inherit;
+/* Ensure proper text colors globally */
+body {
+  color: var(--dark-color) !important;
+}
+
+/* Specific text color fixes */
+.text-muted {
+  color: #6c757d !important;
+  opacity: 1 !important;
+}
+
+.text-secondary {
+  color: #6c757d !important;
+  opacity: 1 !important;
+}
+
+small, .small {
+  color: #6c757d !important;
+  opacity: 1 !important;
 }
 
 *, ::after, ::before {

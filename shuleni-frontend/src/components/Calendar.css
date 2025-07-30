@@ -14,7 +14,8 @@
   text-align: center;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #6c757d;
+  color: #495057 !important;
+  opacity: 1 !important;
 }
 
 .calendar-body {
@@ -62,7 +63,8 @@
 
 .day-number {
   font-weight: 600;
-  color: #495057;
+  color: #495057 !important;
+  opacity: 1 !important;
 }
 
 .events-indicator {
@@ -70,8 +72,9 @@
 }
 
 .calendar-day.today .day-number {
-  color: #1976d2;
+  color: #1976d2 !important;
   font-weight: 700;
+  opacity: 1 !important;
 }
 
 /* Responsive design for smaller screens */
