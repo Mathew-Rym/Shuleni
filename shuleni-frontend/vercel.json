@@ -1,25 +1,12 @@
 {
-  "version": 2,
-  "name": "shuleni-frontend",
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://shuleni-sfox.onrender.com"
+    "VITE_API_BASE_URL": "https://shuleni-sfox.onrender.com",
+    "VITE_APP_ENV": "production"
   }
 }

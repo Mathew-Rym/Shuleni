@@ -1,4 +1,4 @@
-import API_CONFIG, { apiRequest } from '../config/api.js';
+import API_CONFIG, { apiRequest } from '../config/api';
 
 // Authentication API calls
 export const authAPI = {
