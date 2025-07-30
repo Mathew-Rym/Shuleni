@@ -211,14 +211,14 @@ const Resources = () => {
         <div className="mb-4">
           <h5 className="mb-3">Select a Class:</h5>
           <div className="d-flex flex-wrap gap-2">
-            {Object.keys(classes).map((classKey) => (
+            {Object.keys(resources).map((classKey) => (
               <Button
                 key={classKey}
                 variant={selectedClass === classKey ? "primary" : "outline-primary"}
                 onClick={() => setSelectedClass(classKey)}
                 className="rounded-pill"
               >
-                {classes[classKey].name}
+                {resources[classKey].name}
               </Button>
             ))}
           </div>
@@ -228,16 +228,16 @@ const Resources = () => {
           <Card.Body>
             <div className="d-flex justify-content-between align-items-center mb-4">
               <Card.Title className="mb-0">
-                {classes[selectedClass].name} Resources
+                {resources[selectedClass].name} Resources
               </Card.Title>
               <div className="text-muted">
-                {classes[selectedClass].resources.length} resources available
+                {resources[selectedClass].resources.length} resources available
               </div>
             </div>
             
-            {classes[selectedClass].resources.length > 0 ? (
+            {resources[selectedClass].resources.length > 0 ? (
               <ListGroup variant="flush">
-                {classes[selectedClass].resources.map(resource => (
+                {resources[selectedClass].resources.map(resource => (
                   <ListGroup.Item key={resource.id} className="py-3 border-bottom">
                     <div className="d-flex align-items-center">
                       <div className="me-3">
@@ -316,8 +316,8 @@ const Resources = () => {
               <Card.Body>
                 <Card.Title className="mb-3">Recent Resources</Card.Title>
                 <ListGroup variant="flush">
-                  {Object.keys(classes).flatMap(classKey => 
-                    classes[classKey].resources.slice(0, 2).map(resource => (
+                  {Object.keys(resources).flatMap(classKey => 
+                    resources[classKey].resources.slice(0, 2).map(resource => (
                       <ListGroup.Item key={`recent-${resource.id}`} className="py-2">
                         <div className="d-flex align-items-center">
                           <div className="me-2">
@@ -325,7 +325,7 @@ const Resources = () => {
                           </div>
                           <div>
                             <div className="fw-bold">{resource.title}</div>
-                            <small className="text-muted">{classes[classKey].name}</small>
+                            <small className="text-muted">{resources[classKey].name}</small>
                           </div>
                         </div>
                       </ListGroup.Item>
