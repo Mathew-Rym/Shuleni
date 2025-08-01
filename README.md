@@ -4,6 +4,9 @@ Shuleni Backend
 
 Shuleni is a full-stack online school system designed to manage school operations efficiently. This is the **backend** of the application, built with **Flask**, **PostgreSQL**, and **SQLAlchemy**, and secured using **JWT Authentication**.
 
+Rendeer backend deployment: https://dashboard.render.com/web/srv-d1srfler433s73elmshg
+Postgres database dashboard: https://dashboard.render.com/d/dpg-d23bd8u3jp1c739odisg-a
+
 🔧 Tech Stack
 
 - **Framework**: Flask
