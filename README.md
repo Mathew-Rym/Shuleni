@@ -1,10 +1,13 @@
-# 📚 Shuleni Backend
+Shuleni deployed link: (https://shuleni-1-73c5.onrender.com)
+
+Shuleni Backend
 
 Shuleni is a full-stack online school system designed to manage school operations efficiently. This is the **backend** of the application, built with **Flask**, **PostgreSQL**, and **SQLAlchemy**, and secured using **JWT Authentication**.
 
----
+Rendeer backend deployment: https://dashboard.render.com/web/srv-d1srfler433s73elmshg
+Postgres database dashboard: https://dashboard.render.com/d/dpg-d23bd8u3jp1c739odisg-a
 
-## 🔧 Tech Stack
+🔧 Tech Stack
 
 - **Framework**: Flask
 - **Database**: PostgreSQL
@@ -13,9 +16,7 @@ Shuleni is a full-stack online school system designed to manage school operation
 - **Testing**: Pytest + Factory Boy
 - **Deployment**: Render
 
----
-
-## 🗂️ Project Structure
+🗂️ Project Structure
 
 shuleni-backend/
 ├── app/
@@ -40,16 +41,14 @@ Edit
 
 ---
 
-## 🔐 Authentication & Authorization
+🔐 Authentication & Authorization
 
 - JWT-based login system
 - Token refresh endpoint
 - Role-based access control (admin, educator, student)
 - School-level access control for multi-tenancy
 
----
-
-## 🧑‍🏫 Core Features (Modules)
+Core Features (Modules)
 
 ### 1. **Authentication**
 - `POST /register/school`: Register a new school and admin user
@@ -99,9 +98,7 @@ Edit
 ### 11. **Announcements**
 - Admins and educators can post updates to classes
 
----
-
-## 🛢️ Database Schema Overview
+Database Schema Overview
 
 Includes all primary and relational models:
 - `schools`, `users`, `classes`
@@ -110,9 +107,7 @@ Includes all primary and relational models:
 - `assignments`, `assignment_submissions`
 - `chats`, `video_sessions`, `clubs`, `club_members`, `announcements`
 
----
-
-## 📥 Seeding
+Seeding
 
 Run `seed.py` to generate sample data across all models for development/testing:
 
